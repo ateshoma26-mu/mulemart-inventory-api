@@ -1,0 +1,10 @@
+db:
+  host: "localhost"
+  port: "3306"
+  user: "root"
+  password: "![ThigbGGk9Dk=]"
+  database: "mulemart"
+salesforce:
+  username: "alemtsehayjteshoma.f0941be09f1d@agentforce.com"
+  password: "![MlT7LjHFllgq/kv37pWfKVsR4sK3Y4Tn]"
+  token: "![HXHwGh3TpVXa1szojZHYgiEhNKhjbpJUHpqaXWEb6fU=]"

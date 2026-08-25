@@ -1,0 +1,432 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+    <http:listener-config name="inventory-api-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8081" />
+    </http:listener-config>
+    <apikit:config name="inventory-api-config" api="resource::4ae79f63-d259-4a0c-96e6-ab579f7dcc92:mulemart-inventory-api:1.0.0:raml:zip:inventory-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e0f44fb7-0967-4925-8879-d44392525a88" file="config.yaml" key="${secure.key}">
+		<secure-properties:encrypt algorithm="Blowfish" mode="CFB"/>
+	</secure-properties:config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="58f1a01d-52a7-4809-be83-c46ddb65447d" >
+		<db:my-sql-connection host="localhost" port="3306" user="root" password="${secure::db.password}" database="mulemart" />
+	</db:config>
+<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="a639a295-741c-47ee-bbe3-c10597f31904" >
+		<salesforce:basic-connection username="alemtsehayjteshoma.f0941be09f1d@agentforce.com" password="${secure::salesforce.password}" securityToken="${secure::salesforce.token}" url="   https://login.salesforce.com/services/Soap/u/64.0" />
+	</salesforce:sfdc-config>
+	<error-handler name="globalErrorHandler">
+    <on-error-propagate type="APP:DUPLICATE">
+        <ee:transform doc:name="Duplicate Error">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    code: "DUPLICATE",
+    message: error.description,
+    timestamp: now()
+}]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="httpStatus">409</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+    </on-error-propagate>
+</error-handler>	
+	<flow name="inventory-api-main">
+        <http:listener config-ref="inventory-api-httpListenerConfig" path="/api/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:router config-ref="inventory-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:BAD_REQUEST">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Bad request"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:METHOD_NOT_ALLOWED">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Method not allowed"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">405</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_ACCEPTABLE">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not acceptable"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">406</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Unsupported media type"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">415</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+            <on-error-propagate type="APIKIT:NOT_IMPLEMENTED">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Not Implemented"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">501</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="inventory-api-console">
+        <http:listener config-ref="inventory-api-httpListenerConfig" path="/console/*">
+            <http:response statusCode="#[vars.httpStatus default 200]">
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:response>
+            <http:error-response statusCode="#[vars.httpStatus default 500]">
+                <http:body>#[payload]</http:body>
+                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+            </http:error-response>
+        </http:listener>
+        <apikit:console config-ref="inventory-api-config" />
+        <error-handler>
+            <on-error-propagate type="APIKIT:NOT_FOUND">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Resource not found"}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
+        </error-handler>
+    </flow>
+    <flow name="put:\inventory\(itemId):application\json:inventory-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="itemId">attributes.uriParams.'itemId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  itemId: "SKU-1001",
+  warehouseStock: 120,
+  regionalStock: 45,
+  totalInventory: 165,
+  status: "HEALTHY",
+  region: "EU-WEST",
+  safetyStock: 50,
+  lastUpdated: "2026-08-19T10:15:30Z"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="delete:\inventory\(itemId):inventory-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="itemId">attributes.uriParams.'itemId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  timestamp: "2026-08-19T10:15:30Z",
+  code: "VALIDATION_ERROR",
+  message: "Invalid request payload"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="patch:\inventory\(itemId):application\json:inventory-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:variables>
+                <ee:set-variable variableName="itemId">attributes.uriParams.'itemId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  itemId: "SKU-1001",
+  warehouseStock: 120,
+  regionalStock: 45,
+  totalInventory: 165,
+  status: "HEALTHY",
+  region: "EU-WEST",
+  safetyStock: 50,
+  lastUpdated: "2026-08-19T10:15:30Z"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\health:inventory-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  status: "UP",
+  database: "UP",
+  salesforce: "UP",
+  timestamp: "2026-08-19T10:15:30Z"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\inventory:inventory-api-config">
+        <db:select doc:name="Select" doc:id="61596f02-d3ad-44d8-b33e-22eb48eebf2c" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+import * from InventoryLib
+---
+payload map (row) -> do {
+    var total = calculateTotal(row.warehouse_stock, row.regional_stock)
+    ---
+    {
+        itemId: row.item_id,
+        warehouseStock: row.warehouse_stock,
+        regionalStock: row.regional_stock,
+        totalInventory: total,
+        safetyStock: row.safety_stock,
+        status: calculateStatus(total),
+        region: row.region,
+        lastUpdated: row.last_updated
+    }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\inventory\(itemId)\summary:inventory-api-config">
+        <db:select doc:name="Select" doc:id="c5162c39-4415-482c-b0ec-b2897a0f7b4c" config-ref="Database_Config">
+			<db:sql ><![CDATA[     SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters ><![CDATA[     #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+import * from InventoryLib
+---
+if (isEmpty(payload))
+    null
+else do {
+    var row = payload[0]
+    var total = calculateTotal(row.warehouse_stock, row.regional_stock)
+    ---
+    {
+        itemId: row.item_id,
+        totalInventory: total,
+        status: calculateStatus(total),
+        reorderQuantity: calculateReorder(total),
+        region: row.region
+    }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="get:\inventory\(itemId):inventory-api-config">
+        <db:select doc:name="Select" doc:id="242b9dc2-926e-45ff-9eff-f6cdece99bc7" config-ref="Database_Config">
+			<db:sql><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters><![CDATA[   #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
+		</db:select>
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+  output application/json
+  import * from InventoryLib
+  ---
+  if (isEmpty(payload))
+      null
+  else
+      payload[0] then (row) -> do {
+          var total = calculateTotal(row.warehouse_stock, row.regional_stock)
+          ---
+          {
+              itemId: row.item_id,
+              warehouseStock: row.warehouse_stock,
+              regionalStock: row.regional_stock,
+              totalInventory: total,
+              safetyStock: row.safety_stock,
+              status: calculateStatus(total),
+              region: row.region,
+              lastUpdated: row.last_updated
+          }
+      }]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\inventory\bulk:application\json:inventory-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  totalRecords: 5000,
+  successCount: 4987,
+  failureCount: 13,
+  failedItemIds: [
+    "SKU-3310", 
+    "SKU-4821"
+  ],
+  startedAt: "2026-08-19T09:00:00Z",
+  completedAt: "2026-08-19T09:03:42Z"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+    <flow name="post:\inventory:application\json:inventory-api-config">
+        <set-variable value="#[payload]" doc:name="Set Variable" doc:id="d243e55f-cc38-429e-bcf6-fa062cc29bb7" variableName="newItem"/>
+		<db:select doc:name="Select" doc:id="5bf6cfb1-ad6c-4204-9a89-507eff0aa490" config-ref="Database_Config">
+			<db:sql ><![CDATA[     SELECT item_id FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{ itemId: vars.newItem.itemId }]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Choice" doc:id="0372cc86-58eb-4e99-bd84-d230637b0ab3" >
+			<when expression="   #[sizeOf(payload) &gt; 0]">
+				<raise-error doc:name="Raise error" doc:id="f2dbfacf-9075-440b-a398-e2558d2025f9" type="APP:DUPLICATE" description='#["Item " ++ vars.newItem.itemId ++ " already exists"]'/>
+			</when>
+			<otherwise >
+				<db:insert doc:name="Insert" doc:id="3f9cfa0b-ca00-4920-afe6-1a76965ff2eb" config-ref="Database_Config">
+			<db:sql><![CDATA[INSERT INTO inventory (item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region)
+VALUES (:itemId, :warehouseStock, :regionalStock, :totalInventory, :safetyStock, :status, :region)]]></db:sql>
+			<db:input-parameters><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+{
+    itemId: vars.newItem.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}]]]></db:input-parameters>
+		</db:insert>
+				<salesforce:upsert doc:name="Upsert" doc:id="7f368c0a-a0e3-4289-95c4-cd27d4e3efcc" config-ref="Salesforce_Config" objectType="Inventory__c" externalIdFieldName="itemId__c">
+					<salesforce:records><![CDATA[#[%dw 2.0
+output application/java
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+[
+    {
+        itemId__c: vars.newItem.itemId,
+        warehouseStock__c: vars.newItem.warehouseStock,
+        regionalStock__c: vars.newItem.regionalStock,
+        totalInventory__c: total,
+        status__c: calculateStatus(total)
+    }
+]]]]></salesforce:records>
+				</salesforce:upsert>
+				<ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+{
+    itemId: vars.newItem.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+			</otherwise>
+		</choice>
+		<error-handler ref="globalErrorHandler" />
+    </flow>
+    <flow name="post:\inventory\sync:inventory-api-config">
+        <ee:transform doc:name="Transform Message">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  totalRecords: 5000,
+  successCount: 4987,
+  failureCount: 13,
+  failedItemIds: [
+    "SKU-3310", 
+    "SKU-4821"
+  ],
+  startedAt: "2026-08-19T09:00:00Z",
+  completedAt: "2026-08-19T09:03:42Z"
+} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+    </flow>
+</mule>
