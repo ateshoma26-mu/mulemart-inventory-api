@@ -34,7 +34,24 @@ output application/json
             </ee:variables>
         </ee:transform>
     </on-error-propagate>
-</error-handler>	
+    <on-error-propagate type="APP:NOT_FOUND">
+        <ee:transform doc:name="Not Found Error">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    code: "NOT_FOUND",
+    message: error.description,
+    timestamp: now()
+}]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="httpStatus">404</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+    </on-error-propagate>
+</error-handler>
 	<flow name="inventory-api-main">
         <http:listener config-ref="inventory-api-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
@@ -179,23 +196,34 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="delete:\inventory\(itemId):inventory-api-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="itemId">attributes.uriParams.'itemId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="7d712c70-9b94-4fe1-98d8-895095186cdb" variableName="itemId"/>
+		<db:select doc:name="Select" doc:id="eceb0321-3883-47ca-8372-2af3d0642e31" config-ref="Database_Config">
+			<db:sql ><![CDATA[  SELECT item_id, status FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters ><![CDATA[ #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Choice" doc:id="da33afff-0c4e-4abc-89e9-eab4ee8d99c6" >
+			<when expression="#[isEmpty(payload)]">
+				<raise-error doc:name="Raise error" doc:id="ce9a154d-b8ec-459e-a563-37a54709bbb9" type="APP:NOT_FOUND" description='   #["Item " ++ vars.itemId ++ " not found"]'/>
+			</when>
+			<otherwise >
+				<db:update doc:name="Update" doc:id="e4b7aef2-3236-46da-b368-31cc7118153c" config-ref="Database_Config">
+					<db:sql ><![CDATA[UPDATE inventory SET status = 'INACTIVE' WHERE item_id = :itemId]]></db:sql>
+					<db:input-parameters ><![CDATA[ #[{ itemId: vars.itemId }]]]></db:input-parameters>
+				</db:update>
+				<ee:transform doc:name="Transform Message" doc:id="c05635db-2ac2-4274-a8c1-3a2406e0a0a1" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  timestamp: "2026-08-19T10:15:30Z",
-  code: "VALIDATION_ERROR",
-  message: "Invalid request payload"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    itemId: attributes.uriParams.itemId,
+    status: "INACTIVE",
+    message: "Item soft-deleted successfully"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
     </flow>
     <flow name="patch:\inventory\(itemId):application\json:inventory-api-config">
         <ee:transform doc:name="Transform Message">
