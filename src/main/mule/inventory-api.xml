@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
-http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
     <http:listener-config name="inventory-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
@@ -270,28 +271,78 @@ output application/json
 		</choice>
     </flow>
     <flow name="patch:\inventory\(itemId):application\json:inventory-api-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="itemId">attributes.uriParams.'itemId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  itemId: "SKU-1001",
-  warehouseStock: 120,
-  regionalStock: 45,
-  totalInventory: 165,
-  status: "HEALTHY",
-  region: "EU-WEST",
-  safetyStock: 50,
-  lastUpdated: "2026-08-19T10:15:30Z"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="cfcad169-e5e1-42ee-9630-489d5cc8efc3" variableName="itemId"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="18c3797f-39c6-4b78-8ba0-9f9dcf9139e6" variableName="newItem"/>
+		<db:select doc:name="Select" doc:id="60f4d786-bb62-4c48-9cf8-73ddb48be8d0" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT item_id, warehouse_stock, regional_stock, safety_stock, region FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{ itemId: vars.itemId }]]]></db:input-parameters>
+		</db:select>
+		<set-variable value="#[payload[0]]" doc:name="Set Variable" doc:id="f7316e4b-0fa7-459a-9bbf-f9a67429a1ae" variableName="existing"/>
+		<choice doc:name="Choice" doc:id="d86fa8c6-33c4-4713-bd74-46e8e9965d2b" >
+			<when expression="#[isEmpty(vars.existing)]">
+				<raise-error doc:name="Raise error" doc:id="ab57ce2f-7d11-47f4-9e9e-48ee6f91ab70" description='#["Item " ++ vars.itemId ++ " not found"]' type="APP:NOT_FOUND"/>
+			</when>
+			<otherwise >
+				<db:update doc:name="Update" doc:id="9165cd80-11e7-479e-a8af-15454da1a3a3" config-ref="Database_Config">
+					<db:sql ><![CDATA[     UPDATE inventory SET warehouse_stock = :warehouseStock, regional_stock = :regionalStock, total_inventory = :totalInventory, safety_stock = :safetyStock, status = :status, region = :region WHERE item_id = :itemId]]></db:sql>
+					<db:input-parameters ><![CDATA[     #[%dw 2.0
+     output application/json
+     import * from InventoryLib
+     var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+     var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+     var total = calculateTotal(wh, reg)
+     ---
+     {
+         itemId: vars.itemId,
+         warehouseStock: wh,
+         regionalStock: reg,
+         totalInventory: total,
+         safetyStock: vars.newItem.safetyStock default vars.existing.safety_stock,
+         status: calculateStatus(total),
+         region: vars.newItem.region default vars.existing.region
+     }]]]></db:input-parameters>
+				</db:update>
+				<salesforce:upsert objectType="Inventory__c" externalIdFieldName="itemId__c" doc:name="Upsert" doc:id="6a99e135-82f8-4a1c-a63d-58a3a594ccb0" config-ref="Salesforce_Config">
+					<salesforce:records ><![CDATA[#[%dw 2.0
+     output application/java
+     import * from InventoryLib
+     var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+     var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+     var total = calculateTotal(wh, reg)
+     ---
+     [
+         {
+             itemId__c: vars.itemId,
+             warehouseStock__c: wh,
+             regionalStock__c: reg,
+             totalInventory__c: total,
+             status__c: calculateStatus(total)
+         }
+     ]]]]></salesforce:records>
+				</salesforce:upsert>
+				<ee:transform doc:name="Transform Message" doc:id="90f57ecd-0eb9-4f33-a360-af0a1936b019">
+			<ee:message>
+				<ee:set-payload><![CDATA[   %dw 2.0
+   output application/json
+   import * from InventoryLib
+   var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+   var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+   var total = calculateTotal(wh, reg)
+   ---
+   {
+       itemId: vars.itemId,
+       warehouseStock: wh,
+       regionalStock: reg,
+       totalInventory: total,
+       safetyStock: vars.newItem.safetyStock default vars.existing.safety_stock,
+       status: calculateStatus(total),
+       region: vars.newItem.region default vars.existing.region
+   }]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</otherwise>
+		</choice>
+		<error-handler ref="globalErrorHandler" />
     </flow>
     <flow name="get:\health:inventory-api-config">
         <ee:transform doc:name="Transform Message">
