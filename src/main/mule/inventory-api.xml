@@ -344,22 +344,55 @@ output application/json
 		</choice>
 		<error-handler ref="globalErrorHandler" />
     </flow>
-    <flow name="get:\health:inventory-api-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+	<flow name="inventory-apiFlow" doc:id="0e9f2a50-8b09-4c06-bea1-1003ab05eb0b" >
+		<ee:transform doc:name="Transform Message" doc:id="e21d4f15-5ba7-4b48-a03f-1e11f4386e49" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+	<flow name="get:\health:inventory-api-config">
+		<set-variable value="UP" doc:name="Set Variable" doc:id="ade8e7e0-8c88-4674-b8b8-d5c72febba17" variableName="dbStatus"/>
+		<set-variable value="UP" doc:name="Set Variable" doc:id="7232a497-46e3-431e-b1b4-ac3c768e64ed" variableName="sfStatus"/>
+		<try doc:name="Try" doc:id="d755730b-714d-4ba3-8554-596af43cf72b" >
+			<db:select doc:name="Select" doc:id="48d24f01-7ea0-487b-bde1-ca38f2bf5519" config-ref="Database_Config">
+				<db:sql ><![CDATA[SELECT 1]]></db:sql>
+			</db:select>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7aa00170-37dc-426c-9d70-8e9789e01f44" >
+					<set-variable value="DOWN" doc:name="Set Variable" doc:id="bad1bece-9063-44e2-9dc0-5a9d8e876dec" variableName="dbStatus"/>
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<try doc:name="Try" doc:id="df088ead-dd6d-44a9-b6a3-4be2467e026a" >
+			<salesforce:query doc:name="Query" doc:id="be773a8e-650b-4710-ae2b-32e3cdb1f57a" config-ref="Salesforce_Config">
+				<salesforce:salesforce-query ><![CDATA[SELECT Id FROM Inventory__c LIMIT 1]]></salesforce:salesforce-query>
+			</salesforce:query>
+			<error-handler >
+				<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="16b6aec0-5549-4ba9-957e-f3d521225a28" >
+					<set-variable value="DOWN" doc:name="Set Variable" doc:id="afb382c2-f89c-4159-a5f2-bdde2a8c364e" variableName="sfStatus"/>
+				</on-error-continue>
+			</error-handler>
+		</try>
+		<ee:transform doc:name="Transform Message" doc:id="b8e48f8f-dc8e-4be2-926a-8a71dfa99ae9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  status: "UP",
-  database: "UP",
-  salesforce: "UP",
-  timestamp: "2026-08-19T10:15:30Z"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    status: if (vars.dbStatus == "UP" and vars.sfStatus == "UP") "UP" else "DEGRADED",
+    database: vars.dbStatus,
+    salesforce: vars.sfStatus,
+    timestamp: now()
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
     </flow>
-    <flow name="get:\inventory:inventory-api-config">
+	<flow name="get:\inventory:inventory-api-config">
         <db:select doc:name="Select" doc:id="61596f02-d3ad-44d8-b33e-22eb48eebf2c" config-ref="Database_Config">
 			<db:sql ><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory]]></db:sql>
 		</db:select>
