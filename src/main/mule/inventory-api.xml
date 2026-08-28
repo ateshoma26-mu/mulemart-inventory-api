@@ -172,28 +172,72 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\inventory\(itemId):application\json:inventory-api-config">
-        <ee:transform doc:name="Transform Message">
-            <ee:variables>
-                <ee:set-variable variableName="itemId">attributes.uriParams.'itemId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="69aa64e9-da8f-4797-a7bb-c695b6782f3b" variableName="itemId"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="814e884b-e32d-4e29-8992-d7f309250646" variableName="newItem"/>
+		<db:select doc:name="Select" doc:id="74038900-1b2d-4026-9d20-5979299eb3b5" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT item_id FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters ><![CDATA[ #[{ itemId: vars.itemId }]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Choice" doc:id="b0255313-0b4b-486a-bbfc-cb9ddd5dc948" >
+			<when expression="#[isEmpty(payload)]">
+				<raise-error doc:name="Raise error" doc:id="d9afd7da-362d-49e0-92db-fad19a124d7d" type="APP:NOT_FOUND" description='#["Item " ++ vars.itemId ++ " not found"]'/>
+			</when>
+			<otherwise >
+				<db:update doc:name="Update" doc:id="cb658472-967f-4cfb-8923-690801043459" config-ref="Database_Config">
+					<db:sql ><![CDATA[UPDATE inventory SET warehouse_stock = :warehouseStock, regional_stock = :regionalStock, total_inventory = :totalInventory, safety_stock = :safetyStock, status = :status, region = :region WHERE item_id = :itemId]]></db:sql>
+					<db:input-parameters ><![CDATA[#[%dw 2.0
 output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
 ---
 {
-  itemId: "SKU-1001",
-  warehouseStock: 120,
-  regionalStock: 45,
-  totalInventory: 165,
-  status: "HEALTHY",
-  region: "EU-WEST",
-  safetyStock: 50,
-  lastUpdated: "2026-08-19T10:15:30Z"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+    itemId: vars.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}]]]></db:input-parameters>
+				</db:update>
+				<salesforce:upsert doc:name="Upsert" doc:id="aaa1baef-342c-4e17-a106-405c4901996c" config-ref="Salesforce_Config" objectType="Inventory__c" externalIdFieldName="itemId__c">
+					<salesforce:records ><![CDATA[#[%dw 2.0
+     output application/java
+     import * from InventoryLib
+     var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+     ---
+     [
+         {
+             itemId__c: vars.itemId,
+             warehouseStock__c: vars.newItem.warehouseStock,
+             regionalStock__c: vars.newItem.regionalStock,
+             totalInventory__c: total,
+             status__c: calculateStatus(total)
+         }
+     ]]]]></salesforce:records>
+				</salesforce:upsert>
+				<ee:transform doc:name="Transform Message" doc:id="b29ec68e-cb1e-4cb7-ab8b-06ce9fe712ba" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[   %dw 2.0
+   output application/json
+   import * from InventoryLib
+   var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+   ---
+   {
+       itemId: vars.itemId,
+       warehouseStock: vars.newItem.warehouseStock,
+       regionalStock: vars.newItem.regionalStock,
+       totalInventory: total,
+       safetyStock: vars.newItem.safetyStock,
+       status: calculateStatus(total),
+       region: vars.newItem.region
+   }]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+		        <error-handler ref="globalErrorHandler" />
+		
     </flow>
     <flow name="delete:\inventory\(itemId):inventory-api-config">
 		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="7d712c70-9b94-4fe1-98d8-895095186cdb" variableName="itemId"/>
