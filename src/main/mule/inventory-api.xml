@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
-http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
     <http:listener-config name="inventory-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
     <apikit:config name="inventory-api-config" api="resource::4ae79f63-d259-4a0c-96e6-ab579f7dcc92:mulemart-inventory-api:1.0.0:raml:zip:inventory-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
-    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e0f44fb7-0967-4925-8879-d44392525a88" file="config.yaml" key="${secure.key}">
+    <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e0f44fb7-0967-4925-8879-d44392525a88" file="config.yaml" key="MuleMartKey2026">
 		<secure-properties:encrypt algorithm="Blowfish" mode="CFB"/>
 	</secure-properties:config>
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="58f1a01d-52a7-4809-be83-c46ddb65447d" >
 		<db:my-sql-connection host="localhost" port="3306" user="root" password="${secure::db.password}" database="mulemart" />
 	</db:config>
 <salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="a639a295-741c-47ee-bbe3-c10597f31904" >
-		<salesforce:basic-connection username="alemtsehayjteshoma.f0941be09f1d@agentforce.com" password="${secure::salesforce.password}" securityToken="${secure::salesforce.token}" url="   https://login.salesforce.com/services/Soap/u/64.0" />
+		<salesforce:basic-connection username="alemtsehayjteshoma.f0941be09f1d@agentforce.com" password="${secure::salesforce.password}" securityToken="${secure::salesforce.token}" url="https://login.salesforce.com/services/Soap/u/64.0" />
 	</salesforce:sfdc-config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="7039b547-87d2-4588-961c-5fe68d313dba" >
+		<jms:active-mq-connection >
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+		</jms:active-mq-connection>
+	</jms:config>
 	<error-handler name="globalErrorHandler">
     <on-error-propagate type="APP:DUPLICATE">
         <ee:transform doc:name="Duplicate Error">
@@ -543,6 +549,28 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
     }
 ]]]]></salesforce:records>
 				</salesforce:upsert>
+				<set-variable value="#[import * from InventoryLib --- calculateStatus(calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock))]" doc:name="Set Variable" doc:id="ed098448-411b-430f-856f-efe71dab38a9" variableName="itemStatus"/>
+				<choice doc:name="Choice" doc:id="24c1e187-3b58-4472-9303-d7d007301d50">
+					<when expression='#[vars.itemStatus == "CRITICAL"]'>
+						<jms:publish doc:name="Publish" doc:id="bb5897b3-87d0-437d-9d8e-1311b3321b35" config-ref="JMS_Config" destination="procurement.alert.queue">
+					<jms:message>
+						<jms:body><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+{
+    itemId: vars.newItem.itemId,
+    currentStock: total,
+    status: "CRITICAL",
+    region: vars.newItem.region,
+    reorderQuantity: calculateReorder(total),
+    timestamp: now()
+}]]]></jms:body>
+					</jms:message>
+				</jms:publish>
+					</when>
+				</choice>
 				<ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
