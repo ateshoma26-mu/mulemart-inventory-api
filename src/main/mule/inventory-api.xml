@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
-http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd">
     <http:listener-config name="inventory-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
@@ -485,24 +486,57 @@ else do {
         </ee:transform>
     </flow>
     <flow name="post:\inventory\bulk:application\json:inventory-api-config">
-        <ee:transform doc:name="Transform Message">
+        <set-variable value="#[now()]" doc:name="Set startedAt" doc:id="e4f5a6b7-c8d9-0123-ef01-345678901234" variableName="startedAt"/>
+        <ee:transform doc:name="Materialize Bulk Payload" doc:id="f6a7b8c9-d0e1-2345-f012-567890123457">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{
-  totalRecords: 5000,
-  successCount: 4987,
-  failureCount: 13,
-  failedItemIds: [
-    "SKU-3310", 
-    "SKU-4821"
-  ],
-  startedAt: "2026-08-19T09:00:00Z",
-  completedAt: "2026-08-19T09:03:42Z"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+payload]]></ee:set-payload>
             </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="totalRecords"><![CDATA[%dw 2.0
+output application/java
+---
+sizeOf(payload)]]></ee:set-variable>
+            </ee:variables>
         </ee:transform>
+        <set-variable value="#[0]" doc:name="Set successCount" doc:id="a7b8c9d0-e1f2-3456-0123-678901234568" variableName="successCount"/>
+        <set-variable value="#[[]]" doc:name="Set failedItemIds" doc:id="a6b7c8d9-e0f1-2345-0123-567890123456" variableName="failedItemIds"/>
+        <batch:job jobName="bulkInventoryJob" doc:id="b7c8d9e0-f1a2-3456-1234-678901234567" maxFailedRecords="-1" blockSize="100">
+            <batch:process-records>
+                <batch:step name="processEachItemStep" doc:id="c8d9e0f1-a2b3-4567-2345-789012345679">
+                    <try doc:name="Try" doc:id="d9e0f1a2-b3c4-5678-3456-890123456789">
+                        <set-variable value="#[payload.itemId as String]" doc:name="Set currentItemId" doc:id="e0f1a2b3-c4d5-6789-4567-901234567890" variableName="currentItemId"/>
+                        <flow-ref doc:name="Process Item" doc:id="f1a2b3c4-d5e6-7890-5678-012345678901" name="process-inventory-item-subflow"/>
+                        <set-variable value="#[%dw 2.0&#10;output application/java&#10;---&#10;(vars.successCount default 0) + 1]" doc:name="Increment Success" doc:id="b8c9d0e1-f2a3-4567-1234-789012345680" variableName="successCount"/>
+                        <error-handler>
+                            <on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue" doc:id="a2b3c4d5-e6f7-8901-6789-123456789012">
+                                <logger level="WARN" doc:name="Log Bulk Failure" doc:id="b3c4d5e6-f7a8-9012-7890-234567890123" message="Bulk failed for item #[vars.currentItemId]: #[error.description]"/>
+                                <set-variable value="#[%dw 2.0&#10;output application/java&#10;---&#10;(vars.failedItemIds default []) ++ [(vars.currentItemId as String) default 'UNKNOWN']]" doc:name="Track Failed Item" doc:id="c4d5e6f7-a8b9-0123-8901-345678901234" variableName="failedItemIds"/>
+                            </on-error-continue>
+                        </error-handler>
+                    </try>
+                </batch:step>
+            </batch:process-records>
+            <batch:on-complete>
+                <ee:transform doc:name="Build SyncResponse" doc:id="d5e6f7a8-b9c0-1234-9012-456789012345">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    totalRecords: vars.totalRecords,
+    successCount: vars.successCount default 0,
+    failureCount: sizeOf(vars.failedItemIds default []),
+    failedItemIds: vars.failedItemIds default [],
+    startedAt: vars.startedAt,
+    completedAt: now()
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+            </batch:on-complete>
+        </batch:job>
     </flow>
     <flow name="post:\inventory:application\json:inventory-api-config">
         <set-variable value="#[payload]" doc:name="Set Variable" doc:id="d243e55f-cc38-429e-bcf6-fa062cc29bb7" variableName="newItem"/>
@@ -593,7 +627,7 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
 		</choice>
 		<error-handler ref="globalErrorHandler" />
     </flow>
-    <flow name="post:\inventory\sync:inventory-api-config">
+	<flow name="post:\inventory\sync:inventory-api-config">
         <ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -613,4 +647,74 @@ output application/json
             </ee:message>
         </ee:transform>
     </flow>
+	<sub-flow name="process-inventory-item-subflow" doc:id="a6c590d2-9803-4224-9022-d2a984e33429" >
+		<set-variable value="#[payload]" doc:name="Store Item" doc:id="9c462cdd-a4a0-47ef-8512-6cd63024e8e0" variableName="newItem"/>
+		<db:select doc:name="Check Duplicate" doc:id="b1c2d3e4-f5a6-7890-abcd-ef1234567890" config-ref="Database_Config">
+			<db:sql><![CDATA[SELECT item_id FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters><![CDATA[#[{ itemId: vars.newItem.itemId }]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Duplicate Check" doc:id="c2d3e4f5-a6b7-8901-cdef-123456789012">
+			<when expression="#[sizeOf(payload) &gt; 0]">
+				<raise-error doc:name="Raise Duplicate Error" doc:id="d3e4f5a6-b7c8-9012-def0-234567890123" type="APP:DUPLICATE" description='#["Item " ++ vars.newItem.itemId ++ " already exists"]'/>
+			</when>
+			<otherwise>
+				<db:insert doc:name="Insert Item" doc:id="e4f5a6b7-c8d9-0123-ef01-345678901235" config-ref="Database_Config">
+					<db:sql><![CDATA[INSERT INTO inventory (item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region)
+VALUES (:itemId, :warehouseStock, :regionalStock, :totalInventory, :safetyStock, :status, :region)]]></db:sql>
+					<db:input-parameters><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+{
+    itemId: vars.newItem.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}]]]></db:input-parameters>
+				</db:insert>
+				<salesforce:upsert doc:name="Upsert to Salesforce" doc:id="f5a6b7c8-d9e0-1234-f012-456789012346" config-ref="Salesforce_Config" objectType="Inventory__c" externalIdFieldName="itemId__c">
+					<salesforce:records><![CDATA[#[%dw 2.0
+output application/java
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+[
+    {
+        itemId__c: vars.newItem.itemId,
+        warehouseStock__c: vars.newItem.warehouseStock,
+        regionalStock__c: vars.newItem.regionalStock,
+        totalInventory__c: total,
+        status__c: calculateStatus(total)
+    }
+]]]]></salesforce:records>
+				</salesforce:upsert>
+				<set-variable value="#[import * from InventoryLib --- calculateStatus(calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock))]" doc:name="Set itemStatus" doc:id="a6b7c8d9-e0f1-2345-0123-567890123457" variableName="itemStatus"/>
+				<choice doc:name="Critical Stock Check" doc:id="b7c8d9e0-f1a2-3456-1234-678901234568">
+					<when expression='#[vars.itemStatus == "CRITICAL"]'>
+						<jms:publish doc:name="Publish Procurement Alert" doc:id="c8d9e0f1-a2b3-4567-2345-789012345679" config-ref="JMS_Config" destination="procurement.alert.queue">
+							<jms:message>
+								<jms:body><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+{
+    itemId: vars.newItem.itemId,
+    currentStock: total,
+    status: "CRITICAL",
+    region: vars.newItem.region,
+    reorderQuantity: calculateReorder(total),
+    timestamp: now()
+}]]]></jms:body>
+							</jms:message>
+						</jms:publish>
+					</when>
+				</choice>
+			</otherwise>
+		</choice>
+	</sub-flow>
 </mule>
