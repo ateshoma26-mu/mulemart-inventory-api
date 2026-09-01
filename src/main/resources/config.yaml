@@ -4,6 +4,10 @@ db:
   user: "root"
   password: "![ThigbGGk9Dk=]"
   database: "mulemart"
+files:
+  workingDir: "C:/Users/alemi/source/mulemart-inventory-api/data"
+  inbound: "Regional-Updates"
+  processed: "Processed-Files"
 salesforce:
   username: "alemtsehayjteshoma.f0941be09f1d@agentforce.com"
   password: "![MlT7LjHFllgq/kv37pWfKVsR4sK3Y4Tn]"
