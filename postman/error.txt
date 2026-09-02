@@ -1,0 +1,420 @@
+MULE_HOME is set to C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule
+MULE_BASE is set to C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule
+Found JAVA_HOME = C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.jdk.win32.x86_64_1.3.1
+--> Wrapper Started as Console
+Java Service Wrapper Standard Edition 64-bit 3.5.51
+  Copyright (C) 1999-2022 Tanuki Software, Ltd. All Rights Reserved.
+    http://wrapper.tanukisoftware.com
+  Licensed to MuleSoft Inc. for Mule Runtime Enterprise Edition
+
+Launching a JVM...
+Starting the Mule Container...
+WrapperManager: Initializing...
+
+Running Mule in testing mode
+
+INFO  2026-09-01 17:03:17,867 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+*                                                                    *
+*                         (((((((((((((((((((                        *
+*                     (((((                 ((((#                    *
+*                  &(((                        *(((                  *
+*                &(((                             (((                *
+*               (((     (((%               (((#     (((              *
+*              ((     (((((((             (((((((    (((             *
+*             ((     (((((((((           (((((((((     ((            *
+*            ((    #(((((((((((        #(((((((((((    (((           *
+*           #((    ((((((((((((((     ((((((((((((((    ((           *
+*           ((    ((((((  /(((((((   (((((((  /((((((    ((          *
+*           ((    ((((((    (((((((&(((((((    ((((((    ((          *
+*           ((    (((((      ((((((((((((*     ((((((    ((          *
+*           ((    ((((((      *(((((((((       ((((((    ((          *
+*           ((    ((((((        (((((((        ((((((   (((          *
+*            ((    ((((((                     ((((((    ((           *
+*            ((#    ((((((#                 (((((((    ((            *
+*             ((#    ((((((((             ((((((((    (((            *
+*              (((    (((((((              (((((     ((.             *
+*                ((      (((               (((     #((               *
+*                 /((                            (((                 *
+*                    (((                      &(((                   *
+*                      *((((&             &((((                      *
+*                           ((((((((((((((/                          *
+*                                                                    *
+*    ___  ___      _        ______            _   _                  *
+*    |  \/  |     | |       | ___ \          | | (_)                 *
+*    | .  . |_   _| | ___   | |_/ /   _ _ __ | |_ _ _ __ ___   ___   *
+*    | |\/| | | | | |/ _ \  |    / | | | '_ \| __| | '_ ` _ \ / _ \  *
+*    | |  | | |_| | |  __/  | |\ \ |_| | | | | |_| | | | | | |  __/  *
+*    \_|  |_/\__,_|_|\___|  \_| \_\__,_|_| |_|\__|_|_| |_| |_|\___|  *
+*                                                                    *
+*                                                                    *
+* Mule Runtime and Integration Platform                              *
+* Version: 4.7.0 Build: 57372c02                                     *
+* MuleSoft, Inc.                                                     *
+* For more information go to                                         *
+* https://www.mulesoft.com/platform/soa/mule-esb-enterprise          *
+*                                                                    *
+* Server started: 9/1/26 5:03 PM                                     *
+* JDK: 17.0.11 (mixed mode, sharing)                                 *
+* JDK properties:                                                    *
+*  - java.vendor = Eclipse Adoptium                                  *
+*  - java.vm.name = OpenJDK 64-Bit Server VM                         *
+* - java.home =                                                      *
+* C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mu *
+* le.tooling.jdk.win32.x86_64_1.3.1                                  *
+* OS: Windows 11 -  (10.0, amd64)                                    *
+* Wrapper PID: 20396                                                 *
+* Java PID: 24568                                                    *
+* Host: DESKTOP-350IP1B (192.168.1.151)                              *
+* Mule services:                                                     *
+*  - api-gateway-contract-service-1.4.0                              *
+*  - mule-service-http-ee-1.10.0                                     *
+*  - mule-service-oauth-ee-1.4.0                                     *
+*  - mule-service-scheduler-1.7.0                                    *
+*  - mule-service-soap-1.7.0                                         *
+*  - mule-service-weave-ee-2.7.0                                     *
+* Mule server plugins:                                               *
+*  - mule-agent-plugin                                               *
+*  - mule-debugger-5.1.0-mule-server-plugin                          *
+*  - munit-recording-server-mule-server-plugin                       *
+* Applied artifact patches:                                          *
+*  - AGW-4162-1.1.1-1.0.jar                                          *
+*  - AGW-4162-1.1.2-1.0.jar                                          *
+*  - APIKIT-2576-1.3.7-1.3.9-2.0.jar                                 *
+*  - APIKIT-2612-1.0.0-1.0.2-1.1.0-1.0.jar                           *
+*  - APIKIT-2612-1.1.1-1.0.jar                                       *
+*  - APIKIT-2612-1.1.11-1.0.jar                                      *
+*  - APIKIT-2612-1.1.12-1.2.0-1.2.2-1.0.jar                          *
+*  - APIKIT-2612-1.1.13-1.1.14-1.2.3-1.2.4-1.0.jar                   *
+*  - APIKIT-2612-1.1.15-1.1.16-1.0.jar                               *
+*  - APIKIT-2612-1.1.2-1.0.jar                                       *
+*  - APIKIT-2612-1.1.3-1.0.jar                                       *
+*  - APIKIT-2612-1.1.4-1.0.jar                                       *
+*  - APIKIT-2612-1.1.5-1.1.6-1.0.jar                                 *
+*  - APIKIT-2612-1.1.7-1.0.jar                                       *
+*  - APIKIT-2612-1.1.8-1.1.10-1.0.jar                                *
+*  - APIKIT-2612-1.2.5-1.3.1-1.3.4-1.0.jar                           *
+*  - APIKIT-2612-1.3.0-1.0.jar                                       *
+*  - APIKIT-2612-1.3.5-1.3.9-1.0.jar                                 *
+*  - APIKIT-2613-1.2.0-1.2.1-1.0.jar                                 *
+*  - APIKIT-2613-1.2.2-1.0.jar                                       *
+*  - APIKIT-2613-1.2.3-1.2.4-1.3.0-1.0.jar                           *
+*  - APIKIT-2613-1.2.5-1.3.1-1.3.4-1.0.jar                           *
+*  - APIKIT-2613-1.3.5-1.3.6-1.0.jar                                 *
+*  - APIKIT-2613-1.3.7-1.3.8-1.0.jar                                 *
+*  - APIKIT-2613-1.3.9-1.0.jar                                       *
+*  - APIKIT-2989-1.1.16-1.0.jar                                      *
+*  - APIKIT-2989-1.2.5-1.0.jar                                       *
+*  - APIKIT-2989-1.3.16-1.3.19-1.0.jar                               *
+*  - APIKIT-2989-1.4.0-1.4.2-1.0.jar                                 *
+*  - APIKIT-2989-1.5.1-1.5.3-1.0.jar                                 *
+*  - MULE-17706-1.1.1-1.1.2-1.0.jar                                  *
+*  - MULE-17706-1.2.0-1.0.jar                                        *
+*  - MULE-17706-1.2.1-1.2.2-1.0.jar                                  *
+*  - MULE-17706-1.2.3-1.0.jar                                        *
+*  - MULE-17706-1.3.0-1.3.1-1.0.jar                                  *
+*  - MULE-17706-1.3.2-1.3.3-1.0.jar                                  *
+*  - MULE-17706-1.3.4-1.0.jar                                        *
+*  - MULE-17706-1.4.0-1.0.jar                                        *
+*  - MULE-17706-1.4.1-1.4.3-1.0.jar                                  *
+*  - MULE-17706-1.5.0-1.5.6-1.0.jar                                  *
+*  - MULE-17706-1.5.10-1.5.11-1.0.jar                                *
+*  - MULE-17706-1.5.7-1.5.9-1.0.jar                                  *
+*  - MULE-18457-MULE-19564-1.1.1-1.0.jar                             *
+*  - MULE-18457-MULE-19564-1.2.0-1.2.1-1.0.jar                       *
+*  - MULE-18457-MULE-19564-1.3.0-1.0.jar                             *
+*  - MULE-18457-MULE-19564-1.3.1-1.0.jar                             *
+*  - MULE-18457-MULE-19564-1.3.2-1.0.jar                             *
+*  - MULE-18457-MULE-19564-1.3.3-1.0.jar                             *
+*  - MULE-18900-19139-1.4.0-1.4.1-1.4.2-1.0.jar                      *
+*  - MULE-19564-1.3.4-1.0.jar                                        *
+*  - MULE-19564-1.3.5-1.0.jar                                        *
+*  - MULE-19564-1.3.6-1.0.jar                                        *
+*  - SE-12551-1.0.0-1.0.1-1.0.jar                                    *
+*  - SE-12551-1.1.0-1.1.15-2.0.jar                                   *
+*  - SE-12551-1.2.0-1.3.0-1.0.jar                                    *
+*  - SE-12551-1.3.1-1.3.4-1.0.jar                                    *
+*  - SE-12562-1.0.0-1.5.5-1.0.jar                                    *
+*  - SE-17198-1.0.jar                                                *
+* Mule system properties:                                            *
+*  - mule.metadata.cache.expirationInterval.millis = 5000            *
+* - mule.base =                                                      *
+* C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mu *
+* le.tooling.server.4.7.ee_7.18.0.202405262218\mule                  *
+*  - mule.testingMode =                                              *
+* - mule.home =                                                      *
+* C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mu *
+* le.tooling.server.4.7.ee_7.18.0.202405262218\mule                  *
+*  - mule.forceConsoleLog =                                          *
+* - mule.bootstrap.container.wrapper.class =                         *
+* org.mule.runtime.module.boot.tanuki.internal.MuleContainerTanukiWr *
+* apper                                                              *
+*  - mule.metadata.cache.entryTtl.minutes = 10                       *
+**********************************************************************
+INFO  2026-09-01 17:03:18,265 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+* Cluster configuration                                              *
+*                                                                    *
+* Cluster mode disabled                                              *
+**********************************************************************
+INFO  2026-09-01 17:03:18,312 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.factory.ServerPluginDescriptorFactory: Creating plugin from folder C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\server-plugins\mule-agent-plugin
+INFO  2026-09-01 17:03:18,503 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.factory.ServerPluginDescriptorFactory: Creating plugin from folder C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\server-plugins\mule-debugger-5.1.0-mule-server-plugin
+INFO  2026-09-01 17:03:18,553 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.factory.ServerPluginDescriptorFactory: Creating plugin from folder C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\server-plugins\munit-recording-server-mule-server-plugin
+INFO  2026-09-01 17:03:45,048 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: Mule agent keystore file does not exits in C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\conf\mule-agent.jks.
+INFO  2026-09-01 17:03:45,107 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: Starting Mule Agent Version: 2.6.0 ; build-20240118
+INFO  2026-09-01 17:03:45,120 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: Agent Security Manager initialized successfully: fips mode (disabled)
+INFO  2026-09-01 17:03:49,256 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: The /C:/Users/alemi/source/AnypointStudio/AnypointStudio/plugins/org.mule.tooling.server.4.7.ee_7.18.0.202405262218/mule/server-plugins/mule-agent-plugin/\lib\modules folder doesn't exists, skipping appending of jars.
+WARN  2026-09-01 17:03:50,879 [WrapperListener_start_runner] com.mulesoft.agent.details.utils.DefaultCertificateDetails: There was an error reading the certificate. Reason: FileNotFoundException: C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\conf\mule-agent.jks (The system cannot find the file specified)
+INFO  2026-09-01 17:03:51,020 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.gw.http.handler.database Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,021 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.gw.http.handler.log Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,025 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.gw.http.handler.splunk Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,038 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.analytics Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,039 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.database Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,041 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.http Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,042 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the tracking.notification.internal.message.handler Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,042 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.log Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,043 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.messageHistory Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,044 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.splunk Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,054 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the mule.agent.ingest.application.metrics.internal.handler ...
+ERROR 2026-09-01 17:03:51,055 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: There was an error initializing the mule.agent.ingest.application.metrics.internal.handler Internal Handler. It'll be disabled until reconfiguration. Could not initialize ingest monitor publisher. Its configuration is invalid.
+INFO  2026-09-01 17:03:51,065 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the cloudwatch.agent.monitor.publisher Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,068 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the mule.agent.ingest.target.metrics.internal.handler ...
+ERROR 2026-09-01 17:03:51,070 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: There was an error initializing the mule.agent.ingest.target.metrics.internal.handler Internal Handler. It'll be disabled until reconfiguration. Could not initialize ingest monitor publisher. Its configuration is invalid.
+INFO  2026-09-01 17:03:51,072 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.nagios.jmx.internal.handler Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,073 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.zabbix.jmx.internal.handler Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,087 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.graphite.jmx.internal.handler Internal Handler because it's disabled.
+INFO  2026-09-01 17:03:51,088 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the action.status.internal.message.handler ...
+INFO  2026-09-01 17:03:51,089 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: action.status.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,090 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the application.deployment.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,090 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: application.deployment.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,091 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the configuration.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,092 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: configuration.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,093 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the domain.deployment.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,095 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: domain.deployment.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,097 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the flow.status.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,097 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: flow.status.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,098 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the membership.change.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,099 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: membership.change.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,100 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the primary.node.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,100 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: primary.node.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,101 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the scheduling.notification.internal.message.handler ...
+INFO  2026-09-01 17:03:51,101 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: scheduling.notification.internal.message.handler initialized successfully.
+INFO  2026-09-01 17:03:51,156 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Registering plugin: mule-agent-plugin
+INFO  2026-09-01 17:03:51,399 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Registering plugin: mule-debugger-server-plugin
+INFO  2026-09-01 17:03:51,437 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Registering plugin: munit-recording-plugin
+INFO  2026-09-01 17:03:51,901 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Starting plugin: mule-agent-plugin
+INFO  2026-09-01 17:03:51,902 [WrapperListener_start_runner] com.mulesoft.agent.util.DefaultLicenseService: Mule EE evaluation version. Enabling Mule Agent usage.
+INFO  2026-09-01 17:03:51,912 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: Skipping initialization of transport FileAgentTransport
+INFO  2026-09-01 17:03:51,912 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: Initializing transport: RestAgentTransport
+INFO  2026-09-01 17:03:51,912 [WrapperListener_start_runner] com.mulesoft.agent.rest.transport.RestAgentTransport: mule.security.provider: null
+INFO  2026-09-01 17:03:51,966 [WrapperListener_start_runner] org.eclipse.jetty.util.log: Logging initialized @47252ms to org.eclipse.jetty.util.log.Slf4jLog
+WARN  2026-09-01 17:03:51,996 [WrapperListener_start_runner] com.mulesoft.agent.rest.AgentRestLayer: REST Agent transport is starting with no security
+INFO  2026-09-01 17:03:52,325 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: RestAgentTransport initialised
+INFO  2026-09-01 17:03:52,326 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: Skipping initialization of transport WebSocketAgentTransport
+INFO  2026-09-01 17:03:53,233 [WrapperListener_start_runner] org.eclipse.jetty.server.Server: jetty-9.4.53.v20231009; built: 2023-10-09T12:29:09.265Z; git: 27bde00a0b95a1d5bbee0eae7984f891d2d0f8c9; jvm 17.0.11+9
+WARN  2026-09-01 17:03:53,819 [WrapperListener_start_runner] org.glassfish.jersey.server.wadl.WadlFeature: JAXBContext implementation could not be found. WADL feature is disabled.
+WARN  2026-09-01 17:03:54,148 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.deployment.ApplicationsRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.deployment.ApplicationsRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,148 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.installer.InstallerRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.installer.InstallerRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,148 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.extensions.ExtensionRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.extensions.ExtensionRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,149 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.flows.FlowsRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.flows.FlowsRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,149 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.deployment.DomainsRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.deployment.DomainsRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,149 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.action.ActionRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.action.ActionRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,150 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.monitoring.MonitoringRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.monitoring.MonitoringRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,150 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.administration.ComponentRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.administration.ComponentRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,150 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.metadata.MetadataRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.metadata.MetadataRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,151 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.clustering.ClusteringRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.clustering.ClusteringRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,151 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.logging.LoggingRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.logging.LoggingRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,151 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.runtime.RuntimeConfigurationRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.runtime.RuntimeConfigurationRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.studio.StudioRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.studio.StudioRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.healthcheck.HealthCheckRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.healthcheck.HealthCheckRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.valueprovider.ValueProviderRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.valueprovider.ValueProviderRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.dataweave.DataWeaveRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.dataweave.DataWeaveRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,154 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.properties.PropertiesRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.properties.PropertiesRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,154 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.tooling.ToolingRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.tooling.ToolingRequestHandler will be ignored. 
+WARN  2026-09-01 17:03:54,154 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.tracking.TrackingExternalHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.tracking.TrackingExternalHandler will be ignored. 
+INFO  2026-09-01 17:03:55,133 [WrapperListener_start_runner] org.eclipse.jetty.server.handler.ContextHandler: Started o.e.j.s.ServletContextHandler@7b191d51{/,null,AVAILABLE}
+INFO  2026-09-01 17:03:55,133 [WrapperListener_start_runner] org.eclipse.jetty.server.Server: Started @50422ms
+INFO  2026-09-01 17:03:55,185 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: RestAgentTransport started
+INFO  2026-09-01 17:03:55,190 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: Initializing Artifact Validator service
+INFO  2026-09-01 17:03:55,195 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: Total validators loaded: 1
+INFO  2026-09-01 17:03:55,196 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: Validators listed by type:
+INFO  2026-09-01 17:03:55,197 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: 	Type: jarSignatureValidator Names: [defaultJarSignatureValidator]
+INFO  2026-09-01 17:03:55,198 [WrapperListener_start_runner] com.mulesoft.agent.services.healthcheck.AgentHealthCheckService: Initializing HealthCheck service
+INFO  2026-09-01 17:03:58,242 [CronSchedulerHandler] org.quartz.impl.StdSchedulerFactory: Using default implementation for ThreadExecutor
+INFO  2026-09-01 17:03:58,268 [CronSchedulerHandler] org.quartz.core.SchedulerSignalerImpl: Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
+INFO  2026-09-01 17:03:58,269 [CronSchedulerHandler] org.quartz.core.QuartzScheduler: Quartz Scheduler v.2.3.2 created.
+INFO  2026-09-01 17:03:58,271 [CronSchedulerHandler] org.quartz.simpl.RAMJobStore: RAMJobStore initialized.
+INFO  2026-09-01 17:03:58,272 [CronSchedulerHandler] org.quartz.core.QuartzScheduler: Scheduler meta-data: Quartz Scheduler (v2.3.2) '[MuleRuntime].' with instanceId 'NON_CLUSTERED'
+  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
+  NOT STARTED.
+  Currently in standby mode.
+  Number of jobs executed: 0
+  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 1 threads.
+  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+
+INFO  2026-09-01 17:03:58,272 [CronSchedulerHandler] org.quartz.impl.StdSchedulerFactory: Quartz scheduler '[MuleRuntime].' initialized from an externally provided properties instance.
+INFO  2026-09-01 17:03:58,272 [CronSchedulerHandler] org.quartz.impl.StdSchedulerFactory: Quartz scheduler version: 2.3.2
+INFO  2026-09-01 17:03:58,272 [WrapperListener_start_runner] org.quartz.core.QuartzScheduler: Scheduler [MuleRuntime]._$_NON_CLUSTERED started.
+INFO  2026-09-01 17:03:58,295 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+* Started DefaultSchedulerService                                    *
+*                                                                    *
+* Resolved configuration values:                                     *
+*                                                                    *
+* Pooling strategy:       UBER                                       *
+* gracefulShutdownTimeout:       15000 ms                            *
+* uber.threadPool.maxSize:         164                               *
+* uber.threadPool.threadKeepAlive: 30000 ms                          *
+*                                                                    *
+* These can be modified by editing 'conf/scheduler-pools.conf'       *
+**********************************************************************
+INFO  2026-09-01 17:03:58,406 [WrapperListener_start_runner] com.mulesoft.agent.services.AgentStudioManagementService: Starting Studio Management Service
+INFO  2026-09-01 17:03:58,412 [WrapperListener_start_runner] com.mulesoft.agent.services.AgentStudioManagementService: Studio Checker is running
+INFO  2026-09-01 17:03:58,677 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'default'                                                         +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-01 17:03:58,678 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'default'                                                +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-01 17:04:00,539 [WrapperListener_start_runner] [processor: ; event: ] org.mule.runtime.module.deployment.internal.processor.FallbackArtifactConfigurationProcessor: Serialized AST not avaliable for artifact 'default'
+INFO  2026-09-01 17:04:00,603 [ArtifactDeployer.start.01] [processor: ; event: ] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+* Domain: default                                                    *
+* OS encoding: windows-1252, Mule encoding: UTF-8                    *
+*                                                                    *
+**********************************************************************
+INFO  2026-09-01 17:04:00,607 [ArtifactDeployer.start.01] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+* Started domain 'default'                                           *
+**********************************************************************
+INFO  2026-09-01 17:04:00,621 [WrapperListener_start_runner] org.mule.runtime.module.deployment.internal.ArtifactArchiveInstaller: Exploding a Mule artifact archive: 'C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\apps\mulemart-inventory-api.jar'
+WARN  2026-09-01 17:04:21,479 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-extensions-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,479 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration-persistence' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:api-annotations' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-java' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-message-metadata-model' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-extensions-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration-persistence' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:api-annotations' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-java' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-message-metadata-model' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
+WARN  2026-09-01 17:04:22,022 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.DefaultArtifactClassLoaderResolver: Exported packages from artifact 'mulemart-inventory-api' are provided by parent class loader: [org.slf4j, org.slf4j.spi, javax.jms, org.slf4j.event, org.slf4j.helpers]
+INFO  2026-09-01 17:04:22,147 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New app 'mulemart-inventory-api'                                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-01 17:04:22,149 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing app 'mulemart-inventory-api'                                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-01 17:04:59,876 [WrapperListener_start_runner] [processor: ; event: ] org.mule.runtime.module.deployment.impl.internal.application.DefaultMuleApplication: org.mule.sdk.api.meta.JavaVersion.JAVA_25
+java.lang.EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
+	at java.base/sun.reflect.annotation.EnumConstantNotPresentExceptionProxy.generateException(EnumConstantNotPresentExceptionProxy.java:47) ~[?:?]
+	at java.base/sun.reflect.annotation.AnnotationInvocationHandler.invoke(AnnotationInvocationHandler.java:89) ~[?:?]
+	at jdk.proxy4/jdk.proxy4.$Proxy118.value(Unknown Source) ~[?:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.java.type.runtime.ClassBasedAnnotationValueFetcher.getArrayValue(ClassBasedAnnotationValueFetcher.java:56) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.api.loader.java.type.AnnotationValueFetcher.getEnumArrayValue(AnnotationValueFetcher.java:90) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.lambda$parseSupportedJavaVersions$2(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseSupportedJavaVersions(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseStructure(JavaExtensionModelParser.java:151) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:130) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:121) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParserFactory.createParser(JavaExtensionModelParserFactory.java:34) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.delegate.DefaultExtensionModelLoaderDelegate.declare(DefaultExtensionModelLoaderDelegate.java:93) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.AbstractExtensionModelLoader.declareExtension(AbstractExtensionModelLoader.java:111) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.doCreate(ExtensionModelLoader.java:119) ~[mule-extensions-api-1.7.0.jar:?]
+	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.loadExtensionModel(ExtensionModelLoader.java:99) ~[mule-extensions-api-1.7.0.jar:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.discoverExtensionThroughJsonDescriber(RepositoryLookupExtensionModelGenerator.java:98) ~[?:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.lambda$obtainExtensionModel$1(RepositoryLookupExtensionModelGenerator.java:54) ~[?:?]
+	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.obtainExtensionModel(RepositoryLookupExtensionModelGenerator.java:54) ~[?:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.DefaultExtensionModelDiscoverer.lambda$discoverPluginsExtensionModels$0(DefaultExtensionModelDiscoverer.java:49) ~[?:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.PluginsDependenciesProcessor.lambda$process$5(PluginsDependenciesProcessor.java:85) ~[?:?]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179) ~[?:?]
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
+	at java.base/java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:290) ~[?:?]
+	at java.base/java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:754) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+INFO  2026-09-01 17:04:59,897 [WrapperListener_start_runner] [processor: ; event: ] org.mule.runtime.module.deployment.impl.internal.artifact.AbstractDeployableArtifact: Application 'mulemart-inventory-api' never started, nothing to dispose of
+INFO  2026-09-01 17:04:59,897 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Disposing application 'mulemart-inventory-api'                               +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-01 17:05:00,084 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Failed to deploy artifact 'mulemart-inventory-api',                          +
++ org.mule.runtime.deployment.model.api.DeploymentInitException:               +
++ EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25   +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-01 17:05:00,084 [WrapperListener_start_runner] org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer: Failed to deploy artifact [mulemart-inventory-api]
+org.mule.runtime.deployment.model.api.DeploymentException: Failed to deploy artifact [mulemart-inventory-api]
+Caused by: org.mule.runtime.api.exception.MuleRuntimeException: org.mule.runtime.deployment.model.api.DeploymentInitException: EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
+Caused by: org.mule.runtime.deployment.model.api.DeploymentInitException: EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
+Caused by: org.mule.runtime.core.api.config.ConfigurationException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
+Caused by: java.lang.EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
+	at java.base/sun.reflect.annotation.EnumConstantNotPresentExceptionProxy.generateException(EnumConstantNotPresentExceptionProxy.java:47) ~[?:?]
+	at java.base/sun.reflect.annotation.AnnotationInvocationHandler.invoke(AnnotationInvocationHandler.java:89) ~[?:?]
+	at jdk.proxy4/jdk.proxy4.$Proxy118.value(Unknown Source) ~[?:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.java.type.runtime.ClassBasedAnnotationValueFetcher.getArrayValue(ClassBasedAnnotationValueFetcher.java:56) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.api.loader.java.type.AnnotationValueFetcher.getEnumArrayValue(AnnotationValueFetcher.java:90) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.lambda$parseSupportedJavaVersions$2(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseSupportedJavaVersions(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseStructure(JavaExtensionModelParser.java:151) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:130) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:121) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParserFactory.createParser(JavaExtensionModelParserFactory.java:34) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.delegate.DefaultExtensionModelLoaderDelegate.declare(DefaultExtensionModelLoaderDelegate.java:93) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.AbstractExtensionModelLoader.declareExtension(AbstractExtensionModelLoader.java:111) ~[mule-module-extensions-support-4.7.0.jar:?]
+	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.doCreate(ExtensionModelLoader.java:119) ~[mule-extensions-api-1.7.0.jar:?]
+	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.loadExtensionModel(ExtensionModelLoader.java:99) ~[mule-extensions-api-1.7.0.jar:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.discoverExtensionThroughJsonDescriber(RepositoryLookupExtensionModelGenerator.java:98) ~[mule-module-artifact-activation-4.7.0.jar:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.lambda$obtainExtensionModel$1(RepositoryLookupExtensionModelGenerator.java:54) ~[mule-module-artifact-activation-4.7.0.jar:?]
+	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.obtainExtensionModel(RepositoryLookupExtensionModelGenerator.java:54) ~[mule-module-artifact-activation-4.7.0.jar:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.DefaultExtensionModelDiscoverer.lambda$discoverPluginsExtensionModels$0(DefaultExtensionModelDiscoverer.java:49) ~[mule-module-artifact-activation-4.7.0.jar:?]
+	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.PluginsDependenciesProcessor.lambda$process$5(PluginsDependenciesProcessor.java:85) ~[mule-module-artifact-activation-4.7.0.jar:?]
+	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183) ~[?:?]
+	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179) ~[?:?]
+	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
+	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
+	at java.base/java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:290) ~[?:?]
+	at java.base/java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:754) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
+	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
+INFO  2026-09-01 17:05:00,288 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Mule is up and kicking (every 5000ms)                                        +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-01 17:05:00,470 [WrapperListener_start_runner] org.eclipse.jetty.server.AbstractConnector: Started ServerConnector@492b28f5{HTTP/1.1, (http/1.1)}{127.0.0.1:64131}
+INFO  2026-09-01 17:05:00,477 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+*              - - + DOMAIN + - -               * - - + STATUS + - - *
+**********************************************************************
+* default                                       * DEPLOYED           *
+**********************************************************************
+
+*******************************************************************************************************
+*            - - + APPLICATION + - -            *       - - + DOMAIN + - -       * - - + STATUS + - - *
+*******************************************************************************************************
+* mulemart-inventory-api                        * default                        * FAILED             *
+*******************************************************************************************************
+

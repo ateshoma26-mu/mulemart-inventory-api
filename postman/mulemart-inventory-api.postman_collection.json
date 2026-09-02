@@ -1,0 +1,300 @@
+{
+  "info": {
+    "name": "MuleMart Inventory API",
+    "description": "Full endpoint coverage for the MuleMart Global Omni-Channel Inventory API (all 10 RAML resources), including key error-path cases (404, 409, 400). Run folders top to bottom.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8081/api" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "GET Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory - Create",
+      "item": [
+        {
+          "name": "POST Create Item (Healthy)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DEMO-001\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Create Item (Critical - triggers alert)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DEMO-002\",\n  \"warehouseStock\": 3,\n  \"regionalStock\": 4,\n  \"safetyStock\": 20,\n  \"region\": \"NA-EAST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Create Duplicate (expect 409)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DEMO-001\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Create Invalid - negative stock (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DEMO-BAD\",\n  \"warehouseStock\": -5,\n  \"regionalStock\": 10,\n  \"region\": \"EU-WEST\"\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory - Read",
+      "item": [
+        {
+          "name": "GET List All Inventory",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory"
+          }
+        },
+        {
+          "name": "GET List Filtered (status & region)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory?status=HEALTHY&region=EU-WEST"
+          }
+        },
+        {
+          "name": "GET List Paginated",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory?limit=5&offset=0"
+          }
+        },
+        {
+          "name": "GET Item By Id",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO-001"
+          }
+        },
+        {
+          "name": "GET Item By Id - Not Found (expect 404)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-DOES-NOT-EXIST"
+          }
+        },
+        {
+          "name": "GET Item Summary",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO-001/summary"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory - Update",
+      "item": [
+        {
+          "name": "PUT Full Update",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO-001",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DEMO-001\",\n  \"warehouseStock\": 60,\n  \"regionalStock\": 50,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "PUT Not Found (expect 404)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/SKU-DOES-NOT-EXIST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DOES-NOT-EXIST\",\n  \"warehouseStock\": 10,\n  \"regionalStock\": 10\n}"
+            }
+          }
+        },
+        {
+          "name": "PATCH Partial Update (pushes to Critical - triggers alert)",
+          "request": {
+            "method": "PATCH",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO-001",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"warehouseStock\": 2,\n  \"regionalStock\": 3\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory - Delete",
+      "item": [
+        {
+          "name": "DELETE Soft Delete Item",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO-001"
+          }
+        },
+        {
+          "name": "GET Item After Delete (confirms INACTIVE)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO-001"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bulk & Sync",
+      "item": [
+        {
+          "name": "POST Bulk Create",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/bulk",
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  {\n    \"itemId\": \"SKU-BULK-001\",\n    \"warehouseStock\": 100,\n    \"regionalStock\": 60,\n    \"safetyStock\": 20,\n    \"region\": \"NA-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK-002\",\n    \"warehouseStock\": 2,\n    \"regionalStock\": 1,\n    \"safetyStock\": 20,\n    \"region\": \"NA-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK-003\",\n    \"warehouseStock\": 40,\n    \"regionalStock\": 30,\n    \"safetyStock\": 15,\n    \"region\": \"APAC\"\n  }\n]"
+            }
+          }
+        },
+        {
+          "name": "POST Trigger Full Sync",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/sync"
+          }
+        }
+      ]
+    },
+    {
+      "name": "JMS Event Verification (CRITICAL alert + inventory.update.queue)",
+      "description": "Manual test sequence for verifying the CRITICAL procurement alert on PUT/PATCH and the inventory.update.queue CREATE/UPDATE/DELETE events. Run in order; watch procurement.alert.queue and inventory.update.queue in the ActiveMQ console (localhost:8161/admin) as you go.",
+      "item": [
+        {
+          "name": "1. POST create - immediately CRITICAL (CREATE event + procurement alert)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-TEST-100\",\n  \"warehouseStock\": 3,\n  \"regionalStock\": 4,\n  \"safetyStock\": 20,\n  \"region\": \"US-EAST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "2. POST create - healthy (CREATE event only)",
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-TEST-200\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"US-WEST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "3. PUT - push SKU-TEST-200 into CRITICAL (fix verification)",
+          "request": {
+            "method": "PUT",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/SKU-TEST-200",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-TEST-200\",\n  \"warehouseStock\": 2,\n  \"regionalStock\": 3,\n  \"safetyStock\": 20,\n  \"region\": \"US-WEST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "4. PATCH - partial update, still CRITICAL (fix verification)",
+          "request": {
+            "method": "PATCH",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/SKU-TEST-200",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"warehouseStock\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "5. PATCH - raise back to healthy (UPDATE event, no alert)",
+          "request": {
+            "method": "PATCH",
+            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "url": "{{baseUrl}}/inventory/SKU-TEST-200",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"warehouseStock\": 100,\n  \"regionalStock\": 100\n}"
+            }
+          }
+        },
+        {
+          "name": "6. DELETE - soft delete (DELETE event)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-TEST-200"
+          }
+        },
+        {
+          "name": "7. GET item (sanity check)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-TEST-200"
+          }
+        }
+      ]
+    }
+  ]
+}

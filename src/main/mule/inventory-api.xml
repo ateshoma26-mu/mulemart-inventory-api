@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd 
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
 http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd">
     <http:listener-config name="inventory-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
@@ -28,6 +29,8 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
 	<file:config name="File_Config" doc:name="File Config" doc:id="c1d2e3f4-a5b6-7890-cdef-1234567890ab">
 		<file:connection workingDir="${secure::files.workingDir}" />
 	</file:config>
+	<os:object-store name="Inventory_Cache_ObjectStore" doc:name="Object store" doc:id="f1e2d3c4-b5a6-7788-9900-112233445566" persistent="false" entryTtl="5" entryTtlUnit="MINUTES" maxEntries="10000" expirationInterval="1" expirationIntervalUnit="MINUTES"/>
+	<os:object-store name="Health_Status_ObjectStore" doc:name="Object store" doc:id="3945612345-5678-1234-5678-250567234567" persistent="false" entryTtl="2" entryTtlUnit="HOURS" maxEntries="10" expirationInterval="10" expirationIntervalUnit="MINUTES"/>
 	<error-handler name="globalErrorHandler">
     <on-error-propagate type="APP:DUPLICATE">
         <ee:transform doc:name="Duplicate Error">
@@ -63,6 +66,23 @@ output application/json
             </ee:variables>
         </ee:transform>
     </on-error-propagate>
+    <on-error-propagate type="APP:VALIDATION">
+        <ee:transform doc:name="Validation Error">
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    code: "VALIDATION_ERROR",
+    message: error.description,
+    timestamp: now()
+}]]></ee:set-payload>
+            </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="httpStatus">400</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+    </on-error-propagate>
 </error-handler>
 	<flow name="inventory-api-main">
         <http:listener config-ref="inventory-api-httpListenerConfig" path="/api/*">
@@ -76,6 +96,23 @@ output application/json
         </http:listener>
         <apikit:router config-ref="inventory-api-config" />
         <error-handler>
+            <on-error-propagate type="CONNECTIVITY">
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    code: "CONNECTIVITY_ERROR",
+    message: error.description,
+    timestamp: now()
+}]]></ee:set-payload>
+                    </ee:message>
+                    <ee:variables>
+                        <ee:set-variable variableName="httpStatus">503</ee:set-variable>
+                    </ee:variables>
+                </ee:transform>
+            </on-error-propagate>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform doc:name="Transform Message">
                     <ee:message>
@@ -186,8 +223,9 @@ output application/json
     <flow name="put:\inventory\(itemId):application\json:inventory-api-config">
 		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="69aa64e9-da8f-4797-a7bb-c695b6782f3b" variableName="itemId"/>
 		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="814e884b-e32d-4e29-8992-d7f309250646" variableName="newItem"/>
+		<flow-ref doc:name="Validate Payload" doc:id="c3d4e5f6-7890-abcd-ef01-234560203150" name="validate-inventory-fields-subflow"/>
 		<db:select doc:name="Select" doc:id="74038900-1b2d-4026-9d20-5979299eb3b5" config-ref="Database_Config">
-			<db:sql ><![CDATA[SELECT item_id FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:sql ><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region FROM inventory WHERE item_id = :itemId]]></db:sql>
 			<db:input-parameters ><![CDATA[ #[{ itemId: vars.itemId }]]]></db:input-parameters>
 		</db:select>
 		<choice doc:name="Choice" doc:id="b0255313-0b4b-486a-bbfc-cb9ddd5dc948" >
@@ -195,6 +233,7 @@ output application/json
 				<raise-error doc:name="Raise error" doc:id="d9afd7da-362d-49e0-92db-fad19a124d7d" type="APP:NOT_FOUND" description='#["Item " ++ vars.itemId ++ " not found"]'/>
 			</when>
 			<otherwise >
+				<set-variable value="#[payload[0]]" doc:name="Set Variable" doc:id="a6b7c8d9-1234-5678-9abc-def012345601" variableName="existing"/>
 				<db:update doc:name="Update" doc:id="cb658472-967f-4cfb-8923-690801043459" config-ref="Database_Config">
 					<db:sql ><![CDATA[UPDATE inventory SET warehouse_stock = :warehouseStock, regional_stock = :regionalStock, total_inventory = :totalInventory, safety_stock = :safetyStock, status = :status, region = :region WHERE item_id = :itemId]]></db:sql>
 					<db:input-parameters ><![CDATA[#[%dw 2.0
@@ -228,6 +267,62 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
          }
      ]]]]></salesforce:records>
 				</salesforce:upsert>
+				<set-variable value="#[import * from InventoryLib --- calculateStatus(calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock))]" doc:name="Set itemStatus" doc:id="e3f4a5b6-c7d8-9012-ef01-456789012346" variableName="itemStatus"/>
+				<choice doc:name="Critical Stock Check" doc:id="f4a5b6c7-d8e9-0123-f012-567890123457">
+					<when expression='#[vars.itemStatus == "CRITICAL"]'>
+						<jms:publish doc:name="Publish Procurement Alert" doc:id="a5b6c7d8-e9f0-1234-0123-678901234568" config-ref="JMS_Config" destination="procurement.alert.queue">
+							<jms:message>
+								<jms:body><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+{
+    itemId: vars.itemId,
+    currentStock: total,
+    status: "CRITICAL",
+    region: vars.newItem.region,
+    reorderQuantity: calculateReorder(total),
+    timestamp: now()
+}]]]></jms:body>
+							</jms:message>
+						</jms:publish>
+					</when>
+				</choice>
+				<set-variable value="#[write({
+    itemId: vars.existing.item_id,
+    warehouseStock: vars.existing.warehouse_stock,
+    regionalStock: vars.existing.regional_stock,
+    totalInventory: vars.existing.total_inventory,
+    safetyStock: vars.existing.safety_stock,
+    status: vars.existing.status,
+    region: vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="a7b8c9d0-2345-6789-0abc-def012345602" variableName="eventOldValue"/>
+				<set-variable value="#[%dw 2.0
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+write({
+    itemId: vars.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="b8c9d0e1-3456-789a-bcde-f01234560203" variableName="eventNewValue"/>
+				<set-variable value="UPDATE" doc:name="Set eventType" doc:id="b6c7d8e9-f0a1-2345-1234-789012345679" variableName="eventType"/>
+				<set-variable value="#[vars.itemId]" doc:name="Set eventItemId" doc:id="c7d8e9f0-a1b2-3456-2345-890123456780" variableName="eventItemId"/>
+				<set-variable value="#[import * from InventoryLib --- calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)]" doc:name="Set eventTotalInventory" doc:id="d8e9f0a1-b2c3-4567-3456-901234567891" variableName="eventTotalInventory"/>
+				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="e9f0a1b2-c3d4-5678-4567-012345678902" variableName="eventStatus"/>
+				<set-variable value="#[vars.newItem.region]" doc:name="Set eventRegion" doc:id="f0a1b2c3-d4e5-6789-5678-123456789013" variableName="eventRegion"/>
+				<flow-ref doc:name="Publish Inventory Update Event" doc:id="a1b2c3d4-e5f6-7890-6789-234567890124" name="publish-inventory-update-event-subflow"/>
+				<try doc:name="Try" doc:id="a2b3c4d5-1122-3344-5566-778899aabb01">
+					<os:remove key="#[vars.itemId]" doc:name="Invalidate Cache" doc:id="b3c4d5e6-2233-4455-6677-8899aabbcc02" objectStore="Inventory_Cache_ObjectStore"/>
+					<error-handler>
+						<on-error-continue type="OS:KEY_NOT_FOUND" doc:name="On Error Continue" enableNotifications="false" logException="false"/>
+					</error-handler>
+				</try>
 				<ee:transform doc:name="Transform Message" doc:id="b29ec68e-cb1e-4cb7-ab8b-06ce9fe712ba" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[   %dw 2.0
@@ -254,7 +349,7 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
     <flow name="delete:\inventory\(itemId):inventory-api-config">
 		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="7d712c70-9b94-4fe1-98d8-895095186cdb" variableName="itemId"/>
 		<db:select doc:name="Select" doc:id="eceb0321-3883-47ca-8372-2af3d0642e31" config-ref="Database_Config">
-			<db:sql ><![CDATA[  SELECT item_id, status FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:sql ><![CDATA[  SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region FROM inventory WHERE item_id = :itemId]]></db:sql>
 			<db:input-parameters ><![CDATA[ #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
 		</db:select>
 		<choice doc:name="Choice" doc:id="da33afff-0c4e-4abc-89e9-eab4ee8d99c6" >
@@ -262,10 +357,41 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
 				<raise-error doc:name="Raise error" doc:id="ce9a154d-b8ec-459e-a563-37a54709bbb9" type="APP:NOT_FOUND" description='   #["Item " ++ vars.itemId ++ " not found"]'/>
 			</when>
 			<otherwise >
+				<set-variable value="#[payload[0]]" doc:name="Set Variable" doc:id="e1f2a3b4-c5d6-7890-6789-234567890125" variableName="existing"/>
 				<db:update doc:name="Update" doc:id="e4b7aef2-3236-46da-b368-31cc7118153c" config-ref="Database_Config">
 					<db:sql ><![CDATA[UPDATE inventory SET status = 'INACTIVE' WHERE item_id = :itemId]]></db:sql>
 					<db:input-parameters ><![CDATA[ #[{ itemId: vars.itemId }]]]></db:input-parameters>
 				</db:update>
+				<set-variable value="#[write({
+    itemId: vars.existing.item_id,
+    warehouseStock: vars.existing.warehouse_stock,
+    regionalStock: vars.existing.regional_stock,
+    totalInventory: vars.existing.total_inventory,
+    safetyStock: vars.existing.safety_stock,
+    status: vars.existing.status,
+    region: vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="c9d0e1f2-4567-89ab-cdef-012345602031" variableName="eventOldValue"/>
+				<set-variable value="#[write({
+    itemId: vars.existing.item_id,
+    warehouseStock: vars.existing.warehouse_stock,
+    regionalStock: vars.existing.regional_stock,
+    totalInventory: vars.existing.total_inventory,
+    safetyStock: vars.existing.safety_stock,
+    status: &quot;INACTIVE&quot;,
+    region: vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="d0e1f2a3-5678-9abc-def0-123456020314" variableName="eventNewValue"/>
+				<set-variable value="DELETE" doc:name="Set eventType" doc:id="f2a3b4c5-d6e7-8901-7890-345678901236" variableName="eventType"/>
+				<set-variable value="#[vars.itemId]" doc:name="Set eventItemId" doc:id="a3b4c5d6-e7f8-9012-8901-456789012347" variableName="eventItemId"/>
+				<set-variable value="#[vars.existing.total_inventory]" doc:name="Set eventTotalInventory" doc:id="b4c5d6e7-f8a9-0123-9012-567890123458" variableName="eventTotalInventory"/>
+				<set-variable value="INACTIVE" doc:name="Set eventStatus" doc:id="c5d6e7f8-a9b0-1234-0123-678901234569" variableName="eventStatus"/>
+				<set-variable value="#[vars.existing.region]" doc:name="Set eventRegion" doc:id="d6e7f8a9-b0c1-2345-1234-789012345680" variableName="eventRegion"/>
+				<flow-ref doc:name="Publish Inventory Update Event" doc:id="e7f8a9b0-c1d2-3456-2345-890123456781" name="publish-inventory-update-event-subflow"/>
+				<try doc:name="Try" doc:id="c4d5e6f7-3344-5566-7788-99aabbccdd03">
+					<os:remove key="#[vars.itemId]" doc:name="Invalidate Cache" doc:id="d5e6f708-4455-6677-8899-aabbccddee04" objectStore="Inventory_Cache_ObjectStore"/>
+					<error-handler>
+						<on-error-continue type="OS:KEY_NOT_FOUND" doc:name="On Error Continue" enableNotifications="false" logException="false"/>
+					</error-handler>
+				</try>
 				<ee:transform doc:name="Transform Message" doc:id="c05635db-2ac2-4274-a8c1-3a2406e0a0a1" >
 					<ee:message >
 						<ee:set-payload ><![CDATA[%dw 2.0
@@ -284,8 +410,9 @@ output application/json
     <flow name="patch:\inventory\(itemId):application\json:inventory-api-config">
 		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="cfcad169-e5e1-42ee-9630-489d5cc8efc3" variableName="itemId"/>
 		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="18c3797f-39c6-4b78-8ba0-9f9dcf9139e6" variableName="newItem"/>
+		<flow-ref doc:name="Validate Payload" doc:id="d4e5f607-8901-bcde-f012-345602031561" name="validate-inventory-fields-subflow"/>
 		<db:select doc:name="Select" doc:id="60f4d786-bb62-4c48-9cf8-73ddb48be8d0" config-ref="Database_Config">
-			<db:sql ><![CDATA[SELECT item_id, warehouse_stock, regional_stock, safety_stock, region FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:sql ><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region FROM inventory WHERE item_id = :itemId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{ itemId: vars.itemId }]]]></db:input-parameters>
 		</db:select>
 		<set-variable value="#[payload[0]]" doc:name="Set Variable" doc:id="f7316e4b-0fa7-459a-9bbf-f9a67429a1ae" variableName="existing"/>
@@ -331,6 +458,78 @@ output application/json
          }
      ]]]]></salesforce:records>
 				</salesforce:upsert>
+				<set-variable value="#[%dw 2.0
+     output application/java
+     import * from InventoryLib
+     var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+     var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+     ---
+     calculateStatus(calculateTotal(wh, reg))]" doc:name="Set itemStatus" doc:id="b2c3d4e5-f6a7-8901-7890-345678901235" variableName="itemStatus"/>
+				<choice doc:name="Critical Stock Check" doc:id="c3d4e5f6-a7b8-9012-8901-456789012346">
+					<when expression='#[vars.itemStatus == "CRITICAL"]'>
+						<jms:publish doc:name="Publish Procurement Alert" doc:id="d4e5f6a7-b8c9-0123-9012-567890123457" config-ref="JMS_Config" destination="procurement.alert.queue">
+							<jms:message>
+								<jms:body><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+var total = calculateTotal(wh, reg)
+---
+{
+    itemId: vars.itemId,
+    currentStock: total,
+    status: "CRITICAL",
+    region: vars.newItem.region default vars.existing.region,
+    reorderQuantity: calculateReorder(total),
+    timestamp: now()
+}]]]></jms:body>
+							</jms:message>
+						</jms:publish>
+					</when>
+				</choice>
+				<set-variable value="#[write({
+    itemId: vars.existing.item_id,
+    warehouseStock: vars.existing.warehouse_stock,
+    regionalStock: vars.existing.regional_stock,
+    totalInventory: vars.existing.total_inventory,
+    safetyStock: vars.existing.safety_stock,
+    status: vars.existing.status,
+    region: vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="e1f2a3b4-6789-abcd-ef01-234560203145" variableName="eventOldValue"/>
+				<set-variable value="#[%dw 2.0
+import * from InventoryLib
+var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+var total = calculateTotal(wh, reg)
+---
+write({
+    itemId: vars.itemId,
+    warehouseStock: wh,
+    regionalStock: reg,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock default vars.existing.safety_stock,
+    status: calculateStatus(total),
+    region: vars.newItem.region default vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="f2a3b4c5-789a-bcde-f012-345602031456" variableName="eventNewValue"/>
+				<set-variable value="UPDATE" doc:name="Set eventType" doc:id="e5f6a7b8-c9d0-1234-0123-678901234568" variableName="eventType"/>
+				<set-variable value="#[vars.itemId]" doc:name="Set eventItemId" doc:id="f6a7b8c9-d0e1-2345-1234-789012345679" variableName="eventItemId"/>
+				<set-variable value="#[%dw 2.0
+     output application/java
+     import * from InventoryLib
+     var wh = vars.newItem.warehouseStock default vars.existing.warehouse_stock
+     var reg = vars.newItem.regionalStock default vars.existing.regional_stock
+     ---
+     calculateTotal(wh, reg)]" doc:name="Set eventTotalInventory" doc:id="a7b8c9d0-e1f2-3456-2345-890123456780" variableName="eventTotalInventory"/>
+				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="b8c9d0e1-f2a3-4567-3456-901234567891" variableName="eventStatus"/>
+				<set-variable value="#[vars.newItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="c9d0e1f2-a3b4-5678-4567-012345678902" variableName="eventRegion"/>
+				<flow-ref doc:name="Publish Inventory Update Event" doc:id="d0e1f2a3-b4c5-6789-5678-123456789013" name="publish-inventory-update-event-subflow"/>
+				<try doc:name="Try" doc:id="e6f70819-5566-7788-9900-bbccddeeff05">
+					<os:remove key="#[vars.itemId]" doc:name="Invalidate Cache" doc:id="f7081920-6677-8899-0011-ccddeeff0006" objectStore="Inventory_Cache_ObjectStore"/>
+					<error-handler>
+						<on-error-continue type="OS:KEY_NOT_FOUND" doc:name="On Error Continue" enableNotifications="false" logException="false"/>
+					</error-handler>
+				</try>
 				<ee:transform doc:name="Transform Message" doc:id="90f57ecd-0eb9-4f33-a360-af0a1936b019">
 			<ee:message>
 				<ee:set-payload><![CDATA[   %dw 2.0
@@ -366,7 +565,7 @@ output application/java
 			</ee:message>
 		</ee:transform>
 	</flow>
-	<flow name="get:\health:inventory-api-config">
+	<sub-flow name="check-system-health-subflow" doc:id="2031456723-4567-0123-4567-131456723456">
 		<set-variable value="UP" doc:name="Set Variable" doc:id="ade8e7e0-8c88-4674-b8b8-d5c72febba17" variableName="dbStatus"/>
 		<set-variable value="UP" doc:name="Set Variable" doc:id="7232a497-46e3-431e-b1b4-ac3c768e64ed" variableName="sfStatus"/>
 		<try doc:name="Try" doc:id="d755730b-714d-4ba3-8554-596af43cf72b" >
@@ -402,7 +601,31 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+	</sub-flow>
+	<flow name="get:\health:inventory-api-config">
+		<os:contains key="systemHealthStatus" doc:name="Check Health Cache" doc:id="3145672345-5678-1234-5678-241567234567" objectStore="Health_Status_ObjectStore" target="hasHealthSnapshot"/>
+		<choice doc:name="Health Cache Hit Check" doc:id="4156723456-6789-2345-6789-351678345678">
+			<when expression="#[vars.hasHealthSnapshot]">
+				<os:retrieve key="systemHealthStatus" doc:name="Retrieve Cached Health" doc:id="5167834567-7890-3456-7890-462789456789" objectStore="Health_Status_ObjectStore" target="cachedHealth"/>
+				<set-payload value="#[vars.cachedHealth]" doc:name="Set Payload From Cache" doc:id="6278945678-8901-4567-8901-573890567890"/>
+			</when>
+			<otherwise>
+				<flow-ref doc:name="Check System Health" doc:id="7389056789-9012-5678-9012-684901678901" name="check-system-health-subflow"/>
+			</otherwise>
+		</choice>
     </flow>
+	<flow name="hourly-health-check-scheduler-flow" doc:id="8490167890-0123-6789-0123-795012789012">
+		<scheduler doc:name="Every Hour" doc:id="9501278901-1234-7890-1234-806123890123">
+			<scheduling-strategy>
+				<fixed-frequency frequency="1" timeUnit="HOURS"/>
+			</scheduling-strategy>
+		</scheduler>
+		<flow-ref doc:name="Check System Health" doc:id="0612389012-2345-8901-2345-917234901234" name="check-system-health-subflow"/>
+		<os:store key="systemHealthStatus" doc:name="Store Health Snapshot" doc:id="1723490123-3456-9012-3456-028345012345" objectStore="Health_Status_ObjectStore">
+			<os:value><![CDATA[#[payload]]]></os:value>
+		</os:store>
+		<logger level="INFO" doc:name="Log Health Check" doc:id="2834501234-4567-0123-4567-139456123456" message="Hourly health check completed: #[payload]"/>
+	</flow>
 	<flow name="get:\inventory:inventory-api-config">
         <ee:transform doc:name="Parse Filter and Pagination Params" doc:id="a1b2c3d4-1111-4a5b-8c6d-e7f809123456">
             <ee:variables>
@@ -486,13 +709,20 @@ else do {
         </ee:transform>
     </flow>
     <flow name="get:\inventory\(itemId):inventory-api-config">
-        <db:select doc:name="Select" doc:id="242b9dc2-926e-45ff-9eff-f6cdece99bc7" config-ref="Database_Config">
-			<db:sql><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory WHERE item_id = :itemId]]></db:sql>
-			<db:input-parameters><![CDATA[   #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
-		</db:select>
-        <ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
+        <os:contains key="#[attributes.uriParams.itemId]" doc:name="Check Cache" doc:id="a1b2c3d4-5566-7788-9900-aabbccddeeff" objectStore="Inventory_Cache_ObjectStore" target="cacheHit"/>
+        <choice doc:name="Cache Hit Check" doc:id="b2c3d4e5-6677-8899-0011-bbccddeeff00">
+            <when expression="#[vars.cacheHit]">
+                <os:retrieve key="#[attributes.uriParams.itemId]" doc:name="Retrieve From Cache" doc:id="c3d4e5f6-7788-9900-1122-ccddeeff0011" objectStore="Inventory_Cache_ObjectStore" target="cachedItem"/>
+                <set-payload value="#[vars.cachedItem]" doc:name="Set Payload From Cache" doc:id="d4e5f607-8899-0011-2233-ddeeff001122"/>
+            </when>
+            <otherwise>
+                <db:select doc:name="Select" doc:id="242b9dc2-926e-45ff-9eff-f6cdece99bc7" config-ref="Database_Config">
+                    <db:sql><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory WHERE item_id = :itemId]]></db:sql>
+                    <db:input-parameters><![CDATA[   #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
+                </db:select>
+                <ee:transform doc:name="Transform Message">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
   output application/json
   import * from InventoryLib
   ---
@@ -513,8 +743,17 @@ else do {
               lastUpdated: row.last_updated
           }
       }]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+                    </ee:message>
+                </ee:transform>
+                <choice doc:name="Cache Store Check" doc:id="e5f60718-9900-1122-3344-eeff00112233">
+                    <when expression="#[payload != null]">
+                        <os:store key="#[attributes.uriParams.itemId]" doc:name="Store In Cache" doc:id="f6071829-0011-2233-4455-ff0011223344" objectStore="Inventory_Cache_ObjectStore">
+                            <os:value><![CDATA[#[payload]]]></os:value>
+                        </os:store>
+                    </when>
+                </choice>
+            </otherwise>
+        </choice>
     </flow>
     <flow name="post:\inventory\bulk:application\json:inventory-api-config">
         <set-variable value="#[now()]" doc:name="Set startedAt" doc:id="e4f5a6b7-c8d9-0123-ef01-345678901234" variableName="startedAt"/>
@@ -583,6 +822,7 @@ output application/json
     </flow>
     <flow name="post:\inventory:application\json:inventory-api-config">
         <set-variable value="#[payload]" doc:name="Set Variable" doc:id="d243e55f-cc38-429e-bcf6-fa062cc29bb7" variableName="newItem"/>
+		<flow-ref doc:name="Validate Payload" doc:id="e5f60718-9012-cdef-0123-456020315672" name="validate-inventory-fields-subflow"/>
 		<db:select doc:name="Select" doc:id="5bf6cfb1-ad6c-4204-9a89-507eff0aa490" config-ref="Database_Config">
 			<db:sql ><![CDATA[     SELECT item_id FROM inventory WHERE item_id = :itemId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{ itemId: vars.newItem.itemId }]]]></db:input-parameters>
@@ -648,6 +888,26 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
 				</jms:publish>
 					</when>
 				</choice>
+				<set-variable value="#[null]" doc:name="Set eventOldValue" doc:id="a3b4c5d6-89ab-cdef-0123-456020314567" variableName="eventOldValue"/>
+				<set-variable value="#[%dw 2.0
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+write({
+    itemId: vars.newItem.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="b4c5d6e7-9abc-def0-1234-560203145678" variableName="eventNewValue"/>
+				<set-variable value="CREATE" doc:name="Set eventType" doc:id="f8a9b0c1-d2e3-4567-3456-901234567892" variableName="eventType"/>
+				<set-variable value="#[vars.newItem.itemId]" doc:name="Set eventItemId" doc:id="a9b0c1d2-e3f4-5678-4567-012345678903" variableName="eventItemId"/>
+				<set-variable value="#[import * from InventoryLib --- calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)]" doc:name="Set eventTotalInventory" doc:id="b0c1d2e3-f4a5-6789-5678-123456789014" variableName="eventTotalInventory"/>
+				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="c1d2e3f4-a5b6-7890-6789-234567890126" variableName="eventStatus"/>
+				<set-variable value="#[vars.newItem.region]" doc:name="Set eventRegion" doc:id="d2e3f4a5-b6c7-8901-7890-345678901237" variableName="eventRegion"/>
+				<flow-ref doc:name="Publish Inventory Update Event" doc:id="e3f4a5b6-c7d8-9012-8901-456789012348" name="publish-inventory-update-event-subflow"/>
 				<ee:transform doc:name="Transform Message">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
@@ -671,23 +931,58 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
 		<error-handler ref="globalErrorHandler" />
     </flow>
 	<flow name="post:\inventory\sync:inventory-api-config">
-        <ee:transform doc:name="Transform Message">
+        <set-variable value="#[now()]" doc:name="Set startedAt" doc:id="1a2b3c4d-5e6f-7081-9203-a4b5c6d7e8f9" variableName="startedAt"/>
+        <db:select doc:name="Select Active Items" doc:id="2b3c4d5e-6f70-8192-0314-b5c6d7e8f9a0" config-ref="Database_Config">
+            <db:sql><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region FROM inventory WHERE status != 'INACTIVE']]></db:sql>
+        </db:select>
+        <set-variable value="#[sizeOf(payload)]" doc:name="Set totalRecords" doc:id="3c4d5e6f-7081-9203-1425-c6d7e8f9a0b1" variableName="totalRecords"/>
+        <batch:job jobName="fullInventorySyncJob" doc:id="4d5e6f70-8192-0314-2536-d7e8f9a0b1c2" maxFailedRecords="-1" blockSize="100">
+            <batch:process-records>
+                <batch:step name="syncEachItemStep" doc:id="5e6f7081-9203-1425-3647-e8f9a0b1c2d3">
+                    <try doc:name="Try" doc:id="6f708192-0314-2536-4758-f9a0b1c2d3e4">
+                        <set-variable value="#[payload.item_id as String]" doc:name="Set currentItemId" doc:id="70819203-1425-3647-5869-a0b1c2d3e4f5" variableName="currentItemId"/>
+                        <flow-ref doc:name="Sync Item" doc:id="81920314-2536-4758-6970-b1c2d3e4f5a6" name="process-full-sync-item-subflow"/>
+                        <error-handler>
+                            <on-error-propagate enableNotifications="false" logException="false" doc:name="Log And Fail Record" doc:id="92031425-3647-5869-7081-c2d3e4f5a6b7">
+                                <logger level="WARN" doc:name="Log Sync Failure" doc:id="a3142536-4758-6970-8192-d3e4f5a6b7c8" message="Sync failed for item #[vars.currentItemId]: #[error.description]"/>
+                            </on-error-propagate>
+                        </error-handler>
+                    </try>
+                </batch:step>
+            </batch:process-records>
+            <batch:on-complete>
+                <ee:transform doc:name="Build SyncResponse" doc:id="b4253647-5869-7081-9203-e4f5a6b7c8d9">
+                    <ee:message>
+                        <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    totalRecords: payload.loadedRecords,
+    successCount: payload.successfulRecords,
+    failureCount: payload.failedRecords,
+    startedAt: vars.startedAt,
+    completedAt: now()
+}]]></ee:set-payload>
+                    </ee:message>
+                </ee:transform>
+                <logger level="INFO" doc:name="Log SyncResponse" doc:id="c5364758-6970-8192-0314-f5a6b7c8d9e0" message="Full sync job #[vars.batchJobInstanceId] result: #[payload]"/>
+            </batch:on-complete>
+        </batch:job>
+        <ee:transform doc:name="Return Accepted" doc:id="d6475869-7081-9203-1425-a6b7c8d9e0f1">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  totalRecords: 5000,
-  successCount: 4987,
-  failureCount: 13,
-  failedItemIds: [
-    "SKU-3310", 
-    "SKU-4821"
-  ],
-  startedAt: "2026-08-19T09:00:00Z",
-  completedAt: "2026-08-19T09:03:42Z"
-} as Object {encoding: "UTF-8", mediaType: "application/json"}]]></ee:set-payload>
+    status: "ACCEPTED",
+    totalRecords: vars.totalRecords,
+    startedAt: vars.startedAt,
+    message: "Full inventory sync accepted; final counts are written to the application log"
+}]]></ee:set-payload>
             </ee:message>
+            <ee:variables>
+                <ee:set-variable variableName="httpStatus">202</ee:set-variable>
+            </ee:variables>
         </ee:transform>
     </flow>
 	<sub-flow name="process-inventory-item-subflow" doc:id="a6c590d2-9803-4224-9022-d2a984e33429" >
@@ -757,6 +1052,26 @@ var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalSto
 						</jms:publish>
 					</when>
 				</choice>
+				<set-variable value="#[null]" doc:name="Set eventOldValue" doc:id="c5d6e7f8-abcd-ef01-2345-602031456789" variableName="eventOldValue"/>
+				<set-variable value="#[%dw 2.0
+import * from InventoryLib
+var total = calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)
+---
+write({
+    itemId: vars.newItem.itemId,
+    warehouseStock: vars.newItem.warehouseStock,
+    regionalStock: vars.newItem.regionalStock,
+    totalInventory: total,
+    safetyStock: vars.newItem.safetyStock,
+    status: calculateStatus(total),
+    region: vars.newItem.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="d6e7f8a9-bcde-f012-3456-020314567890" variableName="eventNewValue"/>
+				<set-variable value="CREATE" doc:name="Set eventType" doc:id="f1e2d3c4-b5a6-9788-8901-012345678913" variableName="eventType"/>
+				<set-variable value="#[vars.newItem.itemId]" doc:name="Set eventItemId" doc:id="e2d3c4b5-a697-8877-9012-123456789024" variableName="eventItemId"/>
+				<set-variable value="#[import * from InventoryLib --- calculateTotal(vars.newItem.warehouseStock, vars.newItem.regionalStock)]" doc:name="Set eventTotalInventory" doc:id="d3c4b5a6-9788-7766-0123-234567890135" variableName="eventTotalInventory"/>
+				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="c4b5a697-8877-6655-1234-345678901246" variableName="eventStatus"/>
+				<set-variable value="#[vars.newItem.region]" doc:name="Set eventRegion" doc:id="b5a69788-7766-5544-2345-456789012357" variableName="eventRegion"/>
+				<flow-ref doc:name="Publish Inventory Update Event" doc:id="a6978877-6655-4433-3456-567890123468" name="publish-inventory-update-event-subflow"/>
 			</otherwise>
 		</choice>
 	</sub-flow>
@@ -823,7 +1138,7 @@ output application/json
 	<sub-flow name="process-regional-update-subflow" doc:id="d5e6f7a8-b9c0-1234-9012-ef1234567890">
 		<set-variable value="#[payload]" doc:name="Store Regional Item" doc:id="e6f7a8b9-c0d1-2345-0123-f12345678901" variableName="regionalItem"/>
 		<db:select doc:name="Fetch Warehouse Stock" doc:id="f7a8b9c0-d1e2-3456-1234-123456789012" config-ref="Database_Config">
-			<db:sql><![CDATA[SELECT item_id, warehouse_stock, safety_stock, region FROM inventory WHERE item_id = :itemId]]></db:sql>
+			<db:sql><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region FROM inventory WHERE item_id = :itemId]]></db:sql>
 			<db:input-parameters><![CDATA[#[{ itemId: vars.regionalItem.itemId }]]]></db:input-parameters>
 		</db:select>
 		<choice doc:name="Item Exists Check" doc:id="a8b9c0d1-e2f3-4567-2345-234567890123">
@@ -892,7 +1207,169 @@ var total = calculateTotal(wh, reg)
 						</jms:publish>
 					</when>
 				</choice>
+				<set-variable value="#[write({
+    itemId: vars.existing.item_id,
+    warehouseStock: vars.existing.warehouse_stock,
+    regionalStock: vars.existing.regional_stock,
+    totalInventory: vars.existing.total_inventory,
+    safetyStock: vars.existing.safety_stock,
+    status: vars.existing.status,
+    region: vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="e7f8a9b0-cdef-0123-4567-020314567891" variableName="eventOldValue"/>
+				<set-variable value="#[%dw 2.0
+import * from InventoryLib
+var wh = vars.existing.warehouse_stock default 0
+var reg = vars.regionalItem.regionalStock default 0
+var total = calculateTotal(wh, reg)
+---
+write({
+    itemId: vars.regionalItem.itemId,
+    warehouseStock: wh,
+    regionalStock: reg,
+    totalInventory: total,
+    safetyStock: vars.existing.safety_stock,
+    status: calculateStatus(total),
+    region: vars.regionalItem.region default vars.existing.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="f8a9b0c1-def0-1234-5670-203145678902" variableName="eventNewValue"/>
+				<set-variable value="UPDATE" doc:name="Set eventType" doc:id="97887766-3322-1109-8765-4321fedcba98" variableName="eventType"/>
+				<set-variable value="#[vars.regionalItem.itemId]" doc:name="Set eventItemId" doc:id="88776655-4433-2211-0987-6543fedcba99" variableName="eventItemId"/>
+				<set-variable value="#[%dw 2.0
+output application/java
+import * from InventoryLib
+var wh = vars.existing.warehouse_stock default 0
+var reg = vars.regionalItem.regionalStock default 0
+---
+calculateTotal(wh, reg)]" doc:name="Set eventTotalInventory" doc:id="77665544-3322-1100-9876-5432fedcba9a" variableName="eventTotalInventory"/>
+				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="66554433-2211-0099-8765-4321fedcba9b" variableName="eventStatus"/>
+				<set-variable value="#[vars.regionalItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="55443322-1100-9988-7654-3210fedcba9c" variableName="eventRegion"/>
+				<flow-ref doc:name="Publish Inventory Update Event" doc:id="44332211-0099-8877-6543-210fedcba9d0" name="publish-inventory-update-event-subflow"/>
 			</otherwise>
 		</choice>
+	</sub-flow>
+	<sub-flow name="process-full-sync-item-subflow" doc:id="e1f2a3b4-c5d6-7890-1234-56789abcdef0">
+		<set-variable value="#[payload]" doc:name="Store Row" doc:id="f2a3b4c5-d6e7-8901-2345-6789abcdef01" variableName="syncRow"/>
+		<db:update doc:name="Recalculate And Update" doc:id="a3b4c5d6-e7f8-9012-3456-789abcdef012" config-ref="Database_Config">
+			<db:sql><![CDATA[UPDATE inventory SET total_inventory = :totalInventory, status = :status WHERE item_id = :itemId]]></db:sql>
+			<db:input-parameters><![CDATA[#[%dw 2.0
+output application/java
+import * from InventoryLib
+var total = calculateTotal(vars.syncRow.warehouse_stock, vars.syncRow.regional_stock)
+---
+{
+    itemId: vars.syncRow.item_id,
+    totalInventory: total,
+    status: calculateStatus(total)
+}]]]></db:input-parameters>
+		</db:update>
+		<salesforce:upsert doc:name="Upsert To Salesforce" doc:id="b4c5d6e7-f8a9-0123-4567-89abcdef0123" config-ref="Salesforce_Config" objectType="Inventory__c" externalIdFieldName="itemId__c">
+			<salesforce:records><![CDATA[#[%dw 2.0
+output application/java
+import * from InventoryLib
+var total = calculateTotal(vars.syncRow.warehouse_stock, vars.syncRow.regional_stock)
+---
+[
+    {
+        itemId__c: vars.syncRow.item_id,
+        warehouseStock__c: vars.syncRow.warehouse_stock,
+        regionalStock__c: vars.syncRow.regional_stock,
+        totalInventory__c: total,
+        status__c: calculateStatus(total)
+    }
+]]]]></salesforce:records>
+		</salesforce:upsert>
+		<try doc:name="Try" doc:id="c5d6e7f8-a9b0-1234-5678-9abcdef01234">
+			<os:remove key="#[vars.syncRow.item_id]" doc:name="Invalidate Cache" doc:id="d6e7f8a9-b0c1-2345-6789-abcdef012345" objectStore="Inventory_Cache_ObjectStore"/>
+			<error-handler>
+				<on-error-continue type="OS:KEY_NOT_FOUND" doc:name="On Error Continue" enableNotifications="false" logException="false"/>
+			</error-handler>
+		</try>
+		<set-variable value="#[%dw 2.0
+output application/java
+import * from InventoryLib
+---
+calculateStatus(calculateTotal(vars.syncRow.warehouse_stock, vars.syncRow.regional_stock))]" doc:name="Set itemStatus" doc:id="e7f8a9b0-c1d2-3456-789a-bcdef0123456" variableName="itemStatus"/>
+		<choice doc:name="Critical Stock Check" doc:id="f8a9b0c1-d2e3-4567-89ab-cdef01234567">
+			<when expression='#[vars.itemStatus == "CRITICAL"]'>
+				<jms:publish doc:name="Publish Procurement Alert" doc:id="a9b0c1d2-e3f4-5678-9abc-def012345678" config-ref="JMS_Config" destination="procurement.alert.queue">
+					<jms:message>
+						<jms:body><![CDATA[#[%dw 2.0
+output application/json
+import * from InventoryLib
+var total = calculateTotal(vars.syncRow.warehouse_stock, vars.syncRow.regional_stock)
+---
+{
+    itemId: vars.syncRow.item_id,
+    currentStock: total,
+    status: "CRITICAL",
+    region: vars.syncRow.region,
+    reorderQuantity: calculateReorder(total),
+    timestamp: now()
+}]]]></jms:body>
+					</jms:message>
+				</jms:publish>
+			</when>
+		</choice>
+		<set-variable value="#[write({
+    itemId: vars.syncRow.item_id,
+    warehouseStock: vars.syncRow.warehouse_stock,
+    regionalStock: vars.syncRow.regional_stock,
+    totalInventory: vars.syncRow.total_inventory,
+    safetyStock: vars.syncRow.safety_stock,
+    status: vars.syncRow.status,
+    region: vars.syncRow.region
+}, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="a9b0c1d2-0123-4567-8902-031456789013" variableName="eventOldValue"/>
+		<set-variable value="#[%dw 2.0
+import * from InventoryLib
+var total = calculateTotal(vars.syncRow.warehouse_stock, vars.syncRow.regional_stock)
+---
+write({
+    itemId: vars.syncRow.item_id,
+    warehouseStock: vars.syncRow.warehouse_stock,
+    regionalStock: vars.syncRow.regional_stock,
+    totalInventory: total,
+    safetyStock: vars.syncRow.safety_stock,
+    status: calculateStatus(total),
+    region: vars.syncRow.region
+}, &quot;application/json&quot;)]" doc:name="Set eventNewValue" doc:id="b0c1d2e3-1234-5678-9013-142567890124" variableName="eventNewValue"/>
+		<set-variable value="UPDATE" doc:name="Set eventType" doc:id="b0c1d2e3-f4a5-6789-abcd-ef0123456789" variableName="eventType"/>
+		<set-variable value="#[vars.syncRow.item_id]" doc:name="Set eventItemId" doc:id="c1d2e3f4-a5b6-789a-bcde-f0123456789a" variableName="eventItemId"/>
+		<set-variable value="#[import * from InventoryLib --- calculateTotal(vars.syncRow.warehouse_stock, vars.syncRow.regional_stock)]" doc:name="Set eventTotalInventory" doc:id="d2e3f4a5-b6c7-89ab-cdef-0123456789ab" variableName="eventTotalInventory"/>
+		<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="e3f4a5b6-c7d8-9abc-def0-123456789abc" variableName="eventStatus"/>
+		<set-variable value="#[vars.syncRow.region]" doc:name="Set eventRegion" doc:id="f4a5b6c7-d8e9-abcd-ef01-23456789abcd" variableName="eventRegion"/>
+		<flow-ref doc:name="Publish Inventory Update Event" doc:id="a5b6c7d8-e9f0-bcde-f012-3456789abcde" name="publish-inventory-update-event-subflow"/>
+	</sub-flow>
+	<sub-flow name="validate-inventory-fields-subflow" doc:id="f60718920-1234-def0-1234-560203156723">
+		<choice doc:name="Check Negative Stock Fields" doc:id="0819203145-2345-ef01-2345-602031567234">
+			<when expression="#[(vars.newItem.warehouseStock != null and vars.newItem.warehouseStock &lt; 0) or (vars.newItem.regionalStock != null and vars.newItem.regionalStock &lt; 0) or (vars.newItem.safetyStock != null and vars.newItem.safetyStock &lt; 0)]">
+				<raise-error type="APP:VALIDATION" doc:name="Raise Validation Error" doc:id="1920314562-3456-f012-3456-020315672345" description="warehouseStock, regionalStock, and safetyStock must be non-negative"/>
+			</when>
+		</choice>
+	</sub-flow>
+	<sub-flow name="publish-inventory-update-event-subflow" doc:id="c1d2e3f4-a5b6-7890-cdef-234567890124">
+		<db:insert doc:name="Insert Audit Record" doc:id="c2d3e4f5-6789-0abc-def1-234567890126" config-ref="Database_Config">
+			<db:sql><![CDATA[INSERT INTO inventory_audit (item_id, action, old_value, new_value, changed_at) VALUES (:itemId, :action, :oldValue, :newValue, :changedAt)]]></db:sql>
+			<db:input-parameters><![CDATA[#[{
+    itemId: vars.eventItemId,
+    action: vars.eventType,
+    oldValue: vars.eventOldValue,
+    newValue: vars.eventNewValue,
+    changedAt: now()
+}]]]></db:input-parameters>
+		</db:insert>
+		<jms:publish doc:name="Publish Inventory Update Event" doc:id="d2e3f4a5-b6c7-8901-def0-345678901235" config-ref="JMS_Config" destination="inventory.update.queue">
+			<jms:message>
+				<jms:body><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+    eventType: vars.eventType,
+    itemId: vars.eventItemId,
+    totalInventory: vars.eventTotalInventory,
+    status: vars.eventStatus,
+    region: vars.eventRegion,
+    timestamp: now()
+}]]]></jms:body>
+			</jms:message>
+		</jms:publish>
 	</sub-flow>
 </mule>

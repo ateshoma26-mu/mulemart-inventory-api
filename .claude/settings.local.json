@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "WebFetch(domain:docs.mulesoft.com)",
-      "Bash(jar xf *)",
-      "Bash(javap -p -c com/mulesoft/modules/configuration/properties/api/SecureConfigurationPropertiesProviderFactory.class)"
-    ]
-  }
-}
