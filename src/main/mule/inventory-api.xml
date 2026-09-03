@@ -398,14 +398,18 @@ write({
 output application/json
 ---
 {
-    itemId: attributes.uriParams.itemId,
+    itemId: vars.itemId,
     status: "INACTIVE",
     message: "Item soft-deleted successfully"
 }]]></ee:set-payload>
 					</ee:message>
+					<ee:variables>
+						<ee:set-variable variableName="httpStatus">200</ee:set-variable>
+					</ee:variables>
 				</ee:transform>
 			</otherwise>
 		</choice>
+		<error-handler ref="globalErrorHandler" />
     </flow>
     <flow name="patch:\inventory\(itemId):application\json:inventory-api-config">
 		<set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="cfcad169-e5e1-42ee-9630-489d5cc8efc3" variableName="itemId"/>
@@ -522,7 +526,10 @@ write({
      ---
      calculateTotal(wh, reg)]" doc:name="Set eventTotalInventory" doc:id="a7b8c9d0-e1f2-3456-2345-890123456780" variableName="eventTotalInventory"/>
 				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="b8c9d0e1-f2a3-4567-3456-901234567891" variableName="eventStatus"/>
-				<set-variable value="#[vars.newItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="c9d0e1f2-a3b4-5678-4567-012345678902" variableName="eventRegion"/>
+				<set-variable value="#[%dw 2.0
+output application/java
+---
+vars.newItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="c9d0e1f2-a3b4-5678-4567-012345678902" variableName="eventRegion"/>
 				<flow-ref doc:name="Publish Inventory Update Event" doc:id="d0e1f2a3-b4c5-6789-5678-123456789013" name="publish-inventory-update-event-subflow"/>
 				<try doc:name="Try" doc:id="e6f70819-5566-7788-9900-bbccddeeff05">
 					<os:remove key="#[vars.itemId]" doc:name="Invalidate Cache" doc:id="f7081920-6677-8899-0011-ccddeeff0006" objectStore="Inventory_Cache_ObjectStore"/>
@@ -681,79 +688,92 @@ payload map (row) -> do {
         </ee:transform>
     </flow>
     <flow name="get:\inventory\(itemId)\summary:inventory-api-config">
+        <set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="8b1c2d3e-4f50-6172-8394-a5b6c7d8e9f0" variableName="itemId"/>
         <db:select doc:name="Select" doc:id="c5162c39-4415-482c-b0ec-b2897a0f7b4c" config-ref="Database_Config">
 			<db:sql ><![CDATA[     SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory WHERE item_id = :itemId]]></db:sql>
-			<db:input-parameters ><![CDATA[     #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
+			<db:input-parameters ><![CDATA[     #[{ itemId: vars.itemId }]]]></db:input-parameters>
 		</db:select>
-		<ee:transform doc:name="Transform Message">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
-import * from InventoryLib
----
-if (isEmpty(payload))
-    null
-else do {
-    var row = payload[0]
-    var total = calculateTotal(row.warehouse_stock, row.regional_stock)
-    ---
-    {
-        itemId: row.item_id,
-        totalInventory: total,
-        status: calculateStatus(total),
-        reorderQuantity: calculateReorder(total),
-        region: row.region
-    }
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<choice doc:name="Not Found Check" doc:id="9c2d3e4f-5061-7283-94a5-b6c7d8e9f0a1">
+			<when expression="#[isEmpty(payload)]">
+				<raise-error doc:name="Raise error" doc:id="ad4e5f60-7182-9304-a5b6-c7d8e9f0a1b2" type="APP:NOT_FOUND" description='#["Item " ++ vars.itemId ++ " not found"]'/>
+			</when>
+			<otherwise>
+				<ee:transform doc:name="Transform Message">
+		            <ee:message>
+		                <ee:set-payload><![CDATA[%dw 2.0
+		output application/json
+		import * from InventoryLib
+		---
+		payload[0] then (row) -> do {
+		    var total = calculateTotal(row.warehouse_stock, row.regional_stock)
+		    ---
+		    {
+		        itemId: row.item_id,
+		        totalInventory: total,
+		        status: calculateStatus(total),
+		        reorderQuantity: calculateReorder(total),
+		        region: row.region
+		    }
+		}]]></ee:set-payload>
+		            </ee:message>
+		        </ee:transform>
+			</otherwise>
+		</choice>
+		<error-handler ref="globalErrorHandler" />
     </flow>
     <flow name="get:\inventory\(itemId):inventory-api-config">
-        <os:contains key="#[attributes.uriParams.itemId]" doc:name="Check Cache" doc:id="a1b2c3d4-5566-7788-9900-aabbccddeeff" objectStore="Inventory_Cache_ObjectStore" target="cacheHit"/>
+        <set-variable value="#[attributes.uriParams.itemId]" doc:name="Set Variable" doc:id="bd5f6071-8293-a4b5-c6d7-e8f9a0b1c2d3" variableName="itemId"/>
+        <os:contains key="#[vars.itemId]" doc:name="Check Cache" doc:id="a1b2c3d4-5566-7788-9900-aabbccddeeff" objectStore="Inventory_Cache_ObjectStore" target="cacheHit"/>
         <choice doc:name="Cache Hit Check" doc:id="b2c3d4e5-6677-8899-0011-bbccddeeff00">
             <when expression="#[vars.cacheHit]">
-                <os:retrieve key="#[attributes.uriParams.itemId]" doc:name="Retrieve From Cache" doc:id="c3d4e5f6-7788-9900-1122-ccddeeff0011" objectStore="Inventory_Cache_ObjectStore" target="cachedItem"/>
+                <os:retrieve key="#[vars.itemId]" doc:name="Retrieve From Cache" doc:id="c3d4e5f6-7788-9900-1122-ccddeeff0011" objectStore="Inventory_Cache_ObjectStore" target="cachedItem"/>
                 <set-payload value="#[vars.cachedItem]" doc:name="Set Payload From Cache" doc:id="d4e5f607-8899-0011-2233-ddeeff001122"/>
             </when>
             <otherwise>
                 <db:select doc:name="Select" doc:id="242b9dc2-926e-45ff-9eff-f6cdece99bc7" config-ref="Database_Config">
                     <db:sql><![CDATA[SELECT item_id, warehouse_stock, regional_stock, total_inventory, safety_stock, status, region, last_updated FROM inventory WHERE item_id = :itemId]]></db:sql>
-                    <db:input-parameters><![CDATA[   #[{ itemId: attributes.uriParams.itemId }]]]></db:input-parameters>
+                    <db:input-parameters><![CDATA[   #[{ itemId: vars.itemId }]]]></db:input-parameters>
                 </db:select>
-                <ee:transform doc:name="Transform Message">
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
+                <choice doc:name="Not Found Check" doc:id="ce6071829-3948-b5c6-d7e8-f9a0b1c2d3e4">
+                    <when expression="#[isEmpty(payload)]">
+                        <raise-error doc:name="Raise error" doc:id="df718293-4a59-c6d7-e8f9-a0b1c2d3e4f5" type="APP:NOT_FOUND" description='#["Item " ++ vars.itemId ++ " not found"]'/>
+                    </when>
+                    <otherwise>
+                        <ee:transform doc:name="Transform Message">
+                            <ee:message>
+                                <ee:set-payload><![CDATA[%dw 2.0
   output application/json
   import * from InventoryLib
   ---
-  if (isEmpty(payload))
-      null
-  else
-      payload[0] then (row) -> do {
-          var total = calculateTotal(row.warehouse_stock, row.regional_stock)
-          ---
-          {
-              itemId: row.item_id,
-              warehouseStock: row.warehouse_stock,
-              regionalStock: row.regional_stock,
-              totalInventory: total,
-              safetyStock: row.safety_stock,
-              status: calculateStatus(total),
-              region: row.region,
-              lastUpdated: row.last_updated
-          }
-      }]]></ee:set-payload>
-                    </ee:message>
-                </ee:transform>
-                <choice doc:name="Cache Store Check" doc:id="e5f60718-9900-1122-3344-eeff00112233">
-                    <when expression="#[payload != null]">
-                        <os:store key="#[attributes.uriParams.itemId]" doc:name="Store In Cache" doc:id="f6071829-0011-2233-4455-ff0011223344" objectStore="Inventory_Cache_ObjectStore">
-                            <os:value><![CDATA[#[payload]]]></os:value>
-                        </os:store>
-                    </when>
+  payload[0] then (row) -> do {
+      var total = calculateTotal(row.warehouse_stock, row.regional_stock)
+      ---
+      {
+          itemId: row.item_id,
+          warehouseStock: row.warehouse_stock,
+          regionalStock: row.regional_stock,
+          totalInventory: total,
+          safetyStock: row.safety_stock,
+          status: calculateStatus(total),
+          region: row.region,
+          lastUpdated: row.last_updated
+      }
+  }]]></ee:set-payload>
+                            </ee:message>
+                        </ee:transform>
+                        <try doc:name="Try" doc:id="e0829304-5b6a-d7e8-f9a0-b1c2d3e4f5a6">
+                            <os:store key="#[vars.itemId]" doc:name="Store In Cache" doc:id="f6071829-0011-2233-4455-ff0011223344" objectStore="Inventory_Cache_ObjectStore">
+                                <os:value><![CDATA[#[payload]]]></os:value>
+                            </os:store>
+                            <error-handler>
+                                <on-error-continue enableNotifications="false" logException="false" doc:name="On Error Continue"/>
+                            </error-handler>
+                        </try>
+                    </otherwise>
                 </choice>
             </otherwise>
         </choice>
+        <error-handler ref="globalErrorHandler" />
     </flow>
     <flow name="post:\inventory\bulk:application\json:inventory-api-config">
         <set-variable value="#[now()]" doc:name="Set startedAt" doc:id="e4f5a6b7-c8d9-0123-ef01-345678901234" variableName="startedAt"/>
@@ -987,6 +1007,7 @@ output application/json
     </flow>
 	<sub-flow name="process-inventory-item-subflow" doc:id="a6c590d2-9803-4224-9022-d2a984e33429" >
 		<set-variable value="#[payload]" doc:name="Store Item" doc:id="9c462cdd-a4a0-47ef-8512-6cd63024e8e0" variableName="newItem"/>
+		<flow-ref doc:name="Validate Payload" doc:id="a1b2c3d4-e5f6-7890-1234-56789abcde01" name="validate-inventory-fields-subflow"/>
 		<db:select doc:name="Check Duplicate" doc:id="b1c2d3e4-f5a6-7890-abcd-ef1234567890" config-ref="Database_Config">
 			<db:sql><![CDATA[SELECT item_id FROM inventory WHERE item_id = :itemId]]></db:sql>
 			<db:input-parameters><![CDATA[#[{ itemId: vars.newItem.itemId }]]]></db:input-parameters>

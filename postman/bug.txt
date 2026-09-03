@@ -1,0 +1,64 @@
+bug 
+1. Missing item returns null instead of 404
+
+GET /inventory/{itemId} and GET /inventory/{itemId}/summary: if the id is not in MySQL, the Transform sets payload to null and you get 200 with an empty/null body.
+
+PUT already does it right: isEmpty(payload) → raise APP:NOT_FOUND → 404. GET should do the same after the SELECT (and not cache that miss).
+
+2. Cache store failure turns a good GET into 500
+
+GET /inventory/{itemId}: DB + Transform succeed (your SKU-DEMO-001 JSON), then os:store throws → 500 with that JSON still in the body.
+
+PUT already wraps cache remove in Try / On Error Continue (OS:KEY_NOT_FOUND). GET should wrap cache store the same way: if Object Store fails, still return 200 with the item. Reading inventory should not fail only because cache write failed.
+
+
+at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.newItem.region default vars.existing.region".
+Element               : patch:\inventory\(itemId):application\json:inventory-api-config/processors/5/route/1/processors/10 @ mulemart-inventory-api:inventory-api.xml:525 (Set eventRegion)
+Element DSL           : <set-variable value="#[vars.newItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="c9d0e1f2-a3b4-5678-4567-012345678902" variableName="eventRegion"></set-variable>
+Error type            : MULE:EXPRESSION
+FlowStack             : at patch:\inventory\(itemId):application\json:inventory-api-config(patch:\inventory\(itemId):application\json:inventory-api-config/processors/5/route/1/processors/10 @ mulemart-inventory-api:inventory-api.xml:525 (Set eventRegion))
+at inventory-api-main(inventory-api-main/processors/0 @ mulemart-inventory-api:inventory-api.xml:97)
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+ERROR 2026-09-03 09:43:48,438 [[MuleRuntime].uber.19: [mulemart-inventory-api].patch:\inventory\(itemId):application\json:inventory-api-config.CPU_LITE @5f2d1547] [processor: patch:\inventory\(itemId):application\json:inventory-api-config/processors/5/route/1/processors/10; event: 7d0fd650-a79d-11f1-890d-60f6773163c1] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.newItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.newItem.region default vars.existing.region".
+Element               : (None)
+Element DSL           : (None)
+Error type            : MULE:EXPRESSION
+FlowStack             : (None)
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+The failure is Set eventRegion after MySQL and Salesforce already ran. DataWeave cannot mix JSON newItem.region (missing → null) with Java existing.region unless you set output application/java.
+
+
+delete returns 201. change it to 200
+
+
+Object Store requires a key. null → MULE:UNKNOWN → Postman 500. The Transform already built the JSON, so you still see SKU-DEMO-001 in the body.
+
+Why itemId is null there
+
+At the start of GET, attributes.uriParams.itemId is SKU-DEMO-001 (that is how os:contains and the SELECT work).
+
+After DB Select and Transform, Mule replaces the message. HTTP attributes (including uri params) are often gone. PUT avoids this by copying the id first:
+
+vars.itemId = attributes.uriParams.itemId
+
+GET never does that. It still uses attributes.uriParams.itemId on Store In Cache, which is now null.
+
+Fix
+
+First box on GET-by-id: Set Variable itemId from attributes.uriParams.itemId (same as PUT).
+Use vars.itemId for contains / retrieve / SELECT / store.
+Optional: wrap Store In Cache in Try / On Error Continue so a cache write never fails the GET.
+That is the same 500 you saw earlier with a good body. The console line just names the cause. 
