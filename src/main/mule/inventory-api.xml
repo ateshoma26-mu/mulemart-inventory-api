@@ -561,17 +561,6 @@ vars.newItem.region default vars.existing.region]" doc:name="Set eventRegion" do
 		</choice>
 		<error-handler ref="globalErrorHandler" />
     </flow>
-	<flow name="inventory-apiFlow" doc:id="0e9f2a50-8b09-4c06-bea1-1003ab05eb0b" >
-		<ee:transform doc:name="Transform Message" doc:id="e21d4f15-5ba7-4b48-a03f-1e11f4386e49" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-	</flow>
 	<sub-flow name="check-system-health-subflow" doc:id="2031456723-4567-0123-4567-131456723456">
 		<set-variable value="UP" doc:name="Set Variable" doc:id="ade8e7e0-8c88-4674-b8b8-d5c72febba17" variableName="dbStatus"/>
 		<set-variable value="UP" doc:name="Set Variable" doc:id="7232a497-46e3-431e-b1b4-ac3c768e64ed" variableName="sfStatus"/>
@@ -1263,7 +1252,10 @@ var reg = vars.regionalItem.regionalStock default 0
 ---
 calculateTotal(wh, reg)]" doc:name="Set eventTotalInventory" doc:id="77665544-3322-1100-9876-5432fedcba9a" variableName="eventTotalInventory"/>
 				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="66554433-2211-0099-8765-4321fedcba9b" variableName="eventStatus"/>
-				<set-variable value="#[vars.regionalItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="55443322-1100-9988-7654-3210fedcba9c" variableName="eventRegion"/>
+				<set-variable value="#[%dw 2.0
+output application/java
+---
+vars.regionalItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="55443322-1100-9988-7654-3210fedcba9c" variableName="eventRegion"/>
 				<flow-ref doc:name="Publish Inventory Update Event" doc:id="44332211-0099-8877-6543-210fedcba9d0" name="publish-inventory-update-event-subflow"/>
 			</otherwise>
 		</choice>

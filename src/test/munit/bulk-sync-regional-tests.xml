@@ -68,6 +68,9 @@ output application/json
             <munit-tools:mock-when processor="db:insert">
                 <munit-tools:then-return/>
             </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
         </munit:behavior>
         <munit:execution>
             <set-payload value='#[%dw 2.0
@@ -181,6 +184,9 @@ output application/json
                 </munit-tools:then-return>
             </munit-tools:mock-when>
             <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
                 <munit-tools:then-return/>
             </munit-tools:mock-when>
         </munit:behavior>

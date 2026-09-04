@@ -36,6 +36,9 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
                     <munit-tools:payload value="#[[]]" mediaType="application/java"/>
                 </munit-tools:then-return>
             </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
         </munit:behavior>
         <munit:execution>
             <set-payload value='#[%dw 2.0
@@ -116,6 +119,9 @@ output application/json
                 <munit-tools:then-return>
                     <munit-tools:payload value="#[[]]" mediaType="application/java"/>
                 </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
             </munit-tools:mock-when>
             <munit-tools:mock-when processor="os:remove">
                 <munit-tools:then-return/>
@@ -292,6 +298,9 @@ output application/java
                 <munit-tools:then-return/>
             </munit-tools:mock-when>
             <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
                 <munit-tools:then-return/>
             </munit-tools:mock-when>
             <munit-tools:mock-when processor="os:remove">

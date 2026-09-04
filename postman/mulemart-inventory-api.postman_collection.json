@@ -1,7 +1,7 @@
 {
   "info": {
     "name": "MuleMart Inventory API",
-    "description": "Full endpoint coverage for the MuleMart Global Omni-Channel Inventory API (all 10 RAML resources), including key error-path cases (404, 409, 400). Run folders top to bottom.",
+    "description": "Full endpoint coverage for the MuleMart Global Omni-Channel Inventory API (all 10 RAML resources), plus key error paths (404/409/400) and status-threshold demos (CRITICAL < 10, LOW 10-49, NORMAL 50-99, HEALTHY 100-200, OVERSTOCK > 200).\n\nRun folders top to bottom. Requests include test assertions so a live run shows green checkmarks.\n\nNote: the regional CSV sync (`regional-csv-listener-flow`) is triggered by dropping a file into the configured inbound directory, not by an HTTP call, so it has no request here - mention/demo it by dropping a CSV file if needed.\n\nWatch `procurement.alert.queue` and `inventory.update.queue` in the ActiveMQ console (default http://localhost:8161/admin) during the Create/Update/Delete/JMS folders to show the JMS + Salesforce + audit-log side effects live.",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "variable": [
@@ -13,6 +13,23 @@
       "item": [
         {
           "name": "GET Health Check",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body has status/database/salesforce', () => {",
+                  "  const body = pm.response.json();",
+                  "  pm.expect(body).to.have.property('status');",
+                  "  pm.expect(body).to.have.property('database');",
+                  "  pm.expect(body).to.have.property('salesforce');",
+                  "});"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -26,49 +43,121 @@
       "item": [
         {
           "name": "POST Create Item (Healthy)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is HEALTHY', () => pm.expect(pm.response.json().status).to.eql('HEALTHY'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-DEMO-001\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-DEMO2-001\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
             }
           }
         },
         {
-          "name": "POST Create Item (Critical - triggers alert)",
+          "name": "POST Create Item (Critical - triggers procurement alert)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is CRITICAL', () => pm.expect(pm.response.json().status).to.eql('CRITICAL'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-DEMO-002\",\n  \"warehouseStock\": 3,\n  \"regionalStock\": 4,\n  \"safetyStock\": 20,\n  \"region\": \"NA-EAST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-DEMO2-002\",\n  \"warehouseStock\": 3,\n  \"regionalStock\": 4,\n  \"safetyStock\": 20,\n  \"region\": \"NA-EAST\"\n}"
+            }
+          }
+        },
+        {
+          "name": "POST Create Item (Overstock)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is OVERSTOCK', () => pm.expect(pm.response.json().status).to.eql('OVERSTOCK'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+            "url": "{{baseUrl}}/inventory",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"itemId\": \"SKU-DEMO2-003\",\n  \"warehouseStock\": 150,\n  \"regionalStock\": 100,\n  \"safetyStock\": 30,\n  \"region\": \"APAC\"\n}"
             }
           }
         },
         {
           "name": "POST Create Duplicate (expect 409)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 409', () => pm.response.to.have.status(409));",
+                  "pm.test('Code is DUPLICATE', () => pm.expect(pm.response.json().code).to.eql('DUPLICATE'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-DEMO-001\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-DEMO2-001\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
             }
           }
         },
         {
           "name": "POST Create Invalid - negative stock (expect 400)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 400', () => pm.response.to.have.status(400));",
+                  "pm.test('Code is VALIDATION_ERROR', () => pm.expect(pm.response.json().code).to.eql('VALIDATION_ERROR'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-DEMO-BAD\",\n  \"warehouseStock\": -5,\n  \"regionalStock\": 10,\n  \"region\": \"EU-WEST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-DEMO2-BAD\",\n  \"warehouseStock\": -5,\n  \"regionalStock\": 10,\n  \"region\": \"EU-WEST\"\n}"
             }
           }
         }
@@ -79,6 +168,18 @@
       "item": [
         {
           "name": "GET List All Inventory",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Body is an array', () => pm.expect(pm.response.json()).to.be.an('array'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -87,6 +188,17 @@
         },
         {
           "name": "GET List Filtered (status & region)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -95,6 +207,18 @@
         },
         {
           "name": "GET List Paginated",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Page size <= 5', () => pm.expect(pm.response.json().length).to.be.at.most(5));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -103,14 +227,38 @@
         },
         {
           "name": "GET Item By Id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('itemId matches', () => pm.expect(pm.response.json().itemId).to.eql('SKU-DEMO2-001'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/inventory/SKU-DEMO-001"
+            "url": "{{baseUrl}}/inventory/SKU-DEMO2-001"
           }
         },
         {
           "name": "GET Item By Id - Not Found (expect 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Code is NOT_FOUND', () => pm.expect(pm.response.json().code).to.eql('NOT_FOUND'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
@@ -119,10 +267,22 @@
         },
         {
           "name": "GET Item Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Has reorderQuantity', () => pm.expect(pm.response.json()).to.have.property('reorderQuantity'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/inventory/SKU-DEMO-001/summary"
+            "url": "{{baseUrl}}/inventory/SKU-DEMO2-001/summary"
           }
         }
       ]
@@ -132,21 +292,44 @@
       "item": [
         {
           "name": "PUT Full Update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('totalInventory recalculated', () => pm.expect(pm.response.json().totalInventory).to.eql(110));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PUT",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "url": "{{baseUrl}}/inventory/SKU-DEMO-001",
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO2-001",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-DEMO-001\",\n  \"warehouseStock\": 60,\n  \"regionalStock\": 50,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-DEMO2-001\",\n  \"warehouseStock\": 60,\n  \"regionalStock\": 50,\n  \"safetyStock\": 20,\n  \"region\": \"EU-WEST\"\n}"
             }
           }
         },
         {
           "name": "PUT Not Found (expect 404)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', () => pm.response.to.have.status(404));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PUT",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory/SKU-DOES-NOT-EXIST",
             "body": {
               "mode": "raw",
@@ -156,10 +339,22 @@
         },
         {
           "name": "PATCH Partial Update (pushes to Critical - triggers alert)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is CRITICAL', () => pm.expect(pm.response.json().status).to.eql('CRITICAL'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "url": "{{baseUrl}}/inventory/SKU-DEMO-001",
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+            "url": "{{baseUrl}}/inventory/SKU-DEMO2-001",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"warehouseStock\": 2,\n  \"regionalStock\": 3\n}"
@@ -173,18 +368,42 @@
       "item": [
         {
           "name": "DELETE Soft Delete Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is INACTIVE', () => pm.expect(pm.response.json().status).to.eql('INACTIVE'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/inventory/SKU-DEMO-001"
+            "url": "{{baseUrl}}/inventory/SKU-DEMO2-001"
           }
         },
         {
           "name": "GET Item After Delete (confirms INACTIVE)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is INACTIVE', () => pm.expect(pm.response.json().status).to.eql('INACTIVE'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/inventory/SKU-DEMO-001"
+            "url": "{{baseUrl}}/inventory/SKU-DEMO2-001"
           }
         }
       ]
@@ -193,19 +412,87 @@
       "name": "Bulk & Sync",
       "item": [
         {
-          "name": "POST Bulk Create",
+          "name": "POST Bulk Create (mixed success/failure)",
+          "description": "5 records submitted: 3 should succeed (SKU-BULK2-001 healthy, SKU-BULK2-002 CRITICAL - triggers a procurement alert, SKU-BULK2-003 healthy), and 2 should fail inside the batch job (SKU-DEMO2-001 as a duplicate - run 'Inventory - Create' first so it already exists, and SKU-BULK2-004 with negative warehouseStock - fails validation). The 202 response only echoes totalRecords submitted; the actual per-item successCount/failureCount split is written to the application log when the async batch job completes (see 'Log SyncResponse' in the Mule log), so wait a few seconds then use the two verification requests below to confirm which records landed.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 202', () => pm.response.to.have.status(202));",
+                  "pm.test('Status is ACCEPTED', () => pm.expect(pm.response.json().status).to.eql('ACCEPTED'));",
+                  "pm.test('totalRecords reflects all 5 submitted', () => pm.expect(pm.response.json().totalRecords).to.eql(5));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory/bulk",
             "body": {
               "mode": "raw",
-              "raw": "[\n  {\n    \"itemId\": \"SKU-BULK-001\",\n    \"warehouseStock\": 100,\n    \"regionalStock\": 60,\n    \"safetyStock\": 20,\n    \"region\": \"NA-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK-002\",\n    \"warehouseStock\": 2,\n    \"regionalStock\": 1,\n    \"safetyStock\": 20,\n    \"region\": \"NA-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK-003\",\n    \"warehouseStock\": 40,\n    \"regionalStock\": 30,\n    \"safetyStock\": 15,\n    \"region\": \"APAC\"\n  }\n]"
+              "raw": "[\n  {\n    \"itemId\": \"SKU-BULK2-001\",\n    \"warehouseStock\": 100,\n    \"regionalStock\": 60,\n    \"safetyStock\": 20,\n    \"region\": \"NA-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK2-002\",\n    \"warehouseStock\": 2,\n    \"regionalStock\": 1,\n    \"safetyStock\": 20,\n    \"region\": \"NA-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK2-003\",\n    \"warehouseStock\": 40,\n    \"regionalStock\": 30,\n    \"safetyStock\": 15,\n    \"region\": \"APAC\"\n  },\n  {\n    \"itemId\": \"SKU-DEMO2-001\",\n    \"warehouseStock\": 10,\n    \"regionalStock\": 10,\n    \"safetyStock\": 5,\n    \"region\": \"EU-WEST\"\n  },\n  {\n    \"itemId\": \"SKU-BULK2-004\",\n    \"warehouseStock\": -5,\n    \"regionalStock\": 10,\n    \"safetyStock\": 20,\n    \"region\": \"APAC\"\n  }\n]"
             }
           }
         },
         {
+          "name": "GET Verify Bulk Success Item (SKU-BULK2-002 should exist, CRITICAL)",
+          "description": "Run a few seconds after 'POST Bulk Create' so the async batch job has time to finish inserting.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is CRITICAL', () => pm.expect(pm.response.json().status).to.eql('CRITICAL'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-BULK2-002"
+          }
+        },
+        {
+          "name": "GET Verify Bulk Failure Item (SKU-BULK2-004 should NOT exist - expect 404)",
+          "description": "Confirms the negative-stock record from the bulk batch was rejected and never inserted.",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 404', () => pm.response.to.have.status(404));",
+                  "pm.test('Code is NOT_FOUND', () => pm.expect(pm.response.json().code).to.eql('NOT_FOUND'));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{baseUrl}}/inventory/SKU-BULK2-004"
+          }
+        },
+        {
           "name": "POST Trigger Full Sync",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 202', () => pm.response.to.have.status(202));",
+                  "pm.test('Status is ACCEPTED', () => pm.expect(pm.response.json().status).to.eql('ACCEPTED'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [],
@@ -216,50 +503,98 @@
     },
     {
       "name": "JMS Event Verification (CRITICAL alert + inventory.update.queue)",
-      "description": "Manual test sequence for verifying the CRITICAL procurement alert on PUT/PATCH and the inventory.update.queue CREATE/UPDATE/DELETE events. Run in order; watch procurement.alert.queue and inventory.update.queue in the ActiveMQ console (localhost:8161/admin) as you go.",
+      "description": "Manual test sequence for verifying the CRITICAL procurement alert on create/update and the inventory.update.queue CREATE/UPDATE/DELETE audit events. Run in order; watch procurement.alert.queue and inventory.update.queue in the ActiveMQ console (default http://localhost:8161/admin) as you go.",
       "item": [
         {
           "name": "1. POST create - immediately CRITICAL (CREATE event + procurement alert)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is CRITICAL', () => pm.expect(pm.response.json().status).to.eql('CRITICAL'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-TEST-100\",\n  \"warehouseStock\": 3,\n  \"regionalStock\": 4,\n  \"safetyStock\": 20,\n  \"region\": \"US-EAST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-TEST2-100\",\n  \"warehouseStock\": 3,\n  \"regionalStock\": 4,\n  \"safetyStock\": 20,\n  \"region\": \"US-EAST\"\n}"
             }
           }
         },
         {
           "name": "2. POST create - healthy (CREATE event only)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is HEALTHY', () => pm.expect(pm.response.json().status).to.eql('HEALTHY'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "POST",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
             "url": "{{baseUrl}}/inventory",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-TEST-200\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"US-WEST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-TEST2-200\",\n  \"warehouseStock\": 80,\n  \"regionalStock\": 70,\n  \"safetyStock\": 20,\n  \"region\": \"US-WEST\"\n}"
             }
           }
         },
         {
-          "name": "3. PUT - push SKU-TEST-200 into CRITICAL (fix verification)",
+          "name": "3. PUT - push SKU-TEST2-200 into CRITICAL (procurement alert)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is CRITICAL', () => pm.expect(pm.response.json().status).to.eql('CRITICAL'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PUT",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "url": "{{baseUrl}}/inventory/SKU-TEST-200",
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+            "url": "{{baseUrl}}/inventory/SKU-TEST2-200",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"itemId\": \"SKU-TEST-200\",\n  \"warehouseStock\": 2,\n  \"regionalStock\": 3,\n  \"safetyStock\": 20,\n  \"region\": \"US-WEST\"\n}"
+              "raw": "{\n  \"itemId\": \"SKU-TEST2-200\",\n  \"warehouseStock\": 2,\n  \"regionalStock\": 3,\n  \"safetyStock\": 20,\n  \"region\": \"US-WEST\"\n}"
             }
           }
         },
         {
-          "name": "4. PATCH - partial update, still CRITICAL (fix verification)",
+          "name": "4. PATCH - partial update, still CRITICAL (procurement alert again)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is CRITICAL', () => pm.expect(pm.response.json().status).to.eql('CRITICAL'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "url": "{{baseUrl}}/inventory/SKU-TEST-200",
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+            "url": "{{baseUrl}}/inventory/SKU-TEST2-200",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"warehouseStock\": 4\n}"
@@ -268,10 +603,22 @@
         },
         {
           "name": "5. PATCH - raise back to healthy (UPDATE event, no alert)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is HEALTHY', () => pm.expect(pm.response.json().status).to.eql('HEALTHY'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "PATCH",
-            "header": [ { "key": "Content-Type", "value": "application/json" } ],
-            "url": "{{baseUrl}}/inventory/SKU-TEST-200",
+            "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+            "url": "{{baseUrl}}/inventory/SKU-TEST2-200",
             "body": {
               "mode": "raw",
               "raw": "{\n  \"warehouseStock\": 100,\n  \"regionalStock\": 100\n}"
@@ -280,18 +627,42 @@
         },
         {
           "name": "6. DELETE - soft delete (DELETE event)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is INACTIVE', () => pm.expect(pm.response.json().status).to.eql('INACTIVE'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "DELETE",
             "header": [],
-            "url": "{{baseUrl}}/inventory/SKU-TEST-200"
+            "url": "{{baseUrl}}/inventory/SKU-TEST2-200"
           }
         },
         {
           "name": "7. GET item (sanity check)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status code is 200', () => pm.response.to.have.status(200));",
+                  "pm.test('Status is INACTIVE', () => pm.expect(pm.response.json().status).to.eql('INACTIVE'));"
+                ]
+              }
+            }
+          ],
           "request": {
             "method": "GET",
             "header": [],
-            "url": "{{baseUrl}}/inventory/SKU-TEST-200"
+            "url": "{{baseUrl}}/inventory/SKU-TEST2-200"
           }
         }
       ]
