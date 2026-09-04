@@ -1,420 +1,815 @@
-MULE_HOME is set to C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule
-MULE_BASE is set to C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule
-Found JAVA_HOME = C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.jdk.win32.x86_64_1.3.1
---> Wrapper Started as Console
-Java Service Wrapper Standard Edition 64-bit 3.5.51
-  Copyright (C) 1999-2022 Tanuki Software, Ltd. All Rights Reserved.
-    http://wrapper.tanukisoftware.com
-  Licensed to MuleSoft Inc. for Mule Runtime Enterprise Edition
+Message               : Item SKU-MISSING not found
+Element               : delete:\inventory\(itemId):inventory-api-config/processors/2/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:357 (Raise error)
+Element DSL           : <raise-error doc:name="Raise error" doc:id="ce9a154d-b8ec-459e-a563-37a54709bbb9" type="APP:NOT_FOUND" description="   #["Item " ++ vars.itemId ++ " not found"]"></raise-error>
+Error type            : APP:NOT_FOUND
+FlowStack             : at delete:\inventory\(itemId):inventory-api-config(delete:\inventory\(itemId):inventory-api-config/processors/2/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:357 (Raise error))
 
-Launching a JVM...
-Starting the Mule Container...
-WrapperManager: Initializing...
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
 
-Running Mule in testing mode
+INFO  2026-09-03 23:28:17,018 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: delete-inventory-not-found-test - Time elapsed: 0.03 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: put-inventory-success-test - Fully updates an existing item, re+
++ calculates totals, and syncs Salesforce                                      +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: put-inventory-not-found-test - Returns 404 when the item to upd+
++ ate does not exist                                                           +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:17,289 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: put-inventory-success-test - Time elapsed: 0.27 sec
+ERROR 2026-09-03 23:28:17,331 [[MuleRuntime].uber.06: [mulemart-inventory-api].put:\inventory\(itemId):application\json:inventory-api-config.CPU_LITE @4fb6a9a0] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : Item SKU-MISSING not found
+Element               : put:\inventory\(itemId):application\json:inventory-api-config/processors/4/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:233 (Raise error)
+Element DSL           : <raise-error doc:name="Raise error" doc:id="d9afd7da-362d-49e0-92db-fad19a124d7d" type="APP:NOT_FOUND" description="#["Item " ++ vars.itemId ++ " not found"]"></raise-error>
+Error type            : APP:NOT_FOUND
+FlowStack             : at put:\inventory\(itemId):application\json:inventory-api-config(put:\inventory\(itemId):application\json:inventory-api-config/processors/4/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:233 (Raise error))
 
-INFO  2026-09-01 17:03:17,867 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
-**********************************************************************
-*                                                                    *
-*                         (((((((((((((((((((                        *
-*                     (((((                 ((((#                    *
-*                  &(((                        *(((                  *
-*                &(((                             (((                *
-*               (((     (((%               (((#     (((              *
-*              ((     (((((((             (((((((    (((             *
-*             ((     (((((((((           (((((((((     ((            *
-*            ((    #(((((((((((        #(((((((((((    (((           *
-*           #((    ((((((((((((((     ((((((((((((((    ((           *
-*           ((    ((((((  /(((((((   (((((((  /((((((    ((          *
-*           ((    ((((((    (((((((&(((((((    ((((((    ((          *
-*           ((    (((((      ((((((((((((*     ((((((    ((          *
-*           ((    ((((((      *(((((((((       ((((((    ((          *
-*           ((    ((((((        (((((((        ((((((   (((          *
-*            ((    ((((((                     ((((((    ((           *
-*            ((#    ((((((#                 (((((((    ((            *
-*             ((#    ((((((((             ((((((((    (((            *
-*              (((    (((((((              (((((     ((.             *
-*                ((      (((               (((     #((               *
-*                 /((                            (((                 *
-*                    (((                      &(((                   *
-*                      *((((&             &((((                      *
-*                           ((((((((((((((/                          *
-*                                                                    *
-*    ___  ___      _        ______            _   _                  *
-*    |  \/  |     | |       | ___ \          | | (_)                 *
-*    | .  . |_   _| | ___   | |_/ /   _ _ __ | |_ _ _ __ ___   ___   *
-*    | |\/| | | | | |/ _ \  |    / | | | '_ \| __| | '_ ` _ \ / _ \  *
-*    | |  | | |_| | |  __/  | |\ \ |_| | | | | |_| | | | | | |  __/  *
-*    \_|  |_/\__,_|_|\___|  \_| \_\__,_|_| |_|\__|_|_| |_| |_|\___|  *
-*                                                                    *
-*                                                                    *
-* Mule Runtime and Integration Platform                              *
-* Version: 4.7.0 Build: 57372c02                                     *
-* MuleSoft, Inc.                                                     *
-* For more information go to                                         *
-* https://www.mulesoft.com/platform/soa/mule-esb-enterprise          *
-*                                                                    *
-* Server started: 9/1/26 5:03 PM                                     *
-* JDK: 17.0.11 (mixed mode, sharing)                                 *
-* JDK properties:                                                    *
-*  - java.vendor = Eclipse Adoptium                                  *
-*  - java.vm.name = OpenJDK 64-Bit Server VM                         *
-* - java.home =                                                      *
-* C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mu *
-* le.tooling.jdk.win32.x86_64_1.3.1                                  *
-* OS: Windows 11 -  (10.0, amd64)                                    *
-* Wrapper PID: 20396                                                 *
-* Java PID: 24568                                                    *
-* Host: DESKTOP-350IP1B (192.168.1.151)                              *
-* Mule services:                                                     *
-*  - api-gateway-contract-service-1.4.0                              *
-*  - mule-service-http-ee-1.10.0                                     *
-*  - mule-service-oauth-ee-1.4.0                                     *
-*  - mule-service-scheduler-1.7.0                                    *
-*  - mule-service-soap-1.7.0                                         *
-*  - mule-service-weave-ee-2.7.0                                     *
-* Mule server plugins:                                               *
-*  - mule-agent-plugin                                               *
-*  - mule-debugger-5.1.0-mule-server-plugin                          *
-*  - munit-recording-server-mule-server-plugin                       *
-* Applied artifact patches:                                          *
-*  - AGW-4162-1.1.1-1.0.jar                                          *
-*  - AGW-4162-1.1.2-1.0.jar                                          *
-*  - APIKIT-2576-1.3.7-1.3.9-2.0.jar                                 *
-*  - APIKIT-2612-1.0.0-1.0.2-1.1.0-1.0.jar                           *
-*  - APIKIT-2612-1.1.1-1.0.jar                                       *
-*  - APIKIT-2612-1.1.11-1.0.jar                                      *
-*  - APIKIT-2612-1.1.12-1.2.0-1.2.2-1.0.jar                          *
-*  - APIKIT-2612-1.1.13-1.1.14-1.2.3-1.2.4-1.0.jar                   *
-*  - APIKIT-2612-1.1.15-1.1.16-1.0.jar                               *
-*  - APIKIT-2612-1.1.2-1.0.jar                                       *
-*  - APIKIT-2612-1.1.3-1.0.jar                                       *
-*  - APIKIT-2612-1.1.4-1.0.jar                                       *
-*  - APIKIT-2612-1.1.5-1.1.6-1.0.jar                                 *
-*  - APIKIT-2612-1.1.7-1.0.jar                                       *
-*  - APIKIT-2612-1.1.8-1.1.10-1.0.jar                                *
-*  - APIKIT-2612-1.2.5-1.3.1-1.3.4-1.0.jar                           *
-*  - APIKIT-2612-1.3.0-1.0.jar                                       *
-*  - APIKIT-2612-1.3.5-1.3.9-1.0.jar                                 *
-*  - APIKIT-2613-1.2.0-1.2.1-1.0.jar                                 *
-*  - APIKIT-2613-1.2.2-1.0.jar                                       *
-*  - APIKIT-2613-1.2.3-1.2.4-1.3.0-1.0.jar                           *
-*  - APIKIT-2613-1.2.5-1.3.1-1.3.4-1.0.jar                           *
-*  - APIKIT-2613-1.3.5-1.3.6-1.0.jar                                 *
-*  - APIKIT-2613-1.3.7-1.3.8-1.0.jar                                 *
-*  - APIKIT-2613-1.3.9-1.0.jar                                       *
-*  - APIKIT-2989-1.1.16-1.0.jar                                      *
-*  - APIKIT-2989-1.2.5-1.0.jar                                       *
-*  - APIKIT-2989-1.3.16-1.3.19-1.0.jar                               *
-*  - APIKIT-2989-1.4.0-1.4.2-1.0.jar                                 *
-*  - APIKIT-2989-1.5.1-1.5.3-1.0.jar                                 *
-*  - MULE-17706-1.1.1-1.1.2-1.0.jar                                  *
-*  - MULE-17706-1.2.0-1.0.jar                                        *
-*  - MULE-17706-1.2.1-1.2.2-1.0.jar                                  *
-*  - MULE-17706-1.2.3-1.0.jar                                        *
-*  - MULE-17706-1.3.0-1.3.1-1.0.jar                                  *
-*  - MULE-17706-1.3.2-1.3.3-1.0.jar                                  *
-*  - MULE-17706-1.3.4-1.0.jar                                        *
-*  - MULE-17706-1.4.0-1.0.jar                                        *
-*  - MULE-17706-1.4.1-1.4.3-1.0.jar                                  *
-*  - MULE-17706-1.5.0-1.5.6-1.0.jar                                  *
-*  - MULE-17706-1.5.10-1.5.11-1.0.jar                                *
-*  - MULE-17706-1.5.7-1.5.9-1.0.jar                                  *
-*  - MULE-18457-MULE-19564-1.1.1-1.0.jar                             *
-*  - MULE-18457-MULE-19564-1.2.0-1.2.1-1.0.jar                       *
-*  - MULE-18457-MULE-19564-1.3.0-1.0.jar                             *
-*  - MULE-18457-MULE-19564-1.3.1-1.0.jar                             *
-*  - MULE-18457-MULE-19564-1.3.2-1.0.jar                             *
-*  - MULE-18457-MULE-19564-1.3.3-1.0.jar                             *
-*  - MULE-18900-19139-1.4.0-1.4.1-1.4.2-1.0.jar                      *
-*  - MULE-19564-1.3.4-1.0.jar                                        *
-*  - MULE-19564-1.3.5-1.0.jar                                        *
-*  - MULE-19564-1.3.6-1.0.jar                                        *
-*  - SE-12551-1.0.0-1.0.1-1.0.jar                                    *
-*  - SE-12551-1.1.0-1.1.15-2.0.jar                                   *
-*  - SE-12551-1.2.0-1.3.0-1.0.jar                                    *
-*  - SE-12551-1.3.1-1.3.4-1.0.jar                                    *
-*  - SE-12562-1.0.0-1.5.5-1.0.jar                                    *
-*  - SE-17198-1.0.jar                                                *
-* Mule system properties:                                            *
-*  - mule.metadata.cache.expirationInterval.millis = 5000            *
-* - mule.base =                                                      *
-* C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mu *
-* le.tooling.server.4.7.ee_7.18.0.202405262218\mule                  *
-*  - mule.testingMode =                                              *
-* - mule.home =                                                      *
-* C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mu *
-* le.tooling.server.4.7.ee_7.18.0.202405262218\mule                  *
-*  - mule.forceConsoleLog =                                          *
-* - mule.bootstrap.container.wrapper.class =                         *
-* org.mule.runtime.module.boot.tanuki.internal.MuleContainerTanukiWr *
-* apper                                                              *
-*  - mule.metadata.cache.entryTtl.minutes = 10                       *
-**********************************************************************
-INFO  2026-09-01 17:03:18,265 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
-**********************************************************************
-* Cluster configuration                                              *
-*                                                                    *
-* Cluster mode disabled                                              *
-**********************************************************************
-INFO  2026-09-01 17:03:18,312 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.factory.ServerPluginDescriptorFactory: Creating plugin from folder C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\server-plugins\mule-agent-plugin
-INFO  2026-09-01 17:03:18,503 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.factory.ServerPluginDescriptorFactory: Creating plugin from folder C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\server-plugins\mule-debugger-5.1.0-mule-server-plugin
-INFO  2026-09-01 17:03:18,553 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.factory.ServerPluginDescriptorFactory: Creating plugin from folder C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\server-plugins\munit-recording-server-mule-server-plugin
-INFO  2026-09-01 17:03:45,048 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: Mule agent keystore file does not exits in C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\conf\mule-agent.jks.
-INFO  2026-09-01 17:03:45,107 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: Starting Mule Agent Version: 2.6.0 ; build-20240118
-INFO  2026-09-01 17:03:45,120 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: Agent Security Manager initialized successfully: fips mode (disabled)
-INFO  2026-09-01 17:03:49,256 [WrapperListener_start_runner] com.mulesoft.agent.AgentPlugin: The /C:/Users/alemi/source/AnypointStudio/AnypointStudio/plugins/org.mule.tooling.server.4.7.ee_7.18.0.202405262218/mule/server-plugins/mule-agent-plugin/\lib\modules folder doesn't exists, skipping appending of jars.
-WARN  2026-09-01 17:03:50,879 [WrapperListener_start_runner] com.mulesoft.agent.details.utils.DefaultCertificateDetails: There was an error reading the certificate. Reason: FileNotFoundException: C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\conf\mule-agent.jks (The system cannot find the file specified)
-INFO  2026-09-01 17:03:51,020 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.gw.http.handler.database Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,021 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.gw.http.handler.log Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,025 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.gw.http.handler.splunk Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,038 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.analytics Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,039 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.database Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,041 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.http Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,042 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the tracking.notification.internal.message.handler Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,042 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.log Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,043 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.messageHistory Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,044 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.tracking.handler.splunk Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,054 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the mule.agent.ingest.application.metrics.internal.handler ...
-ERROR 2026-09-01 17:03:51,055 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: There was an error initializing the mule.agent.ingest.application.metrics.internal.handler Internal Handler. It'll be disabled until reconfiguration. Could not initialize ingest monitor publisher. Its configuration is invalid.
-INFO  2026-09-01 17:03:51,065 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the cloudwatch.agent.monitor.publisher Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,068 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the mule.agent.ingest.target.metrics.internal.handler ...
-ERROR 2026-09-01 17:03:51,070 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: There was an error initializing the mule.agent.ingest.target.metrics.internal.handler Internal Handler. It'll be disabled until reconfiguration. Could not initialize ingest monitor publisher. Its configuration is invalid.
-INFO  2026-09-01 17:03:51,072 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.nagios.jmx.internal.handler Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,073 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.zabbix.jmx.internal.handler Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,087 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Skipping the initialization of the mule.agent.graphite.jmx.internal.handler Internal Handler because it's disabled.
-INFO  2026-09-01 17:03:51,088 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the action.status.internal.message.handler ...
-INFO  2026-09-01 17:03:51,089 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: action.status.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,090 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the application.deployment.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,090 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: application.deployment.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,091 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the configuration.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,092 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: configuration.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,093 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the domain.deployment.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,095 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: domain.deployment.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,097 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the flow.status.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,097 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: flow.status.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,098 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the membership.change.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,099 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: membership.change.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,100 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the primary.node.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,100 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: primary.node.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,101 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: Initializing the scheduling.notification.internal.message.handler ...
-INFO  2026-09-01 17:03:51,101 [WrapperListener_start_runner] com.mulesoft.agent.configuration.postconfigure.DefaultPostConfigureRunner: scheduling.notification.internal.message.handler initialized successfully.
-INFO  2026-09-01 17:03:51,156 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Registering plugin: mule-agent-plugin
-INFO  2026-09-01 17:03:51,399 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Registering plugin: mule-debugger-server-plugin
-INFO  2026-09-01 17:03:51,437 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Registering plugin: munit-recording-plugin
-INFO  2026-09-01 17:03:51,901 [WrapperListener_start_runner] com.mulesoft.mule.runtime.plugin.manager.MulePluginManager: Starting plugin: mule-agent-plugin
-INFO  2026-09-01 17:03:51,902 [WrapperListener_start_runner] com.mulesoft.agent.util.DefaultLicenseService: Mule EE evaluation version. Enabling Mule Agent usage.
-INFO  2026-09-01 17:03:51,912 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: Skipping initialization of transport FileAgentTransport
-INFO  2026-09-01 17:03:51,912 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: Initializing transport: RestAgentTransport
-INFO  2026-09-01 17:03:51,912 [WrapperListener_start_runner] com.mulesoft.agent.rest.transport.RestAgentTransport: mule.security.provider: null
-INFO  2026-09-01 17:03:51,966 [WrapperListener_start_runner] org.eclipse.jetty.util.log: Logging initialized @47252ms to org.eclipse.jetty.util.log.Slf4jLog
-WARN  2026-09-01 17:03:51,996 [WrapperListener_start_runner] com.mulesoft.agent.rest.AgentRestLayer: REST Agent transport is starting with no security
-INFO  2026-09-01 17:03:52,325 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: RestAgentTransport initialised
-INFO  2026-09-01 17:03:52,326 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: Skipping initialization of transport WebSocketAgentTransport
-INFO  2026-09-01 17:03:53,233 [WrapperListener_start_runner] org.eclipse.jetty.server.Server: jetty-9.4.53.v20231009; built: 2023-10-09T12:29:09.265Z; git: 27bde00a0b95a1d5bbee0eae7984f891d2d0f8c9; jvm 17.0.11+9
-WARN  2026-09-01 17:03:53,819 [WrapperListener_start_runner] org.glassfish.jersey.server.wadl.WadlFeature: JAXBContext implementation could not be found. WADL feature is disabled.
-WARN  2026-09-01 17:03:54,148 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.deployment.ApplicationsRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.deployment.ApplicationsRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,148 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.installer.InstallerRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.installer.InstallerRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,148 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.extensions.ExtensionRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.extensions.ExtensionRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,149 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.flows.FlowsRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.flows.FlowsRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,149 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.deployment.DomainsRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.deployment.DomainsRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,149 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.action.ActionRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.action.ActionRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,150 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.monitoring.MonitoringRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.monitoring.MonitoringRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,150 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.administration.ComponentRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.administration.ComponentRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,150 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.metadata.MetadataRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.metadata.MetadataRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,151 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.clustering.ClusteringRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.clustering.ClusteringRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,151 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.logging.LoggingRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.logging.LoggingRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,151 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.runtime.RuntimeConfigurationRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.runtime.RuntimeConfigurationRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.studio.StudioRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.studio.StudioRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.healthcheck.HealthCheckRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.healthcheck.HealthCheckRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.valueprovider.ValueProviderRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.valueprovider.ValueProviderRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,153 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.dataweave.DataWeaveRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.dataweave.DataWeaveRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,154 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.properties.PropertiesRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.properties.PropertiesRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,154 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.tooling.ToolingRequestHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.tooling.ToolingRequestHandler will be ignored. 
-WARN  2026-09-01 17:03:54,154 [WrapperListener_start_runner] org.glassfish.jersey.internal.inject.Providers: A provider com.mulesoft.agent.external.handlers.tracking.TrackingExternalHandler registered in SERVER runtime does not implement any provider interfaces applicable in the SERVER runtime. Due to constraint configuration problems the provider com.mulesoft.agent.external.handlers.tracking.TrackingExternalHandler will be ignored. 
-INFO  2026-09-01 17:03:55,133 [WrapperListener_start_runner] org.eclipse.jetty.server.handler.ContextHandler: Started o.e.j.s.ServletContextHandler@7b191d51{/,null,AVAILABLE}
-INFO  2026-09-01 17:03:55,133 [WrapperListener_start_runner] org.eclipse.jetty.server.Server: Started @50422ms
-INFO  2026-09-01 17:03:55,185 [WrapperListener_start_runner] com.mulesoft.agent.AgentTransportManager: RestAgentTransport started
-INFO  2026-09-01 17:03:55,190 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: Initializing Artifact Validator service
-INFO  2026-09-01 17:03:55,195 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: Total validators loaded: 1
-INFO  2026-09-01 17:03:55,196 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: Validators listed by type:
-INFO  2026-09-01 17:03:55,197 [WrapperListener_start_runner] com.mulesoft.agent.services.artifactvalidator.AgentApplicationValidatorService: 	Type: jarSignatureValidator Names: [defaultJarSignatureValidator]
-INFO  2026-09-01 17:03:55,198 [WrapperListener_start_runner] com.mulesoft.agent.services.healthcheck.AgentHealthCheckService: Initializing HealthCheck service
-INFO  2026-09-01 17:03:58,242 [CronSchedulerHandler] org.quartz.impl.StdSchedulerFactory: Using default implementation for ThreadExecutor
-INFO  2026-09-01 17:03:58,268 [CronSchedulerHandler] org.quartz.core.SchedulerSignalerImpl: Initialized Scheduler Signaller of type: class org.quartz.core.SchedulerSignalerImpl
-INFO  2026-09-01 17:03:58,269 [CronSchedulerHandler] org.quartz.core.QuartzScheduler: Quartz Scheduler v.2.3.2 created.
-INFO  2026-09-01 17:03:58,271 [CronSchedulerHandler] org.quartz.simpl.RAMJobStore: RAMJobStore initialized.
-INFO  2026-09-01 17:03:58,272 [CronSchedulerHandler] org.quartz.core.QuartzScheduler: Scheduler meta-data: Quartz Scheduler (v2.3.2) '[MuleRuntime].' with instanceId 'NON_CLUSTERED'
-  Scheduler class: 'org.quartz.core.QuartzScheduler' - running locally.
-  NOT STARTED.
-  Currently in standby mode.
-  Number of jobs executed: 0
-  Using thread pool 'org.quartz.simpl.SimpleThreadPool' - with 1 threads.
-  Using job-store 'org.quartz.simpl.RAMJobStore' - which does not support persistence. and is not clustered.
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
 
-INFO  2026-09-01 17:03:58,272 [CronSchedulerHandler] org.quartz.impl.StdSchedulerFactory: Quartz scheduler '[MuleRuntime].' initialized from an externally provided properties instance.
-INFO  2026-09-01 17:03:58,272 [CronSchedulerHandler] org.quartz.impl.StdSchedulerFactory: Quartz scheduler version: 2.3.2
-INFO  2026-09-01 17:03:58,272 [WrapperListener_start_runner] org.quartz.core.QuartzScheduler: Scheduler [MuleRuntime]._$_NON_CLUSTERED started.
-INFO  2026-09-01 17:03:58,295 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
-**********************************************************************
-* Started DefaultSchedulerService                                    *
-*                                                                    *
-* Resolved configuration values:                                     *
-*                                                                    *
-* Pooling strategy:       UBER                                       *
-* gracefulShutdownTimeout:       15000 ms                            *
-* uber.threadPool.maxSize:         164                               *
-* uber.threadPool.threadKeepAlive: 30000 ms                          *
-*                                                                    *
-* These can be modified by editing 'conf/scheduler-pools.conf'       *
-**********************************************************************
-INFO  2026-09-01 17:03:58,406 [WrapperListener_start_runner] com.mulesoft.agent.services.AgentStudioManagementService: Starting Studio Management Service
-INFO  2026-09-01 17:03:58,412 [WrapperListener_start_runner] com.mulesoft.agent.services.AgentStudioManagementService: Studio Checker is running
-INFO  2026-09-01 17:03:58,677 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ New domain 'default'                                                         +
++ Running test: patch-inventory-partial-update-critical-alert-test - Partially +
++ updates an item, defaults omitted fields to existing DB values, and fires the+
++  CRITICAL alert                                                              +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-INFO  2026-09-01 17:03:58,678 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+INFO  2026-09-03 23:28:17,353 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: put-inventory-not-found-test - Time elapsed: 0.06 sec
+INFO  2026-09-03 23:28:17,642 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: patch-inventory-partial-update-critical-alert-test - Time elapsed: 0.29 sec
+================================================================================
+= Tests run: 8 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 2.61 sec   =
+================================================================================
+INFO  2026-09-03 23:28:17,648 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Waiting for client connection 
+INFO  2026-09-03 23:28:17,677 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Client connection received from 127.0.0.1 - true
+INFO  2026-09-03 23:28:18,257 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: post:\inventory:application\json:inventory-api-config
+WARN  2026-09-03 23:28:23,267 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'post:\inventory:application\json:inventory-api-config' not completed in 5000 ms
+WARN  2026-09-03 23:28:23,267 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'post:\inventory:application\json:inventory-api-config' not completed in 5000 ms
+INFO  2026-09-03 23:28:23,280 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: post:\inventory:application\json:inventory-api-config
+INFO  2026-09-03 23:28:23,286 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: patch:\inventory\(itemId):application\json:inventory-api-config
+INFO  2026-09-03 23:28:23,290 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: patch:\inventory\(itemId):application\json:inventory-api-config
+INFO  2026-09-03 23:28:23,293 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: delete:\inventory\(itemId):inventory-api-config
+WARN  2026-09-03 23:28:28,294 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'delete:\inventory\(itemId):inventory-api-config' not completed in 5000 ms
+WARN  2026-09-03 23:28:28,294 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'delete:\inventory\(itemId):inventory-api-config' not completed in 5000 ms
+INFO  2026-09-03 23:28:28,296 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: delete:\inventory\(itemId):inventory-api-config
+INFO  2026-09-03 23:28:28,299 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: put:\inventory\(itemId):application\json:inventory-api-config
+WARN  2026-09-03 23:28:33,301 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'put:\inventory\(itemId):application\json:inventory-api-config' not completed in 5000 ms
+WARN  2026-09-03 23:28:33,301 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'put:\inventory\(itemId):application\json:inventory-api-config' not completed in 5000 ms
+INFO  2026-09-03 23:28:33,302 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: put:\inventory\(itemId):application\json:inventory-api-config
+INFO  2026-09-03 23:28:33,305 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:33,316 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:33,316 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:33,317 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:33,370 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:33,371 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+WARN  2026-09-03 23:28:33,450 [munit.01] org.mule.runtime.config.internal.dsl.spring.ComponentConfigurationBuilder: Parameter ignore from extension munit has a defaultValue configured in the componentBuildingDefinition but not in the extensionModel.
+INFO  2026-09-03 23:28:35,006 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:35,009 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:35,011 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:35,045 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Initialising flow: post:\inventory\sync:inventory-api-config
+INFO  2026-09-03 23:28:35,101 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Initialising flow: post:\inventory\bulk:application\json:inventory-api-config
+INFO  2026-09-03 23:28:35,714 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:35,714 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:35,715 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:35,717 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Starting flow: post:\inventory\sync:inventory-api-config
+INFO  2026-09-03 23:28:35,749 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Starting flow: post:\inventory\bulk:application\json:inventory-api-config
+================================================================================
+=== Running suite: bulk-sync-regional-tests.xml                              ===
+================================================================================
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ Initializing domain 'default'                                                +
++ Running test: post-inventory-sync-accepted-test - Returns 202 ACCEPTED immedi+
++ ately with the active-item count                                             +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-INFO  2026-09-01 17:04:00,539 [WrapperListener_start_runner] [processor: ; event: ] org.mule.runtime.module.deployment.internal.processor.FallbackArtifactConfigurationProcessor: Serialized AST not avaliable for artifact 'default'
-INFO  2026-09-01 17:04:00,603 [ArtifactDeployer.start.01] [processor: ; event: ] org.mule.runtime.core.internal.logging: 
-**********************************************************************
-* Domain: default                                                    *
-* OS encoding: windows-1252, Mule encoding: UTF-8                    *
-*                                                                    *
-**********************************************************************
-INFO  2026-09-01 17:04:00,607 [ArtifactDeployer.start.01] org.mule.runtime.core.internal.logging: 
-**********************************************************************
-* Started domain 'default'                                           *
-**********************************************************************
-INFO  2026-09-01 17:04:00,621 [WrapperListener_start_runner] org.mule.runtime.module.deployment.internal.ArtifactArchiveInstaller: Exploding a Mule artifact archive: 'C:\Users\alemi\source\AnypointStudio\AnypointStudio\plugins\org.mule.tooling.server.4.7.ee_7.18.0.202405262218\mule\apps\mulemart-inventory-api.jar'
-WARN  2026-09-01 17:04:21,479 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-extensions-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,479 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration-persistence' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:api-annotations' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-java' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,480 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-message-metadata-model' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-extensions-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-artifact-declaration-persistence' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:api-annotations' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-metadata-model-java' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:21,482 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.AbstractArtifactClassLoaderConfigurationAssembler: Shared library 'org.mule.runtime:mule-message-metadata-model' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
-WARN  2026-09-01 17:04:22,022 [WrapperListener_start_runner] org.mule.runtime.module.artifact.activation.internal.classloader.DefaultArtifactClassLoaderResolver: Exported packages from artifact 'mulemart-inventory-api' are provided by parent class loader: [org.slf4j, org.slf4j.spi, javax.jms, org.slf4j.event, org.slf4j.helpers]
-INFO  2026-09-01 17:04:22,147 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+INFO  2026-09-03 23:28:36,232 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\sync:inventory-api-config.BLOCKING @54af8754] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Created instance 'b66b3b60-a810-11f1-ba1e-60f6773163c1' for batch job 'fullInventorySyncJob'
+INFO  2026-09-03 23:28:36,242 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\sync:inventory-api-config.BLOCKING @54af8754] com.mulesoft.mule.runtime.module.batch.internal.engine.queue.BatchQueueLoader: Starting loading phase for instance 'b66b3b60-a810-11f1-ba1e-60f6773163c1' of job 'fullInventorySyncJob'
+WARN  2026-09-03 23:28:36,279 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\sync:inventory-api-config.BLOCKING @54af8754] com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo: Reflective operation exception found when creating an implicit reflection serializer for class 'java.util.AbstractMap$SimpleEntry'. We'll search a serializer for the parent class if possible
+INFO  2026-09-03 23:28:36,281 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\sync:inventory-api-config.BLOCKING @54af8754] com.mulesoft.mule.runtime.module.batch.internal.engine.queue.BatchQueueLoader: Finished loading phase for instance b66b3b60-a810-11f1-ba1e-60f6773163c1 of job fullInventorySyncJob. 1 records were loaded
+INFO  2026-09-03 23:28:36,308 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\sync:inventory-api-config.BLOCKING @54af8754] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Started execution of instance 'b66b3b60-a810-11f1-ba1e-60f6773163c1' of job 'fullInventorySyncJob'
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ New app 'mulemart-inventory-api'                                             +
++ Running test: process-full-sync-item-critical-test - Fires the CRITICAL procu+
++ rement alert for a low-stock row                                             +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-INFO  2026-09-01 17:04:22,149 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+INFO  2026-09-03 23:28:36,352 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: post-inventory-sync-accepted-test - Time elapsed: 0.51 sec
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ Initializing app 'mulemart-inventory-api'                                    +
+INFO  2026-09-03 23:28:36,647 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: process-full-sync-item-critical-test - Time elapsed: 0.29 sec
++ Running test: process-full-sync-item-normal-test - Recalculates totals and sy+
++ ncs Salesforce for a non-critical row, without firing an alert               +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-ERROR 2026-09-01 17:04:59,876 [WrapperListener_start_runner] [processor: ; event: ] org.mule.runtime.module.deployment.impl.internal.application.DefaultMuleApplication: org.mule.sdk.api.meta.JavaVersion.JAVA_25
-java.lang.EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
-	at java.base/sun.reflect.annotation.EnumConstantNotPresentExceptionProxy.generateException(EnumConstantNotPresentExceptionProxy.java:47) ~[?:?]
-	at java.base/sun.reflect.annotation.AnnotationInvocationHandler.invoke(AnnotationInvocationHandler.java:89) ~[?:?]
-	at jdk.proxy4/jdk.proxy4.$Proxy118.value(Unknown Source) ~[?:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.java.type.runtime.ClassBasedAnnotationValueFetcher.getArrayValue(ClassBasedAnnotationValueFetcher.java:56) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.api.loader.java.type.AnnotationValueFetcher.getEnumArrayValue(AnnotationValueFetcher.java:90) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.lambda$parseSupportedJavaVersions$2(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseSupportedJavaVersions(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseStructure(JavaExtensionModelParser.java:151) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:130) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:121) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParserFactory.createParser(JavaExtensionModelParserFactory.java:34) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.delegate.DefaultExtensionModelLoaderDelegate.declare(DefaultExtensionModelLoaderDelegate.java:93) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.AbstractExtensionModelLoader.declareExtension(AbstractExtensionModelLoader.java:111) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.doCreate(ExtensionModelLoader.java:119) ~[mule-extensions-api-1.7.0.jar:?]
-	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.loadExtensionModel(ExtensionModelLoader.java:99) ~[mule-extensions-api-1.7.0.jar:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.discoverExtensionThroughJsonDescriber(RepositoryLookupExtensionModelGenerator.java:98) ~[?:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.lambda$obtainExtensionModel$1(RepositoryLookupExtensionModelGenerator.java:54) ~[?:?]
-	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.obtainExtensionModel(RepositoryLookupExtensionModelGenerator.java:54) ~[?:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.DefaultExtensionModelDiscoverer.lambda$discoverPluginsExtensionModels$0(DefaultExtensionModelDiscoverer.java:49) ~[?:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.PluginsDependenciesProcessor.lambda$process$5(PluginsDependenciesProcessor.java:85) ~[?:?]
-	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183) ~[?:?]
-	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179) ~[?:?]
-	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
-	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
-	at java.base/java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:290) ~[?:?]
-	at java.base/java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:754) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-INFO  2026-09-01 17:04:59,897 [WrapperListener_start_runner] [processor: ; event: ] org.mule.runtime.module.deployment.impl.internal.artifact.AbstractDeployableArtifact: Application 'mulemart-inventory-api' never started, nothing to dispose of
-INFO  2026-09-01 17:04:59,897 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
+INFO  2026-09-03 23:28:36,786 [[MuleRuntime].uber.03: [mulemart-inventory-api].batch-job-fullInventorySyncJob-work-manager @166672dc] com.mulesoft.mule.runtime.module.batch.internal.DefaultBatchStep: Step syncEachItemStep finished processing all records for instance b66b3b60-a810-11f1-ba1e-60f6773163c1 of job fullInventorySyncJob
+INFO  2026-09-03 23:28:36,797 [[MuleRuntime].uber.06: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Starting execution of onComplete phase for instance b66b3b60-a810-11f1-ba1e-60f6773163c1 of job fullInventorySyncJob
+INFO  2026-09-03 23:28:36,863 [[MuleRuntime].uber.03: [mulemart-inventory-api].post:\inventory\sync:inventory-api-config.CPU_INTENSIVE @22e79980] org.mule.runtime.core.internal.processor.LoggerMessageProcessor: Full sync job b66b3b60-a810-11f1-ba1e-60f6773163c1 result: {
+  "totalRecords": 1,
+  "successCount": 1,
+  "failureCount": 0,
+  "startedAt": "2026-09-03T23:28:35.855321-04:00",
+  "completedAt": "2026-09-03T23:28:36.805933-04:00"
+}
+INFO  2026-09-03 23:28:36,863 [[MuleRuntime].uber.06: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Finished execution of onComplete phase for instance b66b3b60-a810-11f1-ba1e-60f6773163c1 of job fullInventorySyncJob
+INFO  2026-09-03 23:28:36,864 [[MuleRuntime].uber.06: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Finishing execution for instance 'b66b3b60-a810-11f1-ba1e-60f6773163c1' of job 'fullInventorySyncJob'.
+INFO  2026-09-03 23:28:36,865 [[MuleRuntime].uber.06: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: 
+
+INFO  2026-09-03 23:28:36,901 [[MuleRuntime].uber.06: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Finished execution for instance 'b66b3b60-a810-11f1-ba1e-60f6773163c1' of job 'fullInventorySyncJob'. Total Records processed: 1. Successful records: 1. Failed Records: 0
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+java.lang.AssertionError: On jms:publish. Expected 1 but got 2 calls
+	at org.mule.munit.mock.MockModule.verifyCall(MockModule.java:135)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:36,984 [munit.01] org.mule.munit.runner.model.Suite: FAILURE - test: process-full-sync-item-normal-test - Time elapsed: 0.34 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: process-regional-update-normal-test - Merges regional stock int+
++ o the existing warehouse row and syncs Salesforce without alerting           +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+org.mule.munit.runner.model.TestExecutionException: Error [MULE:EXPRESSION] while running test 'process-regional-update-normal-test':"Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+	at org.mule.munit.runner.flow.TestFlow.run(TestFlow.java:320)
+	at org.mule.munit.runner.model.Test.run(Test.java:98)
+	at org.mule.munit.runner.model.Suite.run(Suite.java:112)
+	at org.mule.munit.runner.SuiteRunner.doRun(SuiteRunner.java:61)
+	at org.mule.munit.runner.SuiteRunner.run(SuiteRunner.java:46)
+	at org.mule.munit.runner.remote.api.server.RunMessageHandler.runSuite(RunMessageHandler.java:97)
+	at org.mule.munit.runner.remote.api.server.RunMessageHandler.parseAndRun(RunMessageHandler.java:80)
+	at org.mule.munit.runner.remote.api.server.RunMessageHandler.handle(RunMessageHandler.java:73)
+	at org.mule.munit.runner.remote.api.server.RunnerServer.handleClientMessage(RunnerServer.java:146)
+	at org.mule.munit.runner.remote.api.server.RunnerServer.run(RunnerServer.java:94)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.mule.service.scheduler@1.7.0/org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:180)
+	at org.mule.service.scheduler@1.7.0/org.mule.service.scheduler.internal.RunnableFutureDecorator.run(RunnableFutureDecorator.java:55)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.util.concurrent.ExecutionException: org.mule.runtime.api.component.execution.ComponentExecutionException: org.mule.runtime.core.api.expression.ExpressionRuntimeException: "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:396)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2073)
+	at org.mule.munit.runner.flow.TestFlow$ExceptionAwareCallable.call(TestFlow.java:384)
+	at org.mule.munit.runner.flow.TestFlow$ExceptionAwareCallable.call(TestFlow.java:373)
+	... 6 more
+Caused by: org.mule.runtime.api.component.execution.ComponentExecutionException: org.mule.runtime.core.api.expression.ExpressionRuntimeException: "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+Caused by: org.mule.runtime.core.api.expression.ExpressionRuntimeException: "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+Caused by: org.mule.runtime.api.el.ExpressionExecutionException: Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:37,270 [munit.01] org.mule.munit.runner.model.Suite: ERROR - test: process-regional-update-normal-test - Time elapsed: 0.28 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: process-regional-update-critical-test - Fires the CRITICAL proc+
++ urement alert when the merged regional stock is critically low               +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+org.mule.munit.runner.model.TestExecutionException: Error [MULE:EXPRESSION] while running test 'process-regional-update-critical-test':"Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+	at org.mule.munit.runner.flow.TestFlow.run(TestFlow.java:320)
+	at org.mule.munit.runner.model.Test.run(Test.java:98)
+	at org.mule.munit.runner.model.Suite.run(Suite.java:112)
+	at org.mule.munit.runner.SuiteRunner.doRun(SuiteRunner.java:61)
+	at org.mule.munit.runner.SuiteRunner.run(SuiteRunner.java:46)
+	at org.mule.munit.runner.remote.api.server.RunMessageHandler.runSuite(RunMessageHandler.java:97)
+	at org.mule.munit.runner.remote.api.server.RunMessageHandler.parseAndRun(RunMessageHandler.java:80)
+	at org.mule.munit.runner.remote.api.server.RunMessageHandler.handle(RunMessageHandler.java:73)
+	at org.mule.munit.runner.remote.api.server.RunnerServer.handleClientMessage(RunnerServer.java:146)
+	at org.mule.munit.runner.remote.api.server.RunnerServer.run(RunnerServer.java:94)
+	at java.base/java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539)
+	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:264)
+	at org.mule.service.scheduler@1.7.0/org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:180)
+	at org.mule.service.scheduler@1.7.0/org.mule.service.scheduler.internal.RunnableFutureDecorator.run(RunnableFutureDecorator.java:55)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.util.concurrent.ExecutionException: org.mule.runtime.api.component.execution.ComponentExecutionException: org.mule.runtime.core.api.expression.ExpressionRuntimeException: "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+	at java.base/java.util.concurrent.CompletableFuture.reportGet(CompletableFuture.java:396)
+	at java.base/java.util.concurrent.CompletableFuture.get(CompletableFuture.java:2073)
+	at org.mule.munit.runner.flow.TestFlow$ExceptionAwareCallable.call(TestFlow.java:384)
+	at org.mule.munit.runner.flow.TestFlow$ExceptionAwareCallable.call(TestFlow.java:373)
+	... 6 more
+Caused by: org.mule.runtime.api.component.execution.ComponentExecutionException: org.mule.runtime.core.api.expression.ExpressionRuntimeException: "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+Caused by: org.mule.runtime.core.api.expression.ExpressionRuntimeException: "Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)" evaluating expression: "vars.regionalItem.region default vars.existing.region".
+Caused by: org.mule.runtime.api.el.ExpressionExecutionException: Unable to infer a output media type as more than one is being used: application/json,application/java please specify using: 'output <your mime-type> --- <expr>'
+
+1| vars.regionalItem.region default vars.existing.region
+   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Trace:
+  at anonymous::main (line: 1, column: 1)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: post-inventory-bulk-accepted-test - Returns 202 ACCEPTED immedi+
++ ately with the submitted record count                                        +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:37,444 [munit.01] org.mule.munit.runner.model.Suite: ERROR - test: process-regional-update-critical-test - Time elapsed: 0.17 sec
+INFO  2026-09-03 23:28:37,477 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\bulk:application\json:inventory-api-config.BLOCKING @396b3482] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Created instance 'b75ffba0-a810-11f1-ba1e-60f6773163c1' for batch job 'bulkInventoryJob'
+INFO  2026-09-03 23:28:37,484 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\bulk:application\json:inventory-api-config.BLOCKING @396b3482] com.mulesoft.mule.runtime.module.batch.internal.engine.queue.BatchQueueLoader: Starting loading phase for instance 'b75ffba0-a810-11f1-ba1e-60f6773163c1' of job 'bulkInventoryJob'
+INFO  2026-09-03 23:28:37,511 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\bulk:application\json:inventory-api-config.BLOCKING @396b3482] com.mulesoft.mule.runtime.module.batch.internal.engine.queue.BatchQueueLoader: Finished loading phase for instance b75ffba0-a810-11f1-ba1e-60f6773163c1 of job bulkInventoryJob. 1 records were loaded
+INFO  2026-09-03 23:28:37,549 [[MuleRuntime].uber.01: [mulemart-inventory-api].post:\inventory\bulk:application\json:inventory-api-config.BLOCKING @396b3482] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Started execution of instance 'b75ffba0-a810-11f1-ba1e-60f6773163c1' of job 'bulkInventoryJob'
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: process-regional-update-not-found-test - Raises APP:NOT_FOUND w+
++ hen the CSV references an item that does not exist in the warehouse DB       +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:37,589 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: post-inventory-bulk-accepted-test - Time elapsed: 0.14 sec
+ERROR 2026-09-03 23:28:37,798 [[MuleRuntime].uber.03: [mulemart-inventory-api].execution.CPU_LITE @56828ef1] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : Item SKU-MISSING not found for regional update
+Element               : process-regional-update-subflow/processors/2/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1167 (Raise Not Found)
+Element DSL           : <raise-error doc:name="Raise Not Found" doc:id="b9c0d1e2-f3a4-5678-3456-345678901234" type="APP:NOT_FOUND" description="#["Item " ++ (vars.regionalItem.itemId default "UNKNOWN") ++ " not found for regional update"]"></raise-error>
+Error type            : APP:NOT_FOUND
+FlowStack             : at process-regional-update-subflow(process-regional-update-subflow/processors/2/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1167 (Raise Not Found))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+================================================================================
+INFO  2026-09-03 23:28:37,812 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: process-regional-update-not-found-test - Time elapsed: 0.22 sec
+= Tests run: 7 - Failed: 1 - Errors: 2 - Skipped: 0 - Time elapsed: 1.97 sec   =
+================================================================================
+INFO  2026-09-03 23:28:37,814 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Waiting for client connection 
+INFO  2026-09-03 23:28:37,817 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Client connection received from 127.0.0.1 - true
+INFO  2026-09-03 23:28:38,304 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: post:\inventory\sync:inventory-api-config
+INFO  2026-09-03 23:28:38,314 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: post:\inventory\sync:inventory-api-config
+INFO  2026-09-03 23:28:38,319 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: post:\inventory\bulk:application\json:inventory-api-config
+WARN  2026-09-03 23:28:38,776 [[MuleRuntime].uber.01: [mulemart-inventory-api].batch-job-bulkInventoryJob-work-manager @ae25e7] org.mule.extension.salesforce.internal.connection.provider.AbstractConnectionProvider: Couldn't connect because the API version is lower than the recommended version. Please use recommended version.. Arguments: {providedVersion=64.0, recommendedVersion=67.0}.
+WARN  2026-09-03 23:28:40,842 [[MuleRuntime].uber.01: [mulemart-inventory-api].batch-job-bulkInventoryJob-work-manager @ae25e7] org.mule.runtime.core.internal.processor.LoggerMessageProcessor: Bulk failed for item "SKU-BULK-A": No flow/sub-flow with name 'publish-inventory-update-event-subflow' found. Failed to route event via endpoint: org.mule.runtime.config.internal.factories.FlowRefFactoryBean$StaticFlowRefMessageProcessor@64ddd61a
+INFO  2026-09-03 23:28:40,861 [[MuleRuntime].uber.01: [mulemart-inventory-api].batch-job-bulkInventoryJob-work-manager @ae25e7] com.mulesoft.mule.runtime.module.batch.internal.DefaultBatchStep: Found exception processing record on step 'processEachItemStep' for job instance 'b75ffba0-a810-11f1-ba1e-60f6773163c1' of job 'bulkInventoryJob'.
+This is the first record to show this exception on this step for this job instance. Subsequent records with the same failureswill not be logged for performance and log readability reasons:
+
+********************************************************************************
+Message               : No flow/sub-flow with name 'publish-inventory-update-event-subflow' found. Failed to route event via endpoint: org.mule.runtime.config.internal.factories.FlowRefFactoryBean$StaticFlowRefMessageProcessor@64ddd61a
+Element               : process-inventory-item-subflow/processors/3/route/1/processors/11 @ mulemart-inventory-api:inventory-api.xml:1095 (Publish Inventory Update Event)
+Element DSL           : <flow-ref doc:name="Publish Inventory Update Event" doc:id="a6978877-6655-4433-3456-567890123468" name="publish-inventory-update-event-subflow"></flow-ref>
+Error type            : MULE:ROUTING
+FlowStack             : at process-inventory-item-subflow(process-inventory-item-subflow/processors/3/route/1/processors/11 @ mulemart-inventory-api:inventory-api.xml:1095 (Publish Inventory Update Event))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:40,895 [[MuleRuntime].uber.01: [mulemart-inventory-api].batch-job-bulkInventoryJob-work-manager @ae25e7] com.mulesoft.mule.runtime.module.batch.internal.DefaultBatchStep: Step processEachItemStep finished processing all records for instance b75ffba0-a810-11f1-ba1e-60f6773163c1 of job bulkInventoryJob
+INFO  2026-09-03 23:28:40,898 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Starting execution of onComplete phase for instance b75ffba0-a810-11f1-ba1e-60f6773163c1 of job bulkInventoryJob
+INFO  2026-09-03 23:28:40,900 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: post:\inventory\bulk:application\json:inventory-api-config
+INFO  2026-09-03 23:28:40,902 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+ERROR 2026-09-03 23:28:40,904 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Exception was found during on-complete step for instance b75ffba0-a810-11f1-ba1e-60f6773163c1 of job bulkInventoryJob
+ERROR 2026-09-03 23:28:40,905 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: 
+********************************************************************************
+Message               : Cannot process event as "(chain)" is stopped
+Element               : 
+org.mule.runtime.core.internal.message.DefaultMessageBuilder$MessageImplementation
+{
+  payload=com.mulesoft.mule.runtime.module.batch.privileged.ImmutableBatchJobResult@bd1252d
+  mediaType=*/*
+  attributes=<not set>
+  attributesMediaType=*/*
+} @ app
+Element DSL           : <ee:transform doc:name="Build SyncResponse" doc:id="d5e6f7a8-b9c0-1234-9012-456789012345">
+<ee:message>
+<ee:set-payload><![CDATA[
+%dw 2.0
+output application/json
+---
+{
+    totalRecords: payload.loadedRecords,
+    successCount: payload.successfulRecords,
+    failureCount: payload.failedRecords,
+    startedAt: vars.startedAt,
+    completedAt: now()
+}
+]]></ee:set-payload>
+</ee:message>
+</ee:transform>
+Error type            : MULE:UNKNOWN
+FlowStack             : 
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:40,905 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Finishing execution for instance 'b75ffba0-a810-11f1-ba1e-60f6773163c1' of job 'bulkInventoryJob'.
+INFO  2026-09-03 23:28:40,905 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: 
+****************************************************************************************************************************************************************
+*             - - + Exception Type + - -             *                  - - + Step + - -                  *                 - - + Count + - -                  *
+****************************************************************************************************************************************************************
+* com.mulesoft.mule.runtime.module.batch.exception.B * processEachItemStep                                * 1                                                  *
+****************************************************************************************************************************************************************
+
+INFO  2026-09-03 23:28:40,907 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+WARN  2026-09-03 23:28:40,945 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo: Reflective operation exception found when creating an implicit reflection serializer for class 'org.mule.runtime.api.lifecycle.LifecycleException'. We'll search a serializer for the parent class if possible
+INFO  2026-09-03 23:28:40,946 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine: Finished execution for instance 'b75ffba0-a810-11f1-ba1e-60f6773163c1' of job 'bulkInventoryJob'. Total Records processed: 1. Successful records: 0. Failed Records: 1
+ERROR 2026-09-03 23:28:40,947 [[MuleRuntime].uber.02: [mulemart-inventory-api].batch-management-work-manager @1225dc8d] org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator: Uncaught throwable in task [mulemart-inventory-api].batch-management-work-manager @1225dc8d - com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine$$Lambda$5953/0x000001ffa3347c38
+java.util.concurrent.ExecutionException: org.mule.runtime.api.serialization.SerializationException: Could not serialize object
+	at java.util.concurrent.FutureTask.report(FutureTask.java:122) ~[?:?]
+	at java.util.concurrent.FutureTask.get(FutureTask.java:191) ~[?:?]
+	at org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:187) [mule-service-scheduler-1.7.0.jar:?]
+	at org.mule.service.scheduler.internal.RunnableFutureDecorator.run(RunnableFutureDecorator.java:55) [mule-service-scheduler-1.7.0.jar:?]
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1136) [?:?]
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:635) [?:?]
+	at java.lang.Thread.run(Thread.java:840) [?:?]
+Caused by: org.mule.runtime.api.serialization.SerializationException: Could not serialize object
+Caused by: com.esotericsoftware.kryo.KryoException: java.lang.IllegalArgumentException: Unable to create serializer "com.esotericsoftware.kryo.serializers.FieldSerializer" for class: org.mule.runtime.api.lifecycle.LifecycleException
+Serialization trace:
+cause (org.mule.runtime.core.internal.exception.MessagingException)
+cause (com.mulesoft.mule.runtime.module.batch.exception.BatchException)
+delegate (com.mulesoft.mule.runtime.module.batch.internal.exception.ExceptionSerializationWrapper)
+onCompletePhaseException (com.mulesoft.mule.runtime.module.batch.internal.DefaultBatchJobResult)
+result (com.mulesoft.mule.runtime.module.batch.internal.DefaultBatchJobInstance)
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:101) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClassAndObject(Kryo.java:651) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.lambda$doSerialize$0(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.onOutput(KryoSerializationProtocol.java:139) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:119) ~[?:?]
+	at org.mule.runtime.core.internal.serialization.AbstractSerializationProtocol.serialize(AbstractSerializationProtocol.java:62) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.LegacyAwareObjectSerializerWrapper$SerializationProtocolWrapper.serialize(LegacyAwareObjectSerializerWrapper.java:53) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.doStore(DefaultBatchJobInstanceStore.java:310) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.update(DefaultBatchJobInstanceStore.java:108) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.finallyOnFinishJobInstance(DefaultBatchEngine.java:458) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.lambda$finishExecution$0(DefaultBatchEngine.java:422) ~[?:?]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:180) ~[?:?]
+	... 4 more
+Caused by: java.lang.IllegalArgumentException: Unable to create serializer "com.esotericsoftware.kryo.serializers.FieldSerializer" for class: org.mule.runtime.api.lifecycle.LifecycleException
+	at com.esotericsoftware.kryo.factories.ReflectionSerializerFactory.makeSerializer(ReflectionSerializerFactory.java:65) ~[kryo-shaded-4.0.3.jar:?]
+	at com.esotericsoftware.kryo.factories.ReflectionSerializerFactory.makeSerializer(ReflectionSerializerFactory.java:43) ~[kryo-shaded-4.0.3.jar:?]
+	at com.esotericsoftware.kryo.Kryo.newDefaultSerializer(Kryo.java:396) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.getDefaultSerializer(Kryo.java:380) ~[?:?]
+	at com.esotericsoftware.kryo.util.DefaultClassResolver.registerImplicit(DefaultClassResolver.java:74) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.getRegistration(Kryo.java:508) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo.lambda$getRegistration$0(ExternalizableKryo.java:116) ~[?:?]
+	at org.mule.runtime.api.util.FunctionalUtils.computeIfAbsent(FunctionalUtils.java:32) ~[mule-api-1.7.0.jar:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo.getRegistration(ExternalizableKryo.java:96) ~[?:?]
+	at com.esotericsoftware.kryo.util.DefaultClassResolver.writeClass(DefaultClassResolver.java:97) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClass(Kryo.java:540) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:75) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClassAndObject(Kryo.java:651) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.lambda$doSerialize$0(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.onOutput(KryoSerializationProtocol.java:139) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:119) ~[?:?]
+	at org.mule.runtime.core.internal.serialization.AbstractSerializationProtocol.serialize(AbstractSerializationProtocol.java:62) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.LegacyAwareObjectSerializerWrapper$SerializationProtocolWrapper.serialize(LegacyAwareObjectSerializerWrapper.java:53) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.doStore(DefaultBatchJobInstanceStore.java:310) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.update(DefaultBatchJobInstanceStore.java:108) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.finallyOnFinishJobInstance(DefaultBatchEngine.java:458) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.lambda$finishExecution$0(DefaultBatchEngine.java:422) ~[?:?]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:180) ~[?:?]
+	... 4 more
+Caused by: java.lang.reflect.InvocationTargetException
+	at jdk.internal.reflect.GeneratedConstructorAccessor145.newInstance(Unknown Source) ~[?:?]
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?]
+	at com.esotericsoftware.kryo.factories.ReflectionSerializerFactory.makeSerializer(ReflectionSerializerFactory.java:51) ~[kryo-shaded-4.0.3.jar:?]
+	at com.esotericsoftware.kryo.factories.ReflectionSerializerFactory.makeSerializer(ReflectionSerializerFactory.java:43) ~[kryo-shaded-4.0.3.jar:?]
+	at com.esotericsoftware.kryo.Kryo.newDefaultSerializer(Kryo.java:396) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.getDefaultSerializer(Kryo.java:380) ~[?:?]
+	at com.esotericsoftware.kryo.util.DefaultClassResolver.registerImplicit(DefaultClassResolver.java:74) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.getRegistration(Kryo.java:508) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo.lambda$getRegistration$0(ExternalizableKryo.java:116) ~[?:?]
+	at org.mule.runtime.api.util.FunctionalUtils.computeIfAbsent(FunctionalUtils.java:32) ~[mule-api-1.7.0.jar:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo.getRegistration(ExternalizableKryo.java:96) ~[?:?]
+	at com.esotericsoftware.kryo.util.DefaultClassResolver.writeClass(DefaultClassResolver.java:97) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClass(Kryo.java:540) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:75) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClassAndObject(Kryo.java:651) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.lambda$doSerialize$0(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.onOutput(KryoSerializationProtocol.java:139) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:119) ~[?:?]
+	at org.mule.runtime.core.internal.serialization.AbstractSerializationProtocol.serialize(AbstractSerializationProtocol.java:62) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.LegacyAwareObjectSerializerWrapper$SerializationProtocolWrapper.serialize(LegacyAwareObjectSerializerWrapper.java:53) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.doStore(DefaultBatchJobInstanceStore.java:310) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.update(DefaultBatchJobInstanceStore.java:108) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.finallyOnFinishJobInstance(DefaultBatchEngine.java:458) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.lambda$finishExecution$0(DefaultBatchEngine.java:422) ~[?:?]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:180) ~[?:?]
+	... 4 more
+Caused by: java.lang.reflect.InaccessibleObjectException: Unable to make field private transient java.lang.Object org.mule.runtime.api.lifecycle.LifecycleException.component accessible: module org.mule.runtime.api does not "opens org.mule.runtime.api.lifecycle" to module kryo.shaded
+	at java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:354) ~[?:?]
+	at java.lang.reflect.AccessibleObject.checkCanSetAccessible(AccessibleObject.java:297) ~[?:?]
+	at java.lang.reflect.Field.checkCanSetAccessible(Field.java:178) ~[?:?]
+	at java.lang.reflect.Field.setAccessible(Field.java:172) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.buildValidFields(FieldSerializer.java:283) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.rebuildCachedFields(FieldSerializer.java:218) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.rebuildCachedFields(FieldSerializer.java:157) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.<init>(FieldSerializer.java:150) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.<init>(FieldSerializer.java:134) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.<init>(FieldSerializer.java:130) ~[?:?]
+	at jdk.internal.reflect.GeneratedConstructorAccessor145.newInstance(Unknown Source) ~[?:?]
+	at jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45) ~[?:?]
+	at java.lang.reflect.Constructor.newInstanceWithCaller(Constructor.java:499) ~[?:?]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:480) ~[?:?]
+	at com.esotericsoftware.kryo.factories.ReflectionSerializerFactory.makeSerializer(ReflectionSerializerFactory.java:51) ~[kryo-shaded-4.0.3.jar:?]
+	at com.esotericsoftware.kryo.factories.ReflectionSerializerFactory.makeSerializer(ReflectionSerializerFactory.java:43) ~[kryo-shaded-4.0.3.jar:?]
+	at com.esotericsoftware.kryo.Kryo.newDefaultSerializer(Kryo.java:396) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.getDefaultSerializer(Kryo.java:380) ~[?:?]
+	at com.esotericsoftware.kryo.util.DefaultClassResolver.registerImplicit(DefaultClassResolver.java:74) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.getRegistration(Kryo.java:508) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo.lambda$getRegistration$0(ExternalizableKryo.java:116) ~[?:?]
+	at org.mule.runtime.api.util.FunctionalUtils.computeIfAbsent(FunctionalUtils.java:32) ~[mule-api-1.7.0.jar:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.ExternalizableKryo.getRegistration(ExternalizableKryo.java:96) ~[?:?]
+	at com.esotericsoftware.kryo.util.DefaultClassResolver.writeClass(DefaultClassResolver.java:97) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClass(Kryo.java:540) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:75) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeObject(Kryo.java:575) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.ObjectField.write(ObjectField.java:79) ~[?:?]
+	at com.esotericsoftware.kryo.serializers.FieldSerializer.write(FieldSerializer.java:508) ~[?:?]
+	at com.esotericsoftware.kryo.Kryo.writeClassAndObject(Kryo.java:651) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.lambda$doSerialize$0(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.onOutput(KryoSerializationProtocol.java:139) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:130) ~[?:?]
+	at com.mulesoft.mule.runtime.module.serialization.kryo.internal.protocol.KryoSerializationProtocol.doSerialize(KryoSerializationProtocol.java:119) ~[?:?]
+	at org.mule.runtime.core.internal.serialization.AbstractSerializationProtocol.serialize(AbstractSerializationProtocol.java:62) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.LegacyAwareObjectSerializerWrapper$SerializationProtocolWrapper.serialize(LegacyAwareObjectSerializerWrapper.java:53) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.doStore(DefaultBatchJobInstanceStore.java:310) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchJobInstanceStore.update(DefaultBatchJobInstanceStore.java:108) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.finallyOnFinishJobInstance(DefaultBatchEngine.java:458) ~[?:?]
+	at com.mulesoft.mule.runtime.module.batch.internal.engine.DefaultBatchEngine.lambda$finishExecution$0(DefaultBatchEngine.java:422) ~[?:?]
+	at java.util.concurrent.Executors$RunnableAdapter.call(Executors.java:539) ~[?:?]
+	at java.util.concurrent.FutureTask.run(FutureTask.java:264) ~[?:?]
+	at org.mule.service.scheduler.internal.AbstractRunnableFutureDecorator.doRun(AbstractRunnableFutureDecorator.java:180) ~[?:?]
+	... 4 more
+INFO  2026-09-03 23:28:40,967 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:40,969 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:41,024 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:41,024 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+WARN  2026-09-03 23:28:41,100 [munit.01] org.mule.runtime.config.internal.dsl.spring.ComponentConfigurationBuilder: Parameter ignore from extension munit has a defaultValue configured in the componentBuildingDefinition but not in the extensionModel.
+INFO  2026-09-03 23:28:41,598 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:41,601 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:41,602 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:41,855 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:41,855 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:41,856 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+================================================================================
+=== Running suite: validation-and-bulk-item-tests.xml                        ===
+================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: process-inventory-item-duplicate-test - Raises APP:DUPLICATE an+
++ d never inserts when the bulk item already exists                            +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:42,015 [[MuleRuntime].uber.07: [mulemart-inventory-api].execution.CPU_LITE @1491ceab] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : Item SKU-BULK-DUP already exists
+Element               : process-inventory-item-subflow/processors/3/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1017 (Raise Duplicate Error)
+Element DSL           : <raise-error doc:name="Raise Duplicate Error" doc:id="d3e4f5a6-b7c8-9012-def0-234567890123" type="APP:DUPLICATE" description="#["Item " ++ vars.newItem.itemId ++ " already exists"]"></raise-error>
+Error type            : APP:DUPLICATE
+FlowStack             : at process-inventory-item-subflow(process-inventory-item-subflow/processors/3/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1017 (Raise Duplicate Error))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+java.lang.AssertionError: On db:insert. Expected 0 but got 1 calls
+	at org.mule.munit.mock.MockModule.verifyCall(MockModule.java:135)
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:42,025 [munit.01] org.mule.munit.runner.model.Suite: FAILURE - test: process-inventory-item-duplicate-test - Time elapsed: 0.13 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: process-inventory-item-rejects-negative-stock-before-insert-tes+
++ t - Regression test: a bulk item with negative stock must be rejected by vali+
++ dation before it ever reaches db:insert                                      +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:42,149 [[MuleRuntime].uber.07: [mulemart-inventory-api].execution.CPU_LITE @655bb8d7] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : warehouseStock, regionalStock, and safetyStock must be non-negative
+Element               : validate-inventory-fields-subflow/processors/0/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1365 (Raise Validation Error)
+Element DSL           : <raise-error type="APP:VALIDATION" doc:name="Raise Validation Error" doc:id="1920314562-3456-f012-3456-020315672345" description="warehouseStock, regionalStock, and safetyStock must be non-negative"></raise-error>
+Error type            : APP:VALIDATION
+FlowStack             : at validate-inventory-fields-subflow(validate-inventory-fields-subflow/processors/0/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1365 (Raise Validation Error))
+at process-inventory-item-subflow(process-inventory-item-subflow/processors/1 @ mulemart-inventory-api:inventory-api.xml:1010 (Validate Payload))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:42,160 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: process-inventory-item-rejects-negative-stock-before-insert-test - Time elapsed: 0.13 sec
++ Running test: validate-inventory-fields-rejects-negative-warehouse-stock-test+
++  - Raises APP:VALIDATION when warehouseStock is negative                     +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:42,179 [[MuleRuntime].uber.07: [mulemart-inventory-api].execution.CPU_LITE @55ee4436] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : warehouseStock, regionalStock, and safetyStock must be non-negative
+Element               : validate-inventory-fields-subflow/processors/0/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1365 (Raise Validation Error)
+Element DSL           : <raise-error type="APP:VALIDATION" doc:name="Raise Validation Error" doc:id="1920314562-3456-f012-3456-020315672345" description="warehouseStock, regionalStock, and safetyStock must be non-negative"></raise-error>
+Error type            : APP:VALIDATION
+FlowStack             : at validate-inventory-fields-subflow(validate-inventory-fields-subflow/processors/0/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1365 (Raise Validation Error))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:42,195 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: validate-inventory-fields-rejects-negative-warehouse-stock-test - Time elapsed: 0.03 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: process-inventory-item-success-test - A valid bulk item passes +
++ validation, gets inserted, and syncs to Salesforce                           +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: validate-inventory-fields-accepts-non-negative-values-test - Pa+
++ sses through without raising an error when all stock fields are non-negative +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:42,566 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: process-inventory-item-success-test - Time elapsed: 0.37 sec
+INFO  2026-09-03 23:28:42,596 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: validate-inventory-fields-accepts-non-negative-values-test - Time elapsed: 0.03 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: validate-inventory-fields-rejects-negative-regional-stock-test +
++ - Raises APP:VALIDATION when regionalStock is negative                       +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:42,618 [[MuleRuntime].uber.06: [mulemart-inventory-api].execution.CPU_LITE @5bfd871c] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : warehouseStock, regionalStock, and safetyStock must be non-negative
+Element               : validate-inventory-fields-subflow/processors/0/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1365 (Raise Validation Error)
+Element DSL           : <raise-error type="APP:VALIDATION" doc:name="Raise Validation Error" doc:id="1920314562-3456-f012-3456-020315672345" description="warehouseStock, regionalStock, and safetyStock must be non-negative"></raise-error>
+Error type            : APP:VALIDATION
+FlowStack             : at validate-inventory-fields-subflow(validate-inventory-fields-subflow/processors/0/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:1365 (Raise Validation Error))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:42,648 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: validate-inventory-fields-rejects-negative-regional-stock-test - Time elapsed: 0.04 sec
+================================================================================
+= Tests run: 6 - Failed: 1 - Errors: 0 - Skipped: 0 - Time elapsed: 0.76 sec   =
+================================================================================
+INFO  2026-09-03 23:28:42,650 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Waiting for client connection 
+INFO  2026-09-03 23:28:42,656 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Client connection received from 127.0.0.1 - true
+INFO  2026-09-03 23:28:43,268 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:43,275 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-JMS_Config
+INFO  2026-09-03 23:28:43,327 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:43,328 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:43,384 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:43,385 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+WARN  2026-09-03 23:28:43,436 [munit.01] org.mule.runtime.config.internal.dsl.spring.ComponentConfigurationBuilder: Parameter ignore from extension munit has a defaultValue configured in the componentBuildingDefinition but not in the extensionModel.
+INFO  2026-09-03 23:28:44,140 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:44,146 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Initialising flow: get:\inventory\(itemId)\summary:inventory-api-config
+INFO  2026-09-03 23:28:44,173 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Initialising flow: get:\inventory\(itemId):inventory-api-config
+INFO  2026-09-03 23:28:44,247 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Initialising flow: get:\inventory:inventory-api-config
+INFO  2026-09-03 23:28:44,545 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:44,546 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Starting flow: get:\inventory\(itemId)\summary:inventory-api-config
+INFO  2026-09-03 23:28:44,573 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Starting flow: get:\inventory\(itemId):inventory-api-config
+INFO  2026-09-03 23:28:44,621 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Starting flow: get:\inventory:inventory-api-config
+================================================================================
+=== Running suite: get-inventory-tests.xml                                   ===
+================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-inventory-by-id-cache-miss-found-test - Falls back to the D+
++ B on a cache miss, transforms the row, and populates the cache               +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:44,779 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-inventory-by-id-cache-miss-found-test - Time elapsed: 0.06 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-inventory-summary-success-test - Returns the compact summar+
++ y view including reorder quantity                                            +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:44,821 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-inventory-summary-success-test - Time elapsed: 0.04 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-inventory-by-id-cache-hit-test - Returns the cached item wi+
++ thout querying the DB when the cache already has the key                     +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-inventory-summary-not-found-test - Returns 404 when the sum+
++ marized item does not exist                                                  +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:44,865 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-inventory-by-id-cache-hit-test - Time elapsed: 0.04 sec
+ERROR 2026-09-03 23:28:44,889 [[MuleRuntime].uber.03: [mulemart-inventory-api].get:\inventory\(itemId)\summary:inventory-api-config.CPU_LITE @51325bb7] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : Item SKU-MISSING not found
+Element               : get:\inventory\(itemId)\summary:inventory-api-config/processors/2/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:698 (Raise error)
+Element DSL           : <raise-error doc:name="Raise error" doc:id="ad4e5f60-7182-9304-a5b6-c7d8e9f0a1b2" type="APP:NOT_FOUND" description="#["Item " ++ vars.itemId ++ " not found"]"></raise-error>
+Error type            : APP:NOT_FOUND
+FlowStack             : at get:\inventory\(itemId)\summary:inventory-api-config(get:\inventory\(itemId)\summary:inventory-api-config/processors/2/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:698 (Raise error))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:44,904 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-inventory-summary-not-found-test - Time elapsed: 0.04 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-inventory-by-id-not-found-test - Raises 404 when the item d+
++ oes not exist in the DB, without ever caching the miss                       +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:44,926 [[MuleRuntime].uber.11: [mulemart-inventory-api].get:\inventory\(itemId):inventory-api-config.CPU_LITE @59b8b11e] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : Item SKU-MISSING not found
+Element               : get:\inventory\(itemId):inventory-api-config/processors/2/route/1/processors/1/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:739 (Raise error)
+Element DSL           : <raise-error doc:name="Raise error" doc:id="df718293-4a59-c6d7-e8f9-a0b1c2d3e4f5" type="APP:NOT_FOUND" description="#["Item " ++ vars.itemId ++ " not found"]"></raise-error>
+Error type            : APP:NOT_FOUND
+FlowStack             : at get:\inventory\(itemId):inventory-api-config(get:\inventory\(itemId):inventory-api-config/processors/2/route/1/processors/1/route/0/processors/0 @ mulemart-inventory-api:inventory-api.xml:739 (Raise error))
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:44,944 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-inventory-by-id-not-found-test - Time elapsed: 0.04 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-inventory-list-test - Lists inventory items and applies def+
++ ault pagination                                                              +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:44,978 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-inventory-list-test - Time elapsed: 0.03 sec
+================================================================================
+= Tests run: 6 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 0.26 sec   =
+================================================================================
+INFO  2026-09-03 23:28:44,978 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Waiting for client connection 
+INFO  2026-09-03 23:28:44,981 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Client connection received from 127.0.0.1 - true
+INFO  2026-09-03 23:28:45,147 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: get:\inventory\(itemId):inventory-api-config
+WARN  2026-09-03 23:28:50,149 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'get:\inventory\(itemId):inventory-api-config' not completed in 5000 ms
+WARN  2026-09-03 23:28:50,149 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'get:\inventory\(itemId):inventory-api-config' not completed in 5000 ms
+INFO  2026-09-03 23:28:50,151 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: get:\inventory\(itemId):inventory-api-config
+INFO  2026-09-03 23:28:50,153 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: get:\inventory\(itemId)\summary:inventory-api-config
+WARN  2026-09-03 23:28:55,153 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'get:\inventory\(itemId)\summary:inventory-api-config' not completed in 5000 ms
+WARN  2026-09-03 23:28:55,153 [munit.01] org.mule.runtime.core.internal.processor.strategy.AbstractStreamProcessingStrategyFactory: Subscribers of ProcessingStrategy for flow 'get:\inventory\(itemId)\summary:inventory-api-config' not completed in 5000 ms
+INFO  2026-09-03 23:28:55,154 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: get:\inventory\(itemId)\summary:inventory-api-config
+INFO  2026-09-03 23:28:55,154 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: get:\inventory:inventory-api-config
+INFO  2026-09-03 23:28:55,155 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: get:\inventory:inventory-api-config
+INFO  2026-09-03 23:28:55,157 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:55,157 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+WARN  2026-09-03 23:28:55,193 [munit.01] org.mule.runtime.config.internal.dsl.spring.ComponentConfigurationBuilder: Parameter ignore from extension munit has a defaultValue configured in the componentBuildingDefinition but not in the extensionModel.
+INFO  2026-09-03 23:28:55,507 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:55,510 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Initialising Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:55,553 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Initialising flow: get:\health:inventory-api-config
+INFO  2026-09-03 23:28:55,758 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:55,758 [munit.01] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Starting Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:55,760 [munit.01] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Starting flow: get:\health:inventory-api-config
+================================================================================
+=== Running suite: health-tests.xml                                          ===
+================================================================================
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: check-system-health-salesforce-down-test - Reports DEGRADED and+
++  salesforce DOWN when the Salesforce query throws                            +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:55,828 [[MuleRuntime].uber.09: [mulemart-inventory-api].execution.CPU_LITE @697925d3] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : 
+Element               : (None)
+Element DSL           : (None)
+Error type            : MULE:CONNECTIVITY
+FlowStack             : (None)
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+INFO  2026-09-03 23:28:55,846 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: check-system-health-salesforce-down-test - Time elapsed: 0.06 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: get-health-cache-hit-test - Returns the cached health snapshot +
++ without recomputing DB/Salesforce connectivity                               +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:55,872 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: get-health-cache-hit-test - Time elapsed: 0.03 sec
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: check-system-health-db-down-test - Reports DEGRADED and databas+
++ e DOWN when the DB connectivity check throws                                 +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ERROR 2026-09-03 23:28:55,950 [[MuleRuntime].uber.10: [mulemart-inventory-api].execution.CPU_LITE @66e9fd28] org.mule.runtime.core.privileged.exception.DefaultExceptionListener: 
+********************************************************************************
+Message               : 
+Element               : (None)
+Element DSL           : (None)
+Error type            : MULE:CONNECTIVITY
+FlowStack             : (None)
+
+  (set debug level logging or '-Dmule.verbose.exceptions=true' for everything)
+********************************************************************************
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Running test: check-system-health-both-up-test - Reports UP when both the DB +
++ check and the Salesforce query succeed                                       +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:55,977 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: check-system-health-db-down-test - Time elapsed: 0.10 sec
+================================================================================
+= Tests run: 4 - Failed: 0 - Errors: 0 - Skipped: 0 - Time elapsed: 0.29 sec   =
+================================================================================
+INFO  2026-09-03 23:28:56,068 [munit.01] org.mule.munit.runner.model.Suite: SUCCESS - test: check-system-health-both-up-test - Time elapsed: 0.09 sec
+INFO  2026-09-03 23:28:56,070 [munit.01] org.mule.munit.runner.remote.api.server.RunnerServer: Waiting for client connection 
+INFO  2026-09-03 23:28:56,073 [Embedded] org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer: ================== Request to Undeploy Artifact: mulemart-inventory-api
+INFO  2026-09-03 23:28:56,204 [pool-2-thread-1] org.mule.munit.remote.coverage.server.CoverageServer: Coverage client connection received from 127.0.0.1 - true
+INFO  2026-09-03 23:28:56,248 [pool-2-thread-1] org.mule.munit.remote.coverage.server.CoverageServer: Coverage client connection received from 127.0.0.1 - true
+INFO  2026-09-03 23:28:56,258 [pool-11-thread-1] org.mule.munit.remote.coverage.CoverageManager: accumulating covered locations
+INFO  2026-09-03 23:28:56,266 [Embedded] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Stopping application 'mulemart-inventory-api'                                +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:28:56,269 [Embedded] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Stopping flow: get:\health:inventory-api-config
+INFO  2026-09-03 23:28:56,271 [Embedded] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:56,271 [Embedded] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Stopping Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:56,279 [pool-12-thread-1] org.mule.munit.remote.coverage.CoverageManager: accumulating covered locations
+INFO  2026-09-03 23:28:56,288 [Embedded] org.mule.runtime.core.internal.logging: 
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 + Disposing application 'mulemart-inventory-api'                               +
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-INFO  2026-09-01 17:05:00,084 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ Failed to deploy artifact 'mulemart-inventory-api',                          +
-+ org.mule.runtime.deployment.model.api.DeploymentInitException:               +
-+ EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25   +
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-ERROR 2026-09-01 17:05:00,084 [WrapperListener_start_runner] org.mule.runtime.module.deployment.internal.DefaultArchiveDeployer: Failed to deploy artifact [mulemart-inventory-api]
-org.mule.runtime.deployment.model.api.DeploymentException: Failed to deploy artifact [mulemart-inventory-api]
-Caused by: org.mule.runtime.api.exception.MuleRuntimeException: org.mule.runtime.deployment.model.api.DeploymentInitException: EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
-Caused by: org.mule.runtime.deployment.model.api.DeploymentInitException: EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
-Caused by: org.mule.runtime.core.api.config.ConfigurationException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
-Caused by: java.lang.EnumConstantNotPresentException: org.mule.sdk.api.meta.JavaVersion.JAVA_25
-	at java.base/sun.reflect.annotation.EnumConstantNotPresentExceptionProxy.generateException(EnumConstantNotPresentExceptionProxy.java:47) ~[?:?]
-	at java.base/sun.reflect.annotation.AnnotationInvocationHandler.invoke(AnnotationInvocationHandler.java:89) ~[?:?]
-	at jdk.proxy4/jdk.proxy4.$Proxy118.value(Unknown Source) ~[?:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.java.type.runtime.ClassBasedAnnotationValueFetcher.getArrayValue(ClassBasedAnnotationValueFetcher.java:56) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.api.loader.java.type.AnnotationValueFetcher.getEnumArrayValue(AnnotationValueFetcher.java:90) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.lambda$parseSupportedJavaVersions$2(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseSupportedJavaVersions(JavaExtensionModelParser.java:156) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.parseStructure(JavaExtensionModelParser.java:151) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:130) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParser.<init>(JavaExtensionModelParser.java:121) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.parser.java.JavaExtensionModelParserFactory.createParser(JavaExtensionModelParserFactory.java:34) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.delegate.DefaultExtensionModelLoaderDelegate.declare(DefaultExtensionModelLoaderDelegate.java:93) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.support@4.7.0/org.mule.runtime.module.extension.internal.loader.AbstractExtensionModelLoader.declareExtension(AbstractExtensionModelLoader.java:111) ~[mule-module-extensions-support-4.7.0.jar:?]
-	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.doCreate(ExtensionModelLoader.java:119) ~[mule-extensions-api-1.7.0.jar:?]
-	at org.mule.runtime.extensions.api@1.7.0/org.mule.runtime.extension.api.loader.ExtensionModelLoader.loadExtensionModel(ExtensionModelLoader.java:99) ~[mule-extensions-api-1.7.0.jar:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.discoverExtensionThroughJsonDescriber(RepositoryLookupExtensionModelGenerator.java:98) ~[mule-module-artifact-activation-4.7.0.jar:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.lambda$obtainExtensionModel$1(RepositoryLookupExtensionModelGenerator.java:54) ~[mule-module-artifact-activation-4.7.0.jar:?]
-	at java.base/java.util.Optional.map(Optional.java:260) ~[?:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.RepositoryLookupExtensionModelGenerator.obtainExtensionModel(RepositoryLookupExtensionModelGenerator.java:54) ~[mule-module-artifact-activation-4.7.0.jar:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.extension.discovery.DefaultExtensionModelDiscoverer.lambda$discoverPluginsExtensionModels$0(DefaultExtensionModelDiscoverer.java:49) ~[mule-module-artifact-activation-4.7.0.jar:?]
-	at org.mule.runtime.artifact.activation@4.7.0/org.mule.runtime.module.artifact.activation.internal.PluginsDependenciesProcessor.lambda$process$5(PluginsDependenciesProcessor.java:85) ~[mule-module-artifact-activation-4.7.0.jar:?]
-	at java.base/java.util.stream.ForEachOps$ForEachOp$OfRef.accept(ForEachOps.java:183) ~[?:?]
-	at java.base/java.util.stream.ReferencePipeline$2$1.accept(ReferencePipeline.java:179) ~[?:?]
-	at java.base/java.util.Spliterators$ArraySpliterator.forEachRemaining(Spliterators.java:992) ~[?:?]
-	at java.base/java.util.stream.AbstractPipeline.copyInto(AbstractPipeline.java:509) ~[?:?]
-	at java.base/java.util.stream.ForEachOps$ForEachTask.compute(ForEachOps.java:290) ~[?:?]
-	at java.base/java.util.concurrent.CountedCompleter.exec(CountedCompleter.java:754) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinTask.doExec(ForkJoinTask.java:373) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinPool$WorkQueue.topLevelExec(ForkJoinPool.java:1182) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinPool.scan(ForkJoinPool.java:1655) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinPool.runWorker(ForkJoinPool.java:1622) ~[?:?]
-	at java.base/java.util.concurrent.ForkJoinWorkerThread.run(ForkJoinWorkerThread.java:165) ~[?:?]
-INFO  2026-09-01 17:05:00,288 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-+ Mule is up and kicking (every 5000ms)                                        +
-++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-INFO  2026-09-01 17:05:00,470 [WrapperListener_start_runner] org.eclipse.jetty.server.AbstractConnector: Started ServerConnector@492b28f5{HTTP/1.1, (http/1.1)}{127.0.0.1:64131}
-INFO  2026-09-01 17:05:00,477 [WrapperListener_start_runner] org.mule.runtime.core.internal.logging: 
-**********************************************************************
-*              - - + DOMAIN + - -               * - - + STATUS + - - *
-**********************************************************************
-* default                                       * DEPLOYED           *
-**********************************************************************
+INFO  2026-09-03 23:28:56,288 [Embedded] org.mule.runtime.core.internal.logging: Stopping app 'mulemart-inventory-api' with no mule context
+INFO  2026-09-03 23:28:56,552 [Embedded] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Database_Config
+INFO  2026-09-03 23:28:56,553 [Embedded] org.mule.runtime.core.internal.lifecycle.AbstractLifecycleManager: Disposing Bean: org.mule.runtime.module.extension.internal.runtime.config.ConfigurationProviderToolingAdapter-Salesforce_Config
+INFO  2026-09-03 23:28:56,607 [Embedded] org.mule.runtime.core.internal.construct.FlowConstructLifecycleManager: Disposing flow: get:\health:inventory-api-config
+WARN  2026-09-03 23:28:56,608 [Embedded] org.mule.runtime.internal.memory.management.DefaultMemoryManagementService: Unable to dispose not present ByteBufferProvider 'org.mule.weave.v2.memory.service: mulemart-inventory-api'
+ERROR 2026-09-03 23:29:08,885 [Embedded] org.mule.service.scheduler.internal.threads.SchedulerThreadPools: Unable to destroy ThreadGroup 'munit' of Scheduler 'munit @4e27df65' (java.lang.IllegalThreadStateException). Remaining threads in the group are:
+	* mysql-cj-abandoned-connection-cleanup
 
-*******************************************************************************************************
-*            - - + APPLICATION + - -            *       - - + DOMAIN + - -       * - - + STATUS + - - *
-*******************************************************************************************************
-* mulemart-inventory-api                        * default                        * FAILED             *
-*******************************************************************************************************
-
+INFO  2026-09-03 23:29:08,909 [Embedded] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+* Application "mulemart-inventory-api" shut down normally on:        *
+* 9/3/26, 11:29 PM                                                   *
+* Up for: 0 days, 0 hours, 1 mins, 13.692 sec                        *
+**********************************************************************
+INFO  2026-09-03 23:29:09,261 [Embedded] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Undeployed artifact 'mulemart-inventory-api'                                 +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:29:09,263 [Embedded] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Stopping domain 'default'                                                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:29:09,263 [Embedded] org.mule.runtime.core.internal.logging: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Disposing domain 'default'                                                   +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2026-09-03 23:29:09,263 [Embedded] org.mule.runtime.core.internal.logging: Stopping domain 'default' with no mule context
+INFO  2026-09-03 23:29:09,264 [Embedded] org.mule.runtime.core.internal.logging: 
+**********************************************************************
+* Domain "default" shut down normally on: 9/3/26, 11:29 PM           *
+* Up for: 0 days, 0 hours, 1 mins, 36.64 sec                         *
+**********************************************************************
+INFO  2026-09-03 23:29:09,534 [Embedded] org.mule.service.scheduler.internal.service.DefaultSchedulerService: Stopping DefaultSchedulerService...
+INFO  2026-09-03 23:29:09,927 [Embedded] org.mule.service.scheduler.internal.service.DefaultSchedulerService: Stopped org.mule.service.scheduler.internal.service.DefaultSchedulerService$1@702fad09
+INFO  2026-09-03 23:29:10,948 [main] org.mule.munit.remote.coverage.CoverageManager: Shutting down coverage server
+INFO  2026-09-03 23:29:10,949 [main] org.mule.munit.remote.coverage.CoverageManager: Calculating application coverage
+INFO  2026-09-03 23:29:10,966 [main] org.mule.munit.remote.RemoteRunner: Done

@@ -1238,6 +1238,7 @@ var total = calculateTotal(wh, reg)
     region: vars.existing.region
 }, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="e7f8a9b0-cdef-0123-4567-020314567891" variableName="eventOldValue"/>
 				<set-variable value="#[%dw 2.0
+output application/java
 import * from InventoryLib
 var wh = vars.existing.warehouse_stock default 0
 var reg = vars.regionalItem.regionalStock default 0

@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns:db="http://www.mulesoft.org/schema/mule/db"
+      xmlns:os="http://www.mulesoft.org/schema/mule/os"
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+    <munit:config name="munit-config" doc:name="MUnit Configuration"/>
+
+    <munit:test name="get-inventory-by-id-cache-hit-test" description="Returns the cached item without querying the DB when the cache already has the key">
+        <munit:behavior>
+            <munit-tools:mock-when processor="os:contains">
+                <munit-tools:then-return>
+                    <munit-tools:variables>
+                        <munit-tools:variable key="#['cacheHit']" value="#[true]"/>
+                    </munit-tools:variables>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:retrieve">
+                <munit-tools:then-return>
+                    <munit-tools:variables>
+                        <munit-tools:variable key="#['cachedItem']" value='#[%dw 2.0
+output application/java
+---
+{
+    itemId: "SKU-TEST-001",
+    warehouseStock: 60,
+    regionalStock: 20,
+    totalInventory: 80,
+    safetyStock: 10,
+    status: "NORMAL",
+    region: "US",
+    lastUpdated: "2026-01-01T00:00:00Z"
+}]'/>
+                    </munit-tools:variables>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-TEST-001" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="get:\inventory\(itemId):inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.itemId]" is="#[MunitTools::equalTo('SKU-TEST-001')]"/>
+            <munit-tools:verify-call processor="os:retrieve" doc:name="Cache is actually read on a cache hit" times="1"/>
+            <munit-tools:verify-call processor="db:select" doc:name="DB is never queried on a cache hit" times="0"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="get-inventory-by-id-cache-miss-found-test" description="Falls back to the DB on a cache miss, transforms the row, and populates the cache">
+        <munit:behavior>
+            <munit-tools:mock-when processor="os:contains">
+                <munit-tools:then-return>
+                    <munit-tools:variables>
+                        <munit-tools:variable key="#['cacheHit']" value="#[false]"/>
+                    </munit-tools:variables>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-TEST-002",
+    warehouse_stock: 60,
+    regional_stock: 20,
+    total_inventory: 80,
+    safety_stock: 10,
+    status: "NORMAL",
+    region: "US",
+    last_updated: |2026-01-01T00:00:00|
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:store">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-TEST-002" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="get:\inventory\(itemId):inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.itemId]" is="#[MunitTools::equalTo('SKU-TEST-002')]"/>
+            <munit-tools:assert-that expression="#[payload.totalInventory]" is="#[MunitTools::equalTo(80)]"/>
+            <munit-tools:verify-call processor="os:store" doc:name="Cache is populated after a DB fetch" times="1"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="get-inventory-by-id-not-found-test" description="Raises 404 when the item does not exist in the DB, without ever caching the miss">
+        <munit:behavior>
+            <munit-tools:mock-when processor="os:contains">
+                <munit-tools:then-return>
+                    <munit-tools:variables>
+                        <munit-tools:variable key="#['cacheHit']" value="#[false]"/>
+                    </munit-tools:variables>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-MISSING" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <try>
+                <flow-ref name="get:\inventory\(itemId):inventory-api-config"/>
+                <error-handler>
+                    <on-error-continue type="APP:NOT_FOUND"/>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(404)]"/>
+            <munit-tools:assert-that expression="#[payload.code]" is="#[MunitTools::equalTo('NOT_FOUND')]"/>
+            <munit-tools:verify-call processor="os:store" doc:name="A miss is never cached" times="0"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="get-inventory-list-test" description="Lists inventory items and applies default pagination">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-A",
+    warehouse_stock: 10,
+    regional_stock: 5,
+    total_inventory: 15,
+    safety_stock: 5,
+    status: "LOW",
+    region: "US",
+    last_updated: |2026-01-01T00:00:00|
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ queryParams: {} }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="get:\inventory:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[sizeOf(payload)]" is="#[MunitTools::equalTo(1)]"/>
+            <munit-tools:assert-that expression="#[payload[0].itemId]" is="#[MunitTools::equalTo('SKU-A')]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="get-inventory-summary-success-test" description="Returns the compact summary view including reorder quantity">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-SUM-001",
+    warehouse_stock: 3,
+    regional_stock: 2,
+    total_inventory: 5,
+    safety_stock: 5,
+    status: "CRITICAL",
+    region: "US"
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-SUM-001" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="get:\inventory\(itemId)\summary:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('CRITICAL')]"/>
+            <munit-tools:assert-that expression="#[payload.reorderQuantity]" is="#[MunitTools::equalTo(195)]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="get-inventory-summary-not-found-test" description="Returns 404 when the summarized item does not exist">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-MISSING" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <try>
+                <flow-ref name="get:\inventory\(itemId)\summary:inventory-api-config"/>
+                <error-handler>
+                    <on-error-continue type="APP:NOT_FOUND"/>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(404)]"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>

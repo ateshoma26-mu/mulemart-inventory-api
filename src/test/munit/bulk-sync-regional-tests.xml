@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns:db="http://www.mulesoft.org/schema/mule/db"
+      xmlns:os="http://www.mulesoft.org/schema/mule/os"
+      xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+      xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+
+    <munit:config name="munit-config" doc:name="MUnit Configuration"/>
+
+    <munit:test name="post-inventory-bulk-accepted-test" description="Returns 202 ACCEPTED immediately with the submitted record count">
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/json
+---
+[]]'/>
+            <flow-ref name="post:\inventory\bulk:application\json:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(202)]"/>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('ACCEPTED')]"/>
+            <munit-tools:assert-that expression="#[payload.totalRecords]" is="#[MunitTools::equalTo(0)]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="post-inventory-sync-accepted-test" description="Returns 202 ACCEPTED immediately with the active-item count">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <flow-ref name="post:\inventory\sync:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(202)]"/>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('ACCEPTED')]"/>
+            <munit-tools:assert-that expression="#[payload.totalRecords]" is="#[MunitTools::equalTo(0)]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-full-sync-item-normal-test" description="Recalculates totals and syncs Salesforce for a non-critical row, without firing an alert">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:remove">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/java
+---
+{
+    item_id: "SKU-SYNC-NORMAL",
+    warehouse_stock: 60,
+    regional_stock: 20,
+    total_inventory: 80,
+    safety_stock: 5,
+    status: "NORMAL",
+    region: "US"
+}]'/>
+            <flow-ref name="process-full-sync-item-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:verify-call processor="salesforce:upsert" doc:name="Salesforce is synced" times="1"/>
+            <munit-tools:verify-call processor="jms:publish" doc:name="No CRITICAL alert; only the generic update event is published" times="1"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-full-sync-item-critical-test" description="Fires the CRITICAL procurement alert for a low-stock row">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:remove">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/java
+---
+{
+    item_id: "SKU-SYNC-CRITICAL",
+    warehouse_stock: 3,
+    regional_stock: 2,
+    total_inventory: 5,
+    safety_stock: 5,
+    status: "CRITICAL",
+    region: "US"
+}]'/>
+            <flow-ref name="process-full-sync-item-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:verify-call processor="jms:publish" doc:name="CRITICAL alert plus the generic update event are both published" times="2"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-regional-update-not-found-test" description="Raises APP:NOT_FOUND when the CSV references an item that does not exist in the warehouse DB">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <try>
+                <set-payload value='#[%dw 2.0
+output application/json
+---
+{ itemId: "SKU-MISSING", regionalStock: 20, region: "US", lastUpdated: "2026-01-01T00:00:00Z" }]'/>
+                <flow-ref name="process-regional-update-subflow"/>
+                <error-handler>
+                    <on-error-continue type="APP:NOT_FOUND">
+                        <set-variable variableName="caughtErrorType" value="#[error.errorType.identifier]"/>
+                    </on-error-continue>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.caughtErrorType]" is="#[MunitTools::equalTo('NOT_FOUND')]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-regional-update-normal-test" description="Merges regional stock into the existing warehouse row and syncs Salesforce without alerting">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-REGIONAL-NORMAL",
+    warehouse_stock: 60,
+    regional_stock: 5,
+    total_inventory: 65,
+    safety_stock: 5,
+    status: "NORMAL",
+    region: "US"
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/json
+---
+{ itemId: "SKU-REGIONAL-NORMAL", regionalStock: 20, region: "EU", lastUpdated: "2026-01-01T00:00:00Z" }]'/>
+            <flow-ref name="process-regional-update-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:verify-call processor="db:update" doc:name="Warehouse row is updated with the merged regional stock" times="1"/>
+            <munit-tools:verify-call processor="salesforce:upsert" doc:name="Salesforce is synced" times="1"/>
+            <munit-tools:verify-call processor="jms:publish" doc:name="No CRITICAL alert; only the generic update event is published" times="1"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-regional-update-critical-test" description="Fires the CRITICAL procurement alert when the merged regional stock is critically low">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-REGIONAL-CRITICAL",
+    warehouse_stock: 3,
+    regional_stock: 50,
+    total_inventory: 53,
+    safety_stock: 5,
+    status: "NORMAL",
+    region: "US"
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/json
+---
+{ itemId: "SKU-REGIONAL-CRITICAL", regionalStock: 2, region: "US", lastUpdated: "2026-01-01T00:00:00Z" }]'/>
+            <flow-ref name="process-regional-update-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:verify-call processor="jms:publish" doc:name="CRITICAL alert plus the generic update event are both published" times="2"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>

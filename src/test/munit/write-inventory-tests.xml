@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns:db="http://www.mulesoft.org/schema/mule/db"
+      xmlns:os="http://www.mulesoft.org/schema/mule/os"
+      xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+      xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+      xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+
+    <munit:config name="munit-config" doc:name="MUnit Configuration"/>
+
+    <munit:test name="post-inventory-create-success-test" description="Creates a new item, syncs it to Salesforce, and returns calculated totals">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/json
+---
+{
+    itemId: "SKU-NEW-001",
+    warehouseStock: 40,
+    regionalStock: 20,
+    safetyStock: 10,
+    region: "US"
+}]'/>
+            <flow-ref name="post:\inventory:application\json:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.itemId]" is="#[MunitTools::equalTo('SKU-NEW-001')]"/>
+            <munit-tools:assert-that expression="#[payload.totalInventory]" is="#[MunitTools::equalTo(60)]"/>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('NORMAL')]"/>
+            <munit-tools:verify-call processor="salesforce:upsert" doc:name="Salesforce is synced on create" times="1"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="post-inventory-duplicate-test" description="Returns 409 DUPLICATE and never inserts when the item already exists">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{item_id: "SKU-DUP-001"}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/json
+---
+{
+    itemId: "SKU-DUP-001",
+    warehouseStock: 40,
+    regionalStock: 20,
+    safetyStock: 10,
+    region: "US"
+}]'/>
+            <try>
+                <flow-ref name="post:\inventory:application\json:inventory-api-config"/>
+                <error-handler>
+                    <on-error-continue type="APP:DUPLICATE"/>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(409)]"/>
+            <munit-tools:assert-that expression="#[payload.code]" is="#[MunitTools::equalTo('DUPLICATE')]"/>
+            <munit-tools:verify-call processor="db:insert" doc:name="No insert happens on a duplicate" times="0"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="put-inventory-success-test" description="Fully updates an existing item, recalculates totals, and syncs Salesforce">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-PUT-001",
+    warehouse_stock: 10,
+    regional_stock: 10,
+    total_inventory: 20,
+    safety_stock: 5,
+    status: "LOW",
+    region: "US"
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:remove">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+    warehouseStock: 120,
+    regionalStock: 90,
+    safetyStock: 15,
+    region: "EU"
+}]]></ee:set-payload>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-PUT-001" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="put:\inventory\(itemId):application\json:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.totalInventory]" is="#[MunitTools::equalTo(210)]"/>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('OVERSTOCK')]"/>
+            <munit-tools:assert-that expression="#[payload.region]" is="#[MunitTools::equalTo('EU')]"/>
+            <munit-tools:verify-call processor="salesforce:upsert" doc:name="Salesforce is synced on update" times="1"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="put-inventory-not-found-test" description="Returns 404 when the item to update does not exist">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{ warehouseStock: 10, regionalStock: 10, safetyStock: 5, region: "US" }]]></ee:set-payload>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-MISSING" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <try>
+                <flow-ref name="put:\inventory\(itemId):application\json:inventory-api-config"/>
+                <error-handler>
+                    <on-error-continue type="APP:NOT_FOUND"/>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(404)]"/>
+            <munit-tools:assert-that expression="#[payload.code]" is="#[MunitTools::equalTo('NOT_FOUND')]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="patch-inventory-partial-update-critical-alert-test" description="Partially updates an item, defaults omitted fields to existing DB values, and fires the CRITICAL alert">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-PATCH-001",
+    warehouse_stock: 5,
+    regional_stock: 3,
+    total_inventory: 8,
+    safety_stock: 5,
+    status: "CRITICAL",
+    region: "US"
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:remove">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{ warehouseStock: 3 }]]></ee:set-payload>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-PATCH-001" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="patch:\inventory\(itemId):application\json:inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.warehouseStock]" is="#[MunitTools::equalTo(3)]"/>
+            <munit-tools:assert-that expression="#[payload.regionalStock]" is="#[MunitTools::equalTo(3)]"/>
+            <munit-tools:assert-that expression="#[payload.region]" is="#[MunitTools::equalTo('US')]"/>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('CRITICAL')]"/>
+            <munit-tools:verify-call processor="jms:publish" doc:name="CRITICAL alert plus the generic update event are both published" times="2"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="patch-inventory-not-found-test" description="Returns 404 when the item to patch does not exist">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{ warehouseStock: 3 }]]></ee:set-payload>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-MISSING" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <try>
+                <flow-ref name="patch:\inventory\(itemId):application\json:inventory-api-config"/>
+                <error-handler>
+                    <on-error-continue type="APP:NOT_FOUND"/>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(404)]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="delete-inventory-soft-delete-test" description="Soft-deletes the item in MySQL only (status=INACTIVE) and never touches Salesforce">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{
+    item_id: "SKU-DEL-001",
+    warehouse_stock: 10,
+    regional_stock: 10,
+    total_inventory: 20,
+    safety_stock: 5,
+    status: "LOW",
+    region: "US"
+}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:update">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="os:remove">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-DEL-001" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <flow-ref name="delete:\inventory\(itemId):inventory-api-config"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[payload.status]" is="#[MunitTools::equalTo('INACTIVE')]"/>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(200)]"/>
+            <munit-tools:verify-call processor="salesforce:upsert" doc:name="DELETE never calls Salesforce" times="0"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="delete-inventory-not-found-test" description="Returns 404 when the item to delete does not exist">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <ee:transform>
+                <ee:message>
+                    <ee:set-attributes><![CDATA[%dw 2.0
+output application/java
+---
+{ uriParams: { itemId: "SKU-MISSING" } }]]></ee:set-attributes>
+                </ee:message>
+            </ee:transform>
+            <try>
+                <flow-ref name="delete:\inventory\(itemId):inventory-api-config"/>
+                <error-handler>
+                    <on-error-continue type="APP:NOT_FOUND"/>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.httpStatus]" is="#[MunitTools::equalTo(404)]"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>
