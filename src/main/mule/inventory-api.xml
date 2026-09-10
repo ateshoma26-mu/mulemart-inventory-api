@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
     <http:listener-config name="inventory-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="inventory-api-config" api="resource::4ae79f63-d259-4a0c-96e6-ab579f7dcc92:mulemart-inventory-api:1.0.0:raml:zip:inventory-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="inventory-api-config" api="api/inventory-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e0f44fb7-0967-4925-8879-d44392525a88" file="config.yaml" key="MuleMartKey2026">
 		<secure-properties:encrypt algorithm="Blowfish" mode="CFB"/>
 	</secure-properties:config>

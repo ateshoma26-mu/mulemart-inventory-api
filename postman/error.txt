@@ -19,115 +19,10 @@
 [INFO] --- mule:4.10.1:generate-sources (default-generate-sources) @ mulemart-inventory-api ---
 [INFO] 
 [INFO] --- mule:4.10.1:process-sources (default-process-sources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- resources:3.4.0:resources (default-resources) @ mulemart-inventory-api ---
-[INFO] Copying 4 resources from src\main\resources to ..\..\AppData\Local\Temp\munit-temp-dir\munittarget3601970479816538944\classes
-[INFO] 
-[INFO] --- mule:4.10.1:process-resources (default-process-resources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- compiler:3.14.1:compile (default-compile) @ mulemart-inventory-api ---
-[INFO] Nothing to compile - all classes are up to date.
-[INFO] 
-[INFO] --- mule:4.10.1:compile (default-compile) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:process-classes (default-process-classes) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:generate-test-sources (default-generate-test-sources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- resources:3.4.0:testResources (default-testResources) @ mulemart-inventory-api ---
-[INFO] Copying 1 resource from src\test\resources to ..\..\AppData\Local\Temp\munit-temp-dir\munittarget3601970479816538944\test-classes
-[INFO] 
-[INFO] --- mule:4.10.1:generate-test-resources (default-generate-test-resources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ mulemart-inventory-api ---
-[INFO] Nothing to compile - all classes are up to date.
-[INFO] 
-[INFO] --- mule:4.10.1:test-compile (default-test-compile) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- surefire:3.5.4:test (default-test) @ mulemart-inventory-api ---
-[INFO] Tests are skipped.
-[INFO] 
-[INFO] --- munit:3.2.1:test (test) @ mulemart-inventory-api ---
-[INFO] Run of munit-maven-plugin skipped. Property [skipTests] was set to true
-[INFO] 
-[INFO] >>> munit:3.2.1:coverage-report (test) > [munit]test @ mulemart-inventory-api >>>
-[INFO] 
-[INFO] --- mule:4.10.1:validate (default-validate) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:initialize (default-initialize) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:generate-sources (default-generate-sources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:process-sources (default-process-sources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- resources:3.4.0:resources (default-resources) @ mulemart-inventory-api ---
-[INFO] Copying 4 resources from src\main\resources to ..\..\AppData\Local\Temp\munit-temp-dir\munittarget3601970479816538944\classes
-[INFO] 
-[INFO] --- mule:4.10.1:process-resources (default-process-resources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- compiler:3.14.1:compile (default-compile) @ mulemart-inventory-api ---
-[INFO] Nothing to compile - all classes are up to date.
-[INFO] 
-[INFO] --- mule:4.10.1:compile (default-compile) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:process-classes (default-process-classes) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:generate-test-sources (default-generate-test-sources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- resources:3.4.0:testResources (default-testResources) @ mulemart-inventory-api ---
-[INFO] Copying 1 resource from src\test\resources to ..\..\AppData\Local\Temp\munit-temp-dir\munittarget3601970479816538944\test-classes
-[INFO] 
-[INFO] --- mule:4.10.1:generate-test-resources (default-generate-test-resources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- compiler:3.14.1:testCompile (default-testCompile) @ mulemart-inventory-api ---
-[INFO] Nothing to compile - all classes are up to date.
-[INFO] 
-[INFO] --- mule:4.10.1:test-compile (default-test-compile) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- surefire:3.5.4:test (default-test) @ mulemart-inventory-api ---
-[INFO] Tests are skipped.
-[INFO] 
-[INFO] --- munit:3.2.1:test (test) @ mulemart-inventory-api ---
-[INFO] Run of munit-maven-plugin skipped. Property [skipTests] was set to true
-[INFO] 
-[INFO] <<< munit:3.2.1:coverage-report (test) < [munit]test @ mulemart-inventory-api <<<
-[INFO] 
-[INFO] 
-[INFO] --- munit:3.2.1:coverage-report (test) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:package (default-package) @ mulemart-inventory-api ---
-[INFO] Building zip: C:\Users\alemi\AppData\Local\Temp\munit-temp-dir\munittarget3601970479816538944\mulemart-inventory-api-1.0.0-SNAPSHOT-mule-application-light-package.jar
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  8.778 s
-[INFO] Finished at: 2026-09-04T14:19:36-04:00
-[INFO] ------------------------------------------------------------------------
-[INFO] Scanning for projects...
-[INFO] 
-[INFO] ----------------< com.mycompany:mulemart-inventory-api >----------------
-[INFO] Building mulemart-inventory-api 1.0.0-SNAPSHOT
-[INFO]   from pom.xml
-[INFO] --------------------------[ mule-application ]--------------------------
-[INFO] 
-[INFO] --- clean:3.2.0:clean (default-clean-1) @ mulemart-inventory-api ---
-[INFO] Deleting C:\Users\alemi\source\mulemart-inventory-api\target
-[INFO] 
-[INFO] --- clean:3.2.0:clean (default-clean) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:clean (default-clean) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:validate (default-validate) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:initialize (default-initialize) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:generate-sources (default-generate-sources) @ mulemart-inventory-api ---
-[INFO] 
-[INFO] --- mule:4.10.1:process-sources (default-process-sources) @ mulemart-inventory-api ---
 [INFO] About to fetch required dependencies for artifact: com.mycompany:mulemart-inventory-api:pom:1.0.0-SNAPSHOT. This may take a while...
 [INFO] 
 [INFO] --- resources:3.4.0:resources (default-resources) @ mulemart-inventory-api ---
-[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] Copying 6 resources from src\main\resources to target\classes
 [INFO] 
 [INFO] --- mule:4.10.1:process-resources (default-process-resources) @ mulemart-inventory-api ---
 [INFO] 
@@ -141,7 +36,7 @@
 [INFO] Building from Mule Runtime distribution in 'C:\Users\alemi\source\AnypointStudio\AnypointStudio\target\build-dependencies\mule-framework-latest-bundle-2.0.0'
 [WARNING] Ignoring duplicated module 'com.mulesoft.connectivity.mule.api'
 [WARNING] Ignoring duplicated module 'org.mule.runtime.metadata.model.persistence'
-[INFO] Loaded AbstractMuleFrameworkBuilderFactory implementation 'org.mule.framework.impl.builder.DefaultMuleFrameworkBuilderFactory' from classloader 'java.net.URLClassLoader@61c9d316'
+[INFO] Loaded AbstractMuleFrameworkBuilderFactory implementation 'org.mule.framework.impl.builder.DefaultMuleFrameworkBuilderFactory' from classloader 'java.net.URLClassLoader@37f02465'
 [INFO] About to fetch required dependencies for artifact: com.mycompany:mulemart-inventory-api:pom:1.0.0-SNAPSHOT. This may take a while...
 [WARNING] Shared library 'org.mule.runtime:mule-extensions-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
 [WARNING] Shared library 'org.mule.runtime:mule-api' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
@@ -160,7 +55,32 @@
 [WARNING] Shared library 'org.mule.runtime:mule-metadata-model-java' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
 [WARNING] Shared library 'org.mule.runtime:mule-message-metadata-model' is a Mule Runtime dependency. It will not be used by 'mule-jms-connector' in order to avoid classloading issues. Please consider removing it, or at least not putting it as a sharedLibrary.
 [WARNING] Exported packages from artifact 'mulemart-inventory-api' are provided by parent class loader: [org.slf4j, org.slf4j.spi, javax.jms, org.slf4j.event, org.slf4j.helpers]
-[INFO] Loaded AbstractDataTypeBuilderFactory implementation 'org.mule.runtime.core.api.metadata.DefaultDataTypeBuilderFactory' from classloader 'java.net.URLClassLoader@61c9d316'
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element createJob of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element describeSobject of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element getDeleted of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element getUpdated of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element query of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element queryAll of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element queryXmlStream of extension Salesforce
+[WARNING] A Keys Resolver is being defined without defining an Output Resolver, Input Resolver nor Attributes Resolver for element search of extension Salesforce
+[WARNING] Extension 'Salesforce' has definition warnings:
+	* Could not validate Class: Could not find class for MetadataType [org.mule.metadata.api.model.impl.DefaultObjectType@b54e694[
+  {}
+  org.mule.metadata.api.model.MetadataFormat@31aa22
+  []
+  false
+  <null>
+]]
+	* Could not validate Class: Could not find class for MetadataType [org.mule.metadata.api.model.impl.DefaultObjectType@79765bf6[
+  {}
+  org.mule.metadata.api.model.MetadataFormat@31aa22
+  []
+  false
+  <null>
+]]
+
+[WARNING] Component 'console' in extension 'APIKit' already has a 'config-ref' parameter defined. Skipping ConfigRefDeclarationEnricher for it.
+[WARNING] Component 'router' in extension 'APIKit' already has a 'config-ref' parameter defined. Skipping ConfigRefDeclarationEnricher for it.
 [INFO] 
 [INFO] --- mule:4.10.1:generate-test-sources (default-generate-test-sources) @ mulemart-inventory-api ---
 [INFO] 
@@ -180,50 +100,7 @@
 [INFO] Acquiring dynamic ports...
 [INFO] Dynamic port definition [DONE]
 [INFO] About to fetch required dependencies for artifact: com.mycompany:mulemart-inventory-api:pom:1.0.0-SNAPSHOT. This may take a while...
-[INFO] Copying files to C:\Users\alemi\source\mulemart-inventory-api\target\munitworkingdir-16097173001400\mulemart-inventory-api
+[INFO] Copying files to C:\Users\alemi\source\mulemart-inventory-api\target\munitworkingdir-5177815116900\mulemart-inventory-api
 [INFO] Running MULE_EE with version 4.7.0
 [INFO] --add-opens: java.base/java.lang.reflect=org.mule.runtime.jpms.utils
 [INFO] --add-opens: java.base/java.lang=org.mule.runtime.jpms.utils
-[INFO] ===============================================================================
-[INFO] MUnit Coverage Summary
-[INFO] ===============================================================================
-[INFO]  * Resources: 1 - Flows: 21 - Processors: 191
-[INFO]  * Application Coverage: 79.58%
-[INFO] 
-[WARNING] ----------------------------- WARNING --------------------------------------
-[WARNING]  * Application coverage is below defined limit. Required: 80.0% - Current: 79.58%
-[INFO] ====================================================================================
-[INFO] MUnit Run Summary - Product: MULE_EE, Version: 4.7.0
-[INFO] ====================================================================================
-[INFO]  >> bulk-sync-regional-tests.xml test result: Tests: 7, Errors: 3, Failures: 0, Skipped: 0
-[INFO] 	 --- process-regional-update-critical-test <<< ERROR
-[INFO] 	 --- process-full-sync-item-normal-test <<< ERROR
-[INFO] 	 --- process-regional-update-normal-test <<< ERROR
-[INFO]  >> validation-and-bulk-item-tests.xml test result: Tests: 6, Errors: 1, Failures: 0, Skipped: 0
-[INFO] 	 --- process-inventory-item-success-test <<< ERROR
-[INFO]  >> get-inventory-tests.xml test result: Tests: 6, Errors: 0, Failures: 0, Skipped: 0
-[INFO]  >> write-inventory-tests.xml test result: Tests: 8, Errors: 3, Failures: 0, Skipped: 0
-[INFO] 	 --- put-inventory-success-test <<< ERROR
-[INFO] 	 --- delete-inventory-soft-delete-test <<< ERROR
-[INFO] 	 --- post-inventory-create-success-test <<< ERROR
-[INFO]  >> health-tests.xml test result: Tests: 4, Errors: 0, Failures: 0, Skipped: 0
-[INFO] 	
-[INFO] ====================================================================================
-[INFO]  > Tests:   	31
-[INFO]  > Errors:  	7
-[INFO]  > Failures:	0
-[INFO]  > Skipped: 	0
-[INFO] ====================================================================================
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD FAILURE
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  02:33 min
-[INFO] Finished at: 2026-09-04T14:45:27-04:00
-[INFO] ------------------------------------------------------------------------
-[ERROR] Failed to execute goal com.mulesoft.munit.tools:munit-maven-plugin:3.2.1:test (test) on project mulemart-inventory-api: Build Failed: MUnit Tests Failed -> [Help 1]
-[ERROR] 
-[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
-[ERROR] Re-run Maven using the -X switch to enable full debug logging.
-[ERROR] 
-[ERROR] For more information about the errors and possible solutions, please read the following articles:
-[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException
