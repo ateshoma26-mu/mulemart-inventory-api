@@ -23,4 +23,4 @@ jobs:
         env:
           ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
           ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
-        run: mvn -B -e -s .maven/settings.xml clean package --file pom.xml -Dskip MunitTest
+        run: mvn -B -e -s .maven/settings.xml clean package --file pom.xml -DskipMunitTest
