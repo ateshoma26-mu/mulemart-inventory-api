@@ -59,7 +59,7 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>4ae79f63-d259-4a0c-96e6-ab579f7dcc92</groupId>
+			<groupId>29a7b6a7-f305-473d-b822-a8cfbe82d976</groupId>
 			<artifactId>mulemart-inventory-api</artifactId>
 			<version>1.0.0</version>
 			<classifier>raml</classifier>
