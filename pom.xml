@@ -86,6 +86,13 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
+			<groupId>29a7b6a7-f305-473d-b822-a8cfbe82d976</groupId>
+			<artifactId>mulemart-inventory-api</artifactId>
+			<version>1.0.0</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
+		</dependency>
+		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
 			<version>1.10.4</version>
