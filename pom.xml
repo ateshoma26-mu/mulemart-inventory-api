@@ -9,12 +9,15 @@
 
 	<name>mulemart-inventory-api</name>
 
-<properties>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <app.runtime>4.7.0</app.runtime>
-    <mule.maven.plugin.version>4.1.1</mule.maven.plugin.version>
-    <munit.version>3.1.0</munit.version>
-</properties>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<app.runtime>4.7.0</app.runtime>
+		<mule.maven.plugin.version>4.10.1</mule.maven.plugin.version>
+		<munit.version>3.2.1</munit.version>
+	</properties>
+
 
 	<build>
 		<plugins>
@@ -41,32 +44,32 @@
 					</sharedLibraries>
 				</configuration>
 			</plugin>
-<plugin>
-    <groupId>com.mulesoft.munit.tools</groupId>
-    <artifactId>munit-maven-plugin</artifactId>
-    <version>${munit.version}</version>
-    <executions>
-        <execution>
-            <id>test</id>
-            <phase>test</phase>
-            <goals>
-                <goal>test</goal>
-                <goal>coverage-report</goal>
-            </goals>
-        </execution>
-    </executions>
-    <configuration>
-        <coverage>
-            <runCoverage>true</runCoverage>
-            <failBuild>false</failBuild>
-            <formats>
-                <format>html</format>
-            </formats>
-        </coverage>
-    </configuration>
-</plugin>
-
-			
+			<plugin>
+				<groupId>com.mulesoft.munit.tools</groupId>
+				<artifactId>munit-maven-plugin</artifactId>
+				<version>${munit.version}</version>
+				<executions>
+					<execution>
+						<id>test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>test</goal>
+							<goal>coverage-report</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<coverage>
+						<runCoverage>true</runCoverage>
+						<failBuild>false</failBuild>
+						<requiredApplicationCoverage>80</requiredApplicationCoverage>
+						<formats>
+							<format>html</format>
+							<format>console</format>
+						</formats>
+					</coverage>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -141,6 +144,20 @@
 			<groupId>org.apache.activemq</groupId>
 			<artifactId>activemq-client</artifactId>
 			<version>5.15.16</version>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-runner</artifactId>
+			<version>${munit.version}</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.mulesoft.munit</groupId>
+			<artifactId>munit-tools</artifactId>
+			<version>${munit.version}</version>
+			<classifier>mule-plugin</classifier>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 

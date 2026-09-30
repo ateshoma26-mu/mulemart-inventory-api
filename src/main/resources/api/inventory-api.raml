@@ -1,0 +1,335 @@
+#%RAML 1.0
+title: MuleMart Global Omni-Channel Inventory API
+version: v1
+baseUri: https://api.mulemart.com/{version}
+mediaType: application/json
+protocols: [ HTTPS ]
+
+documentation:
+  - title: Overview
+    content: |
+      Process API for MuleMart's Global Omni-Channel Inventory Platform.
+      Provides governed, API-led access to unified inventory data sourced from
+      the legacy warehouse (MySQL), regional CSV feeds, and Salesforce (Inventory__c).
+      Supports full CRUD, bulk/sync operations, and a health endpoint.
+
+# ---------------------------------------------------------------------------
+# DATA TYPES
+# ---------------------------------------------------------------------------
+types:
+
+  Status:
+    type: string
+    enum: [ OVERSTOCK, HEALTHY, NORMAL, LOW, CRITICAL, INACTIVE ]
+    description: |
+      Derived inventory status.
+      >200 OVERSTOCK | 100-200 HEALTHY | 50-99 NORMAL | 10-49 LOW | <10 CRITICAL.
+      INACTIVE is set by a soft delete.
+
+  InventoryItem:
+    type: object
+    properties:
+      itemId:
+        type: string
+        description: Unique business identifier; used as external Id for Salesforce upsert.
+        example: SKU-1001
+      warehouseStock:
+        type: integer
+        minimum: 0
+        description: Stock held in the central warehouse (MySQL).
+      regionalStock:
+        type: integer
+        minimum: 0
+        description: Stock reported by regional centers (CSV feeds).
+      totalInventory?:
+        type: integer
+        description: Derived = warehouseStock + regionalStock. Read-only.
+      status?: Status
+      region?:
+        type: string
+        example: EU-WEST
+      safetyStock?:
+        type: integer
+        minimum: 0
+        description: Safety-stock threshold retrieved from the warehouse system.
+      lastUpdated?:
+        type: datetime
+    example:
+      itemId: SKU-1001
+      warehouseStock: 120
+      regionalStock: 45
+      totalInventory: 165
+      status: HEALTHY
+      region: EU-WEST
+      safetyStock: 50
+      lastUpdated: 2026-08-19T10:15:30Z
+
+  InventoryItemCreate:
+    type: object
+    description: Payload for creating an item. Derived fields are ignored if supplied.
+    properties:
+      itemId: string
+      warehouseStock: integer
+      regionalStock: integer
+      region?: string
+      safetyStock?: integer
+    example:
+      itemId: SKU-2002
+      warehouseStock: 30
+      regionalStock: 5
+      region: NA-EAST
+      safetyStock: 40
+
+  InventoryItemPatch:
+    type: object
+    description: Partial update. Any subset of mutable fields.
+    properties:
+      warehouseStock?: integer
+      regionalStock?: integer
+      region?: string
+      safetyStock?: integer
+      status?: Status
+    example:
+      warehouseStock: 8
+
+  InventorySummary:
+    type: object
+    description: Compact status view for a single item.
+    properties:
+      itemId: string
+      totalInventory: integer
+      status: Status
+      reorderQuantity:
+        type: integer
+        description: 200 - totalInventory when replenishment is required; otherwise 0.
+      region?: string
+    example:
+      itemId: SKU-1001
+      totalInventory: 165
+      status: HEALTHY
+      reorderQuantity: 0
+      region: EU-WEST
+
+  SyncResponse:
+    type: object
+    description: Result of a sync or bulk operation.
+    properties:
+      totalRecords: integer
+      successCount: integer
+      failureCount: integer
+      failedItemIds?: array
+      startedAt: datetime
+      completedAt: datetime
+    example:
+      totalRecords: 5000
+      successCount: 4987
+      failureCount: 13
+      failedItemIds: [ "SKU-3310", "SKU-4821" ]
+      startedAt: 2026-08-19T09:00:00Z
+      completedAt: 2026-08-19T09:03:42Z
+
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        example: VALIDATION_ERROR
+      message: string
+      timestamp: datetime
+      details?: array
+    example:
+      code: VALIDATION_ERROR
+      message: warehouseStock must be a non-negative integer
+      timestamp: 2026-08-19T10:15:30Z
+      details: [ "field: warehouseStock" ]
+
+  HealthStatus:
+    type: object
+    properties:
+      status:
+        type: string
+        enum: [ UP, DEGRADED, DOWN ]
+      database: string
+      salesforce: string
+      timestamp: datetime
+    example:
+      status: UP
+      database: UP
+      salesforce: UP
+      timestamp: 2026-08-19T10:15:30Z
+
+# ---------------------------------------------------------------------------
+# TRAITS
+# ---------------------------------------------------------------------------
+traits:
+
+  standardErrors:
+    responses:
+      400:
+        description: Validation error
+        body:
+          application/json:
+            type: ErrorResponse
+            example:
+              code: VALIDATION_ERROR
+              message: Invalid request payload
+              timestamp: 2026-08-19T10:15:30Z
+      404:
+        description: Resource not found
+        body:
+          application/json:
+            type: ErrorResponse
+            example:
+              code: NOT_FOUND
+              message: Item SKU-9999 not found
+              timestamp: 2026-08-19T10:15:30Z
+      409:
+        description: Duplicate resource
+        body:
+          application/json:
+            type: ErrorResponse
+            example:
+              code: DUPLICATE
+              message: Item SKU-1001 already exists
+              timestamp: 2026-08-19T10:15:30Z
+      503:
+        description: Downstream connectivity failure
+        body:
+          application/json:
+            type: ErrorResponse
+            example:
+              code: CONNECTIVITY_ERROR
+              message: Unable to reach Salesforce
+              timestamp: 2026-08-19T10:15:30Z
+
+  pageable:
+    queryParameters:
+      offset?:
+        type: integer
+        default: 0
+        minimum: 0
+      limit?:
+        type: integer
+        default: 50
+        minimum: 1
+        maximum: 200
+
+  filterable:
+    queryParameters:
+      status?: Status
+      region?: string
+
+# ---------------------------------------------------------------------------
+# RESOURCES
+# ---------------------------------------------------------------------------
+/health:
+  get:
+    description: Liveness/health check for DB and Salesforce connectivity.
+    responses:
+      200:
+        body:
+          application/json:
+            type: HealthStatus
+
+/inventory:
+  get:
+    description: List inventory items with optional filtering and pagination.
+    is: [ pageable, filterable, standardErrors ]
+    responses:
+      200:
+        body:
+          application/json:
+            type: InventoryItem[]
+            example:
+              - itemId: SKU-1001
+                warehouseStock: 120
+                regionalStock: 45
+                totalInventory: 165
+                status: HEALTHY
+                region: EU-WEST
+  post:
+    description: Create a new inventory item and sync to Salesforce.
+    is: [ standardErrors ]
+    body:
+      application/json:
+        type: InventoryItemCreate
+    responses:
+      201:
+        body:
+          application/json:
+            type: InventoryItem
+
+  /sync:
+    post:
+      description: Trigger a full inventory synchronization (DB + regional feeds).
+      is: [ standardErrors ]
+      responses:
+        202:
+          body:
+            application/json:
+              type: SyncResponse
+
+  /bulk:
+    post:
+      description: Bulk create/update items (batch processing, 5000+ records).
+      is: [ standardErrors ]
+      body:
+        application/json:
+          type: InventoryItemCreate[]
+      responses:
+        202:
+          body:
+            application/json:
+              type: SyncResponse
+
+  /{itemId}:
+    uriParameters:
+      itemId:
+        type: string
+        example: SKU-1001
+    get:
+      description: Retrieve a single item (served from Object Store cache or DB).
+      is: [ standardErrors ]
+      responses:
+        200:
+          body:
+            application/json:
+              type: InventoryItem
+    put:
+      description: Full update; recalculates totals and status. Invalidates cache.
+      is: [ standardErrors ]
+      body:
+        application/json:
+          type: InventoryItemCreate
+      responses:
+        200:
+          body:
+            application/json:
+              type: InventoryItem
+    patch:
+      description: Partial update. Invalidates cache.
+      is: [ standardErrors ]
+      body:
+        application/json:
+          type: InventoryItemPatch
+      responses:
+        200:
+          body:
+            application/json:
+              type: InventoryItem
+    delete:
+      description: Soft delete (status = INACTIVE). Record is retained in DB. Invalidates cache.
+      is: [ standardErrors ]
+      responses:
+        204:
+          description: Soft-deleted successfully.
+
+    /summary:
+      get:
+        description: Compact status summary including reorderQuantity.
+        is: [ standardErrors ]
+        responses:
+          200:
+            body:
+              application/json:
+                type: InventorySummary

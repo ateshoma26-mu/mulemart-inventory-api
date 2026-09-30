@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:munit="http://www.mulesoft.org/schema/mule/munit"
+      xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+      xmlns:db="http://www.mulesoft.org/schema/mule/db"
+      xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+      xmlns="http://www.mulesoft.org/schema/mule/core"
+      xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+http://www.mulesoft.org/schema/mule/munit-tools http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+
+    <munit:config name="munit-config" doc:name="MUnit Configuration"/>
+
+    <munit:test name="validate-inventory-fields-rejects-negative-warehouse-stock-test" description="Raises APP:VALIDATION when warehouseStock is negative">
+        <munit:execution>
+            <set-variable variableName="newItem" value='#[%dw 2.0
+output application/json
+---
+{ warehouseStock: -5, regionalStock: 10, safetyStock: 5 }]'/>
+            <try>
+                <flow-ref name="validate-inventory-fields-subflow"/>
+                <error-handler>
+                    <on-error-continue type="APP:VALIDATION">
+                        <set-variable variableName="caughtErrorType" value="#[error.errorType.identifier]"/>
+                    </on-error-continue>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.caughtErrorType]" is="#[MunitTools::equalTo('VALIDATION')]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="validate-inventory-fields-rejects-negative-regional-stock-test" description="Raises APP:VALIDATION when regionalStock is negative">
+        <munit:execution>
+            <set-variable variableName="newItem" value='#[%dw 2.0
+output application/json
+---
+{ warehouseStock: 5, regionalStock: -1, safetyStock: 5 }]'/>
+            <try>
+                <flow-ref name="validate-inventory-fields-subflow"/>
+                <error-handler>
+                    <on-error-continue type="APP:VALIDATION">
+                        <set-variable variableName="caughtErrorType" value="#[error.errorType.identifier]"/>
+                    </on-error-continue>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.caughtErrorType]" is="#[MunitTools::equalTo('VALIDATION')]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="validate-inventory-fields-accepts-non-negative-values-test" description="Passes through without raising an error when all stock fields are non-negative">
+        <munit:execution>
+            <set-variable variableName="newItem" value='#[%dw 2.0
+output application/json
+---
+{ warehouseStock: 5, regionalStock: 10, safetyStock: 2 }]'/>
+            <flow-ref name="validate-inventory-fields-subflow"/>
+            <set-variable variableName="reachedAfterValidation" value="#[true]"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.reachedAfterValidation]" is="#[MunitTools::equalTo(true)]"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-inventory-item-rejects-negative-stock-before-insert-test" description="Regression test: a bulk item with negative stock must be rejected by validation before it ever reaches db:insert">
+        <munit:execution>
+            <try>
+                <set-payload value='#[%dw 2.0
+output application/json
+---
+{ itemId: "SKU-BULK-NEG", warehouseStock: -10, regionalStock: 5, safetyStock: 5, region: "US" }]'/>
+                <flow-ref name="process-inventory-item-subflow"/>
+                <error-handler>
+                    <on-error-continue type="APP:VALIDATION">
+                        <set-variable variableName="caughtErrorType" value="#[error.errorType.identifier]"/>
+                    </on-error-continue>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.caughtErrorType]" is="#[MunitTools::equalTo('VALIDATION')]"/>
+            <munit-tools:verify-call processor="db:insert" doc:name="DB insert is never reached for an invalid item" times="0"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-inventory-item-success-test" description="A valid bulk item passes validation, gets inserted, and syncs to Salesforce">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="db:insert">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="salesforce:upsert">
+                <munit-tools:then-return>
+                    <munit-tools:payload value="#[[]]" mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+            <munit-tools:mock-when processor="jms:publish">
+                <munit-tools:then-return/>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <set-payload value='#[%dw 2.0
+output application/json
+---
+{ itemId: "SKU-BULK-OK", warehouseStock: 30, regionalStock: 20, safetyStock: 5, region: "US" }]'/>
+            <flow-ref name="process-inventory-item-subflow"/>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:verify-call processor="db:insert" doc:name="Item and its audit record are both inserted" times="2"/>
+            <munit-tools:verify-call processor="salesforce:upsert" doc:name="Salesforce is synced" times="1"/>
+        </munit:validation>
+    </munit:test>
+
+    <munit:test name="process-inventory-item-duplicate-test" description="Raises APP:DUPLICATE and never inserts when the bulk item already exists">
+        <munit:behavior>
+            <munit-tools:mock-when processor="db:select">
+                <munit-tools:then-return>
+                    <munit-tools:payload value='#[[{item_id: "SKU-BULK-DUP"}]]' mediaType="application/java"/>
+                </munit-tools:then-return>
+            </munit-tools:mock-when>
+        </munit:behavior>
+        <munit:execution>
+            <try>
+                <set-payload value='#[%dw 2.0
+output application/json
+---
+{ itemId: "SKU-BULK-DUP", warehouseStock: 30, regionalStock: 20, safetyStock: 5, region: "US" }]'/>
+                <flow-ref name="process-inventory-item-subflow"/>
+                <error-handler>
+                    <on-error-continue type="APP:DUPLICATE">
+                        <set-variable variableName="caughtErrorType" value="#[error.errorType.identifier]"/>
+                    </on-error-continue>
+                </error-handler>
+            </try>
+        </munit:execution>
+        <munit:validation>
+            <munit-tools:assert-that expression="#[vars.caughtErrorType]" is="#[MunitTools::equalTo('DUPLICATE')]"/>
+            <munit-tools:verify-call processor="db:insert" doc:name="DB insert is never reached for a duplicate" times="0"/>
+        </munit:validation>
+    </munit:test>
+
+</mule>

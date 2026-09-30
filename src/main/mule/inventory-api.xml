@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+<mule xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:api-gateway="http://www.mulesoft.org/schema/mule/api-gateway" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/api-gateway http://www.mulesoft.org/schema/mule/api-gateway/current/mule-api-gateway.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd
@@ -11,7 +11,8 @@ http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/fil
     <http:listener-config name="inventory-api-httpListenerConfig">
         <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="inventory-api-config" api="resource::4ae79f63-d259-4a0c-96e6-ab579f7dcc92:mulemart-inventory-api:1.0.0:raml:zip:inventory-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <apikit:config name="inventory-api-config" api="resource::29a7b6a7-f305-473d-b822-a8cfbe82d976:mulemart-inventory-api:1.0.0:raml:zip:inventory-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
+    <api-gateway:autodiscovery apiId="21165822" flowRef="inventory-api-main" />
     <secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="e0f44fb7-0967-4925-8879-d44392525a88" file="config.yaml" key="MuleMartKey2026">
 		<secure-properties:encrypt algorithm="Blowfish" mode="CFB"/>
 	</secure-properties:config>
@@ -561,17 +562,6 @@ vars.newItem.region default vars.existing.region]" doc:name="Set eventRegion" do
 		</choice>
 		<error-handler ref="globalErrorHandler" />
     </flow>
-	<flow name="inventory-apiFlow" doc:id="0e9f2a50-8b09-4c06-bea1-1003ab05eb0b" >
-		<ee:transform doc:name="Transform Message" doc:id="e21d4f15-5ba7-4b48-a03f-1e11f4386e49" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/java
----
-{
-}]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
-	</flow>
 	<sub-flow name="check-system-health-subflow" doc:id="2031456723-4567-0123-4567-131456723456">
 		<set-variable value="UP" doc:name="Set Variable" doc:id="ade8e7e0-8c88-4674-b8b8-d5c72febba17" variableName="dbStatus"/>
 		<set-variable value="UP" doc:name="Set Variable" doc:id="7232a497-46e3-431e-b1b4-ac3c768e64ed" variableName="sfStatus"/>
@@ -1238,6 +1228,7 @@ var total = calculateTotal(wh, reg)
     region: vars.existing.region
 }, &quot;application/json&quot;)]" doc:name="Set eventOldValue" doc:id="e7f8a9b0-cdef-0123-4567-020314567891" variableName="eventOldValue"/>
 				<set-variable value="#[%dw 2.0
+output application/java
 import * from InventoryLib
 var wh = vars.existing.warehouse_stock default 0
 var reg = vars.regionalItem.regionalStock default 0
@@ -1262,7 +1253,10 @@ var reg = vars.regionalItem.regionalStock default 0
 ---
 calculateTotal(wh, reg)]" doc:name="Set eventTotalInventory" doc:id="77665544-3322-1100-9876-5432fedcba9a" variableName="eventTotalInventory"/>
 				<set-variable value="#[vars.itemStatus]" doc:name="Set eventStatus" doc:id="66554433-2211-0099-8765-4321fedcba9b" variableName="eventStatus"/>
-				<set-variable value="#[vars.regionalItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="55443322-1100-9988-7654-3210fedcba9c" variableName="eventRegion"/>
+				<set-variable value="#[%dw 2.0
+output application/java
+---
+vars.regionalItem.region default vars.existing.region]" doc:name="Set eventRegion" doc:id="55443322-1100-9988-7654-3210fedcba9c" variableName="eventRegion"/>
 				<flow-ref doc:name="Publish Inventory Update Event" doc:id="44332211-0099-8877-6543-210fedcba9d0" name="publish-inventory-update-event-subflow"/>
 			</otherwise>
 		</choice>
