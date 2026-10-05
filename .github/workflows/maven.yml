@@ -24,3 +24,12 @@ jobs:
           ANYPOINT_CLIENT_ID: ${{ secrets.ANYPOINT_CLIENT_ID }}
           ANYPOINT_CLIENT_SECRET: ${{ secrets.ANYPOINT_CLIENT_SECRET }}
         run: mvn -B -e -s .maven/settings.xml clean package --file pom.xml -DskipMunitTests
+      - name: Deploy to CloudHub
+        run: |
+          mvn deploy \
+            -DmuleDeploy \
+            -Danypoint.username=${{ secrets.ANYPOINT_USERNAME }} \
+            -Danypoint.password=${{ secrets.ANYPOINT_PASSWORD }} \
+            -Dcloudhub.application.name=your-app-name \
+            -Dcloudhub.environment=Production \
+            -Dcloudhub.region=us-east-1
