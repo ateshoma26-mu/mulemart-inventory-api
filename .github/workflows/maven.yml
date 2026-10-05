@@ -30,6 +30,6 @@ jobs:
             -DmuleDeploy \
             -Danypoint.username=${{ secrets.ANYPOINT_USERNAME }} \
             -Danypoint.password=${{ secrets.ANYPOINT_PASSWORD }} \
-            -Dcloudhub.application.name=your-app-name \
+            -Dcloudhub.application.name=mulemart-inventory-api \
             -Dcloudhub.environment=Production \
             -Dcloudhub.region=us-east-1
