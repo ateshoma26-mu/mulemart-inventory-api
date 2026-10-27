@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: dev 
     steps:
       - uses: actions/checkout@v4
 
@@ -30,6 +31,6 @@ jobs:
             -DmuleDeploy \
             -Danypoint.username=${{ secrets.ANYPOINT_USERNAME }} \
             -Danypoint.password=${{ secrets.ANYPOINT_PASSWORD }} \
-            -Dcloudhub.application.name=mulemart-inventory-api \
+            -Dcloudhub.application.name=${{ vars.APP_NAME }} \
             -Dcloudhub.environment=Sandbox \
             -Dcloudhub.region=us-east-1
